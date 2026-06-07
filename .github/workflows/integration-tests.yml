@@ -58,7 +58,7 @@ jobs:
 
     - name: Archive integration test results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: integration-test-results
         path: target/failsafe-reports/
@@ -66,7 +66,7 @@ jobs:
 
     - name: Upload test logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: minecraft-server-logs
         path: /data/logs/
