@@ -1,0 +1,73 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/**'
+      - 'tests/integration/**'
+      - 'pom.xml'
+      - 'package.json'
+      - '.github/workflows/integration-tests.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/**'
+      - 'tests/integration/**'
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      minecraft-server:
+        image: itzg/minecraft-server:latest
+        options: |
+          --health-cmd="curl localhost:25565 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        env:
+          EULA: TRUE
+          VERSION: 1.20.1
+          TYPE: PAPER
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build project
+      run: mvn clean package -B -DskipTests
+
+    - name: Wait for server
+      run: |
+        timeout 60 bash -c 'while ! nc -z localhost 25565; do sleep 1; done'
+      continue-on-error: true
+
+    - name: Run integration tests
+      run: mvn integration-test -B
+      env:
+        MINECRAFT_SERVER_HOST: localhost
+        MINECRAFT_SERVER_PORT: 25565
+
+    - name: Archive integration test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: integration-test-results
+        path: target/failsafe-reports/
+        retention-days: 30
+
+    - name: Upload test logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: minecraft-server-logs
+        path: /data/logs/
+        retention-days: 7

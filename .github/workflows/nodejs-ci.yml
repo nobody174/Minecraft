@@ -1,0 +1,95 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/tools/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - '.eslintrc.json'
+      - '.github/workflows/nodejs-ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/tools/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['18.x', '20.x', '22.x']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Lint code
+      run: npm run lint
+
+    - name: Build project
+      run: npm run build
+
+    - name: Run tests
+      run: npm test
+
+    - name: Generate coverage report
+      run: npm run test:coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage/coverage-final.json
+        flags: javascript
+        name: js-coverage
+        fail_ci_if_error: false
+
+    - name: Archive build artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts-node-${{ matrix.node-version }}
+        path: dist/
+        retention-days: 30
+
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-node-${{ matrix.node-version }}
+        path: coverage/
+        retention-days: 30
+
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run npm audit
+      run: npm audit --audit-level=moderate
+      continue-on-error: true

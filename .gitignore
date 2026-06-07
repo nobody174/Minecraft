@@ -1,0 +1,139 @@
+# Java/Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.bak
+release.properties
+dependency-reduced-pom.xml
+.classpath
+.project
+.c9/
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+
+# Gradle
+.gradle/
+build/
+gradle-app.setting
+gradleBuild/
+
+# IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+.eclipse/
+.settings/
+bin/
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+*.code-workspace
+.vs/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.npm
+dist/
+coverage/
+.nyc_output/
+
+# Build outputs
+build/
+out/
+*.class
+*.jar
+*.exe
+*.war
+*.zip
+
+# Environment files
+.env
+.env.local
+.env.*.local
+local.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+.directory
+.AppleDouble
+.LSOverride
+
+# Test coverage
+coverage/
+.coverage
+.pytest_cache/
+htmlcov/
+
+# IDE specific
+.vscode/extensions.json
+
+# Minecraft specific
+eula.txt
+server.properties
+server-icon.png
+crash-reports/
+logs/
+world/
+world_nether/
+world_the_end/
+usercache.json
+ops.json
+whitelist.json
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+~*
+
+# System files
+.Spotlight-V100
+.Trashes
+Icon
+.AppleDouble
+.LSOverride
+
+# IntelliJ local config
+.idea/workspace.xml
+.idea/libraries/
+.idea/modules.xml
+.idea/misc.xml
+.idea/vcs.xml
+
+# Build system
+.gradle
+gradle/
+
+# WildFly/JBoss
+.deployables/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Compiled Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Documentation
+site/
+docs/_build/
