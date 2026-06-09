@@ -120,7 +120,7 @@ plugin-name/
 ### 2. plugin.yml (Plugin Configuration)
 
 ```yaml
-# Copyright (c) 2026 nobody174 - vartdal@gmail.com
+# Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
 # Licensed under MIT License
 
 name: PluginName
@@ -162,7 +162,7 @@ permissions:
 ### 3. Main Plugin Class
 
 ```java
-// Copyright (c) 2026 nobody174 - vartdal@gmail.com
+// Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
 // Licensed under MIT License
 
 package com.minecraft.plugin;
@@ -235,7 +235,7 @@ public class PluginName extends JavaPlugin {
 ## Testing Template
 
 ```java
-// Copyright (c) 2026 nobody174 - vartdal@gmail.com
+// Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
 // Licensed under MIT License
 
 package com.minecraft.plugin;
