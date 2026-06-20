@@ -60,13 +60,73 @@ MINGW*) msys=true ;;
 NONSTOP*) nonstop=true ;;
 esac
 
-CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
-
-if ! command -v java &> /dev/null; then
-    die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH."
+# Determine the Java command to use to start the JVM.
+if [ -n "$JAVA_HOME" ] ; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+        # IBM's JDK on AIX uses strange locations for the executables
+        JAVACMD="$JAVA_HOME/jre/sh/java"
+    else
+        JAVACMD="$JAVA_HOME/bin/java"
+    fi
+    if [ ! -x "$JAVACMD" ] ; then
+        die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
+Please set the JAVA_HOME variable in your environment to match the
+location of your Java installation."
+    fi
+else
+    JAVACMD="java"
+    command -v java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+Please set the JAVA_HOME variable in your environment to match the
+location of your Java installation."
 fi
 
-JAVA_EXE="java"
-JAVA_OPTS=(-XX:+IgnoreUnrecognizedVMOptions -XX:+UseG1GC -XX:G1NewCollectionPercentage=20 -XX:G1MaxNewGenPercentSize=30 -XX:InitiatingHeapOccupancyPercent=35 -XX:+DisableExplicitGC -Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en -XX:+TieredCompilation -XX:TieredStopAtLevel=4)
+# Increase the maximum file descriptors if we can.
+if ! "$cygwin" && ! "$darwin" && ! "$nonstop" ; then
+    case $MAX_FD in #(
+      /*)
+        MAX_FD_LIMIT=$(( $(getconf ARG_MAX) / 2 - 32 ))
+        ;;
+      *)
+        MAX_FD_LIMIT=$MAX_FD
+        ;;
+    esac
+    ulimit -n $MAX_FD_LIMIT
+fi
 
-exec "$JAVA_EXE" "${JAVA_OPTS[@]}" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+# For Cygwin / MSYS, switch paths to Windows format before running java
+if "$cygwin" ; then
+    APP_HOME=$( cygpath --path --mixed "$APP_HOME" )
+    CP=$( cygpath --path --mixed "$CP" )
+
+    CLASSPATH=$( cygpath --path --mixed "$CLASSPATH" )
+
+    JAVACMD=$( cygpath --mixed "$JAVACMD" )
+
+    for arg in "$@" ; do
+        if [[ "$arg" =~ ^-.*\.jar$ ]] || [[ "$arg" =~ ^-.*\.class$ ]] ; then
+            arg=$( cygpath --path --mixed "$arg" )
+        fi
+        CP="$CP:$arg"
+    done
+    CLASSPATH="$(IFS=:; echo "${CLASSPATH[*]}")"
+
+fi
+
+# Collect all arguments for the java command;
+#   * "$DEFAULT_JVM_OPTS" if the corresponding macro variable is not empty
+#   * "$CP" (computed dynamically) if the corresponding macro variable is not empty
+#   * "$GRADLE_OPTS" if the corresponding macro variable is not empty
+#   * "-classpath" only if the classpath is not empty
+#   * user arguments passed on the command line if any
+
+# app_path may be relative in case the current directory is different from the one where the script is
+APP_HOME=$( cd "${APP_HOME:-.}" && pwd -P )
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+
+# Start the Gradle application
+"$JAVACMD" \
+  $DEFAULT_JVM_OPTS \
+  $GRADLE_OPTS \
+  -classpath "$CLASSPATH" \
+  org.gradle.wrapper.GradleWrapperMain \
+  "$@"
