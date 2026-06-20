@@ -1,0 +1,47 @@
+plugins {
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
+    id 'java-library'
+}
+
+version = '1.0.0'
+group = 'com.nobody174.bossradar'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+minecraft {
+    accessTransformers.file 'src/main/resources/META-INF/accesstransformer.cfg'
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neoforge_version}"
+}
+
+jar {
+    archiveBaseName = "boss-radar"
+    archiveVersion = "${version}-mc${minecraft_version.replace('.', '_')}"
+    manifest {
+        attributes([
+            "Specification-Title": "bossradar",
+            "Implementation-Title": "Boss Radar",
+            "Implementation-Version": version,
+            "Implementation-Vendor": "nobody174"
+        ])
+    }
+}
+
+runs {
+    client {
+        workingDirectory project.file('run')
+    }
+    server {
+        workingDirectory project.file('run')
+    }
+}

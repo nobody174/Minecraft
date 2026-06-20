@@ -1,0 +1,76 @@
+{
+  "commands": {
+    "spawn_wither": {
+      "type": "summon",
+      "entity": "minecraft:wither",
+      "op_only": true,
+      "description": "Spawns a wither at your location"
+    },
+    "spawn_dragon": {
+      "type": "summon",
+      "entity": "minecraft:ender_dragon",
+      "op_only": true,
+      "description": "Spawns an ender dragon"
+    },
+    "spawn_creeper": {
+      "type": "summon",
+      "entity": "minecraft:creeper",
+      "op_only": true,
+      "description": "Spawns a creeper"
+    },
+    "creative": {
+      "type": "alias",
+      "command": "gamemode creative @s",
+      "op_only": true,
+      "description": "Switch to creative mode"
+    },
+    "survival": {
+      "type": "alias",
+      "command": "gamemode survival @s",
+      "op_only": true,
+      "description": "Switch to survival mode"
+    },
+    "adventure": {
+      "type": "alias",
+      "command": "gamemode adventure @s",
+      "op_only": true,
+      "description": "Switch to adventure mode"
+    },
+    "spectator": {
+      "type": "alias",
+      "command": "gamemode spectator @s",
+      "op_only": true,
+      "description": "Switch to spectator mode"
+    },
+    "day": {
+      "type": "alias",
+      "command": "time set day",
+      "op_only": true,
+      "description": "Set time to day"
+    },
+    "night": {
+      "type": "alias",
+      "command": "time set night",
+      "op_only": true,
+      "description": "Set time to night"
+    },
+    "clear_inv": {
+      "type": "alias",
+      "command": "clear @s",
+      "op_only": true,
+      "description": "Clear your inventory"
+    },
+    "rain": {
+      "type": "alias",
+      "command": "weather rain",
+      "op_only": true,
+      "description": "Start raining"
+    },
+    "clear_weather": {
+      "type": "alias",
+      "command": "weather clear",
+      "op_only": true,
+      "description": "Clear weather"
+    }
+  }
+}

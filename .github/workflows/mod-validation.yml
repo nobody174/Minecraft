@@ -1,0 +1,142 @@
+name: Mod Validation & Checks
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'mods/**'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-structure:
+    runs-on: ubuntu-latest
+    name: Validate Mod Structure
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check GlowTools mod structure
+        run: |
+          MOD_PATH="mods/glowtools_server-client"
+          echo "## GlowTools Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check required files
+          REQUIRED_FILES=(
+            "build.gradle"
+            "gradle.properties"
+            "settings.gradle"
+            "README.md"
+            "RELEASE_NOTES.md"
+            ".gitignore"
+            "src/main/java/com/nobody174/glowtools/GlowToolsMod.java"
+            "src/main/java/com/nobody174/glowtools/server/GlowToolsServerEvents.java"
+            "src/main/java/com/nobody174/glowtools/server/command/AdminCommandHandler.java"
+            "src/main/resources/META-INF/neoforge.mods.toml"
+          )
+
+          PASSED=0
+          FAILED=0
+
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ -f "$MOD_PATH/$file" ]; then
+              echo "✅ $file" >> $GITHUB_STEP_SUMMARY
+              ((PASSED++))
+            else
+              echo "❌ $file (MISSING)" >> $GITHUB_STEP_SUMMARY
+              ((FAILED++))
+            fi
+          done
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Results:** $PASSED passed, $FAILED failed" >> $GITHUB_STEP_SUMMARY
+
+          [ $FAILED -eq 0 ] || exit 1
+
+      - name: Check Boss Radar mod structure
+        run: |
+          MOD_PATH="mods/boss-radar"
+          echo "## Boss Radar Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          REQUIRED_FILES=(
+            "build.gradle"
+            "README.md"
+            "src/main/java/com/nobody174/bossradar/BossRadarMod.java"
+          )
+
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ -f "$MOD_PATH/$file" ]; then
+              echo "✅ $file" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ $file (MISSING)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+  validate-config:
+    runs-on: ubuntu-latest
+    name: Validate Configuration Files
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate TOML files
+        run: |
+          echo "## Configuration Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          for toml_file in $(find mods -name "*.toml"); do
+            if grep -q "modId=" "$toml_file" 2>/dev/null; then
+              echo "✅ $toml_file (valid)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ $toml_file (check required)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+      - name: Validate JSON files
+        run: |
+          # Check if jq is available for JSON validation
+          if command -v jq &> /dev/null; then
+            for json_file in $(find mods -name "*.json"); do
+              if jq empty "$json_file" 2>/dev/null; then
+                echo "✅ $json_file (valid JSON)" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "❌ $json_file (invalid JSON)" >> $GITHUB_STEP_SUMMARY
+              fi
+            done
+          fi
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    name: Check Documentation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify README files
+        run: |
+          echo "## Documentation Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          for readme in $(find mods -name "README.md"); do
+            MOD_NAME=$(dirname $readme | sed 's|.*/||')
+            SIZE=$(wc -c < "$readme")
+
+            if [ $SIZE -gt 500 ]; then
+              echo "✅ $MOD_NAME README ($(($SIZE / 1024))KB)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ $MOD_NAME README (too short)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+      - name: Check for release notes
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          for notes in $(find mods -name "RELEASE_NOTES.md"); do
+            echo "✅ Release notes found: $notes" >> $GITHUB_STEP_SUMMARY
+          done

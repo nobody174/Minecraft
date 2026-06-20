@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All rights reserved © 2025 nobody174"
+
+[[mods]]
+modId="bossradar"
+version="${file.jarVersion}"
+displayName="Boss Radar"
+logoFile="assets/bossradar/icon.png"
+logoBlur=true
+authors="nobody174"
+credits="Created with Claude Code by Anthropic"
+description='''Boss Radar is a craftable compass item that detects nearby bosses and dangerous mobs, points toward the nearest target, and displays a distance indicator ring as a HUD overlay.'''
+displayURL="https://github.com/nobody174/boss-radar"
+sources="https://github.com/nobody174/boss-radar"
+
+[[dependencies.bossradar]]
+modId="neoforge"
+mandatory=true
+versionRange="[21,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.bossradar]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="BOTH"

@@ -1,0 +1,32 @@
+# Build & Gradle
+build/
+.gradle/
+gradle-app.setting
+*.jar
+*.war
+
+# IDE
+.eclipse/
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+
+# Build outputs
+bin/
+out/
+*.log
+*.class
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.bak
+*.tmp
+*.temp

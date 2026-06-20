@@ -1,0 +1,37 @@
+# ===== FIXED — same for every 1.21.1 NeoForge mod =====
+modLoader="javafml"             # Always "javafml" — do not change
+loaderVersion="[1,)"            # Always this — do not change
+
+# ===== CHANGE PER MOD =====
+license="All Rights Reserved © 2025 nobody174"
+
+[[mods]]
+modId="glowtools_sc"            # Must match @Mod(...), folder name, and [[dependencies.X]] below
+version="${file.jarVersion}"    # Always this — do not change
+displayName="GlowTools Server+Client"
+logoFile="assets/glowtools/icon.png"
+logoBlur=true
+authors="nobody174"
+credits="Created with Claude Code by Anthropic"
+description="""
+GlowTools Server+Client makes your tools glow with particle effects when held in hand.
+Uses server-side positioning for accurate weapon location and third-person rendering.
+Requires both server and client installation.
+"""
+displayURL="https://www.patreon.com/c/Nobody174"
+sources="https://github.com/nobody174/glowtools"
+
+# ===== FIXED — only the [[dependencies.X]] name changes per mod =====
+[[dependencies.glowtools_sc]]
+modId="neoforge"
+mandatory=true
+versionRange="[21,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.glowtools_sc]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="BOTH"
