@@ -15,6 +15,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 
 import com.nobody174.buddybeast.entity.ModEntities;
+import com.nobody174.buddybeast.network.BuddyNetworkHandler;
 
 @Mod("buddybeast")
 public class BuddyBeast {
@@ -24,6 +25,9 @@ public class BuddyBeast {
         // Register deferred registries
         modEventBus.register(ModEntities.class);
         ModEntities.ENTITY_TYPES.register(modEventBus);
+
+        // Register network handlers
+        modEventBus.addListener(BuddyNetworkHandler::register);
     }
 }
 

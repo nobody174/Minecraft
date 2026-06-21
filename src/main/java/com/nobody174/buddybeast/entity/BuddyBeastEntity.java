@@ -20,6 +20,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.level.Level;
 
+import com.nobody174.buddybeast.ai.FollowOwnerGoal;
+import com.nobody174.buddybeast.ai.StayGoal;
+import com.nobody174.buddybeast.ai.IdleGoal;
+
 import java.util.UUID;
 
 public class BuddyBeastEntity extends Mob {
@@ -32,6 +36,16 @@ public class BuddyBeastEntity extends Mob {
 
     public BuddyBeastEntity(EntityType<? extends Mob> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+
+        // Priority-based goal execution
+        this.goalSelector.addGoal(0, new FollowOwnerGoal(this, 1.0));
+        this.goalSelector.addGoal(1, new StayGoal(this));
+        this.goalSelector.addGoal(2, new IdleGoal(this));
     }
 
     @Override
