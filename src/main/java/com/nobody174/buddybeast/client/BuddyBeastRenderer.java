@@ -10,10 +10,13 @@
 
 package com.nobody174.buddybeast.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 
 import com.nobody174.buddybeast.BuddyBeast;
 import com.nobody174.buddybeast.entity.BuddyBeastEntity;
@@ -30,6 +33,24 @@ public class BuddyBeastRenderer extends MobRenderer<BuddyBeastEntity, EntityMode
     @Override
     public ResourceLocation getTextureLocation(BuddyBeastEntity entity) {
         return TEXTURE;
+    }
+
+    @Override
+    public void render(BuddyBeastEntity entity, float entityYaw, float partialTick, PoseStack poseStack, net.minecraft.client.renderer.MultiBufferSource bufferSource, int packedLight) {
+        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+
+        // Render name tag and health information
+        if (entity.isTamed()) {
+            renderTamedIndicator(entity, poseStack, partialTick);
+        }
+    }
+
+    private void renderTamedIndicator(BuddyBeastEntity entity, PoseStack poseStack, float partialTick) {
+        // Visual indicator that buddy is tamed
+        poseStack.pushPose();
+        poseStack.translate(0.0, entity.getBbHeight() + 0.5, 0.0);
+        // Color glow or aura can be added here for future enhancement
+        poseStack.popPose();
     }
 }
 

@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import com.nobody174.buddybeast.ai.FollowOwnerGoal;
 import com.nobody174.buddybeast.ai.StayGoal;
 import com.nobody174.buddybeast.ai.IdleGoal;
+import com.nobody174.buddybeast.ai.LookAtOwnerGoal;
 
 import java.util.UUID;
 
@@ -42,10 +43,11 @@ public class BuddyBeastEntity extends Mob {
     protected void registerGoals() {
         super.registerGoals();
 
-        // Priority-based goal execution
+        // Priority-based goal execution (lower number = higher priority)
         this.goalSelector.addGoal(0, new FollowOwnerGoal(this, 1.0));
-        this.goalSelector.addGoal(1, new StayGoal(this));
-        this.goalSelector.addGoal(2, new IdleGoal(this));
+        this.goalSelector.addGoal(1, new LookAtOwnerGoal(this));
+        this.goalSelector.addGoal(2, new StayGoal(this));
+        this.goalSelector.addGoal(3, new IdleGoal(this));
     }
 
     @Override
@@ -96,6 +98,20 @@ public class BuddyBeastEntity extends Mob {
     @Override
     public net.minecraft.world.InteractionResult mobInteract(net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand) {
         return BuddyInteractionHandler.handleRightClick(this, player, hand);
+    }
+
+    // Animation and visual state tracking
+    public float getAnimationProgress() {
+        // For use in animations - based on age
+        return (float) this.tickCount / 20.0f;
+    }
+
+    public boolean isFollowing() {
+        return this.isTamed();
+    }
+
+    public float getHealthPercent() {
+        return this.getHealth() / this.getMaxHealth();
     }
 
     // Getter/Setter methods

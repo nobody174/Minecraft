@@ -17,29 +17,36 @@
 
 **Week 1 Status:** All core systems implemented and building successfully!
 
-### Week 2: AI and Taming
-- [ ] Implement `BuddyGoalSelector` with goal prioritization
-- [ ] Create `FollowPlayerGoal`
-- [ ] Create `StayGoal`
-- [ ] Create `IdleGoal`
-- [ ] Implement right-click taming interaction
-- [ ] Add health bar and animation system
+### Week 2: Health Bar & Rendering - ⏳ IN PROGRESS
+- [x] Goal selector with priority system (DONE in Week 1)
+- [x] FollowOwnerGoal (DONE in Week 1)
+- [x] StayGoal (DONE in Week 1)
+- [x] IdleGoal (DONE in Week 1)
+- [x] Right-click taming interaction (DONE in Week 1)
+- [ ] **Add health bar rendering on client**
+- [ ] **Improve entity animations (setupAnim)**
+- [ ] **Add status effect indicators**
+- [ ] **Test AI goal switching in-game**
 
-### Week 3: Persistence and Sync
-- [ ] Implement NBT serialization (readAdditionalSaveData)
-- [ ] Implement NBT deserialization (addAdditionalSaveData)
-- [ ] Create `BuddySyncPacket`
-- [ ] Register packet with NeoForge network
-- [ ] Implement sync packet sending (every 10 ticks)
-- [ ] Test multiplayer synchronization
+### Week 3: Testing & Network Verification - ⏳ PLANNED
+- [x] NBT serialization (DONE in Week 1)
+- [x] NBT deserialization (DONE in Week 1)
+- [x] CustomPacketPayload structure (DONE in Week 1)
+- [x] Packet registration (DONE in Week 1)
+- [ ] **Implement packet sending (every 10 ticks server-side)**
+- [ ] **Implement packet handling (client-side)**
+- [ ] **Test multiplayer sync in actual game**
+- [ ] **Verify save/load works across server restarts**
 
-### Week 4: Testing and Release
-- [ ] Manual testing: single-player spawn/tame/follow
-- [ ] Manual testing: save/load persistence
-- [ ] Manual testing: multiplayer sync
-- [ ] Performance profiling (20+ buddies)
-- [ ] Bug fixes
-- [ ] Documentation completion
+### Week 4: In-Game Testing & Polish - ⏳ PLANNED
+- [ ] **Single-player spawn testing** (/summon buddybeast:buddy_beast)
+- [ ] **Taming interaction testing** (right-click)
+- [ ] **Following behavior testing** (does it actually follow?)
+- [ ] **Multiplayer sync testing** (2+ players)
+- [ ] **Save/load persistence testing** (world reload)
+- [ ] **Performance profiling** (20+ buddies simultaneously)
+- [ ] **Bug fixes and edge cases**
+- [ ] **Final documentation and release prep**
 
 ## Blocking Tasks
 
