@@ -45,10 +45,15 @@ public class IdleGoal extends Goal {
                 double y = this.buddy.getY();
                 double z = this.buddy.getZ() + (this.random.nextDouble() - 0.5) * 10;
 
-                this.buddy.getNavigation().moveTo(x, y, z, 0.5);
+                this.buddy.getNavigation().moveTo(x, y, z, 0.4);
                 this.idleTicks = 0;
             }
         }
+    }
+
+    @Override
+    public void stop() {
+        this.buddy.getNavigation().stop();
     }
 }
 

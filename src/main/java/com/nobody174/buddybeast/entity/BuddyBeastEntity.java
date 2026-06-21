@@ -15,28 +15,28 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
-public class BuddyBeastEntity extends LivingEntity {
-    private static final EntityDataAccessor<Integer> DATA_HEALTH = SynchedEntityData.defineId(BuddyBeastEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<String> DATA_OWNER_NAME = SynchedEntityData.defineId(BuddyBeastEntity.class, EntityDataSerializers.STRING);
+public class BuddyBeastEntity extends Mob {
+    private static final EntityDataAccessor<String> DATA_OWNER_NAME =
+        SynchedEntityData.defineId(BuddyBeastEntity.class, EntityDataSerializers.STRING);
 
     private UUID ownerUUID;
     private String ownerName = "Unknown";
     private boolean isTamed = false;
 
-    public BuddyBeastEntity(EntityType<? extends LivingEntity> entityType, Level level) {
+    public BuddyBeastEntity(EntityType<? extends Mob> entityType, Level level) {
         super(entityType, level);
     }
 
     @Override
-    protected void defineSyncedData(SynchedEntityData.Builder builder) {
-        super.defineSyncedData(builder);
-        builder.define(DATA_HEALTH, 20);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         builder.define(DATA_OWNER_NAME, "Unknown");
     }
 
@@ -74,6 +74,11 @@ public class BuddyBeastEntity extends LivingEntity {
         }
     }
 
+    @Override
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
+    }
+
     // Getter/Setter methods
     public boolean isTamed() {
         return this.isTamed;
@@ -100,9 +105,15 @@ public class BuddyBeastEntity extends LivingEntity {
         this.entityData.set(DATA_OWNER_NAME, name);
     }
 
-    @Override
-    public boolean isInvulnerableTo(net.minecraft.world.damagesource.DamageSource source) {
-        return false;
+    public LivingEntity findOwner() {
+        if (this.ownerUUID == null) {
+            return null;
+        }
+        // Try to find owner in nearby players
+        if (this.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            return serverLevel.getEntity(this.ownerUUID) instanceof LivingEntity ? (LivingEntity) serverLevel.getEntity(this.ownerUUID) : null;
+        }
+        return null;
     }
 }
 

@@ -35,6 +35,11 @@ public class StayGoal extends Goal {
     }
 
     @Override
+    public void stop() {
+        // Stop any ongoing navigation
+    }
+
+    @Override
     public void tick() {
         // Stay in place
     }

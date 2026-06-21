@@ -48,7 +48,7 @@ public class FollowOwnerGoal extends Goal {
             return false;
         }
 
-        LivingEntity owner = this.buddy.getOwner();
+        LivingEntity owner = this.buddy.findOwner();
         if (owner == null) {
             return false;
         }
@@ -63,7 +63,7 @@ public class FollowOwnerGoal extends Goal {
             return false;
         }
 
-        LivingEntity owner = this.buddy.getOwner();
+        LivingEntity owner = this.buddy.findOwner();
         if (owner == null) {
             return false;
         }
@@ -84,7 +84,7 @@ public class FollowOwnerGoal extends Goal {
 
     @Override
     public void tick() {
-        LivingEntity owner = this.buddy.getOwner();
+        LivingEntity owner = this.buddy.findOwner();
         if (owner == null) {
             return;
         }
@@ -93,7 +93,17 @@ public class FollowOwnerGoal extends Goal {
         this.pathNavigation.moveTo(owner, this.speedMultiplier);
 
         // Look at owner
-        this.buddy.getLookControl().setLookAt(owner.getEyePosition(), 10.0f, 10.0f);
+        double dx = owner.getX() - this.buddy.getX();
+        double dy = owner.getEyeY() - this.buddy.getEyeY();
+        double dz = owner.getZ() - this.buddy.getZ();
+        double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+        if (distance > 0) {
+            float yaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90f;
+            float pitch = (float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)));
+            this.buddy.setXRot(pitch);
+            this.buddy.setYRot(yaw);
+        }
     }
 }
 

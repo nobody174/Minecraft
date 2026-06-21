@@ -26,7 +26,10 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<BuddyBeastEntity>> BUDDY_BEAST =
         ENTITY_TYPES.register("buddy_beast", () ->
             EntityType.Builder.of(BuddyBeastEntity::new, MobCategory.CREATURE)
-                .sized(0.8f, 1.5f)
+                .sized(0.8f, 1.9f)
+                .eyeHeight(1.3f)
+                .clientTrackingRange(8)
+                .updateInterval(3)
                 .build("buddy_beast")
         );
 }

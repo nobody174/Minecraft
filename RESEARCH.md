@@ -31,10 +31,13 @@ symbol:   method getNavigation()
 location: variable buddy of type BuddyBeastEntity
 ```
 
-**Need to Research:**
-- Does LivingEntity have `getNavigation()` or different method?
-- How to access PathNavigation in 1.21.1?
-- Is it `getNavi gation()`, `getPathNavigation()`, or inherited method?
+**Status:** CONFIRMED - BuddyBeastEntity extends LivingEntity, but getNavigation() is a Mob method, not LivingEntity method
+
+**Solution:** Must extend Mob or PathfinderMob instead of LivingEntity directly
+
+**Found in Research:**
+- Mob class is documented as containing pathfinding logic
+- Need to use `Mob` as base class for creatures with AI
 
 ### Issue 3: Look Control
 **Problem:** `getLookControl()` method not found
