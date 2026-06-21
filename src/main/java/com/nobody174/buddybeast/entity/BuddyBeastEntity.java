@@ -93,6 +93,11 @@ public class BuddyBeastEntity extends Mob {
         return HumanoidArm.RIGHT;
     }
 
+    @Override
+    public net.minecraft.world.InteractionResult mobInteract(net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand) {
+        return BuddyInteractionHandler.handleRightClick(this, player, hand);
+    }
+
     // Getter/Setter methods
     public boolean isTamed() {
         return this.isTamed;
