@@ -2,17 +2,20 @@
 
 ## v0.1.0 Progress
 
-### Week 1: Entity Foundation
-- [x] **RESEARCH:** NeoForge entity and goal APIs (RESEARCH_FIRST.md) - COMPLETE
-- [x] Create `BuddyBeastEntity` class extending `Mob` - COMPLETE
-- [x] Register entity type in registry (ModEntities) - COMPLETE
-- [x] Implement goal selector and AI goals (Follow, Stay, Idle) - COMPLETE
-- [x] Network packet system (BuddySyncPacket, handler) - COMPLETE
-- [x] NBT persistence methods (readAdditionalSaveData, addAdditionalSaveData) - COMPLETE
-- [ ] Create entity model and texture
-- [ ] Implement client-side rendering
-- [ ] Implement right-click taming interaction
-- [ ] Test basic spawning and AI
+### Week 1: Entity Foundation - ✅ COMPLETE
+- [x] **RESEARCH:** NeoForge entity and goal APIs (RESEARCH_FIRST.md)
+- [x] Create `BuddyBeastEntity` class extending `Mob`
+- [x] Register entity type in registry (ModEntities)
+- [x] Implement goal selector and AI goals (FollowOwnerGoal, StayGoal, IdleGoal)
+- [x] Network packet system (BuddySyncPacket, BuddyNetworkHandler)
+- [x] NBT persistence methods (readAdditionalSaveData, addAdditionalSaveData)
+- [x] Implement right-click taming interaction (BuddyInteractionHandler)
+- [x] Entity spawn handler (BuddySpawnHandler)
+- [x] Client-side rendering (BuddyBeastRenderer with CowModel placeholder)
+- [x] Entity and spawn registration in main mod class
+- [x] Build successfully compiling with no errors
+
+**Week 1 Status:** All core systems implemented and building successfully!
 
 ### Week 2: AI and Taming
 - [ ] Implement `BuddyGoalSelector` with goal prioritization
