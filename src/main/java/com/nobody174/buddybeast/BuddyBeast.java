@@ -13,11 +13,13 @@ package com.nobody174.buddybeast;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 import com.nobody174.buddybeast.entity.ModEntities;
 import com.nobody174.buddybeast.entity.BuddySpawnHandler;
 import com.nobody174.buddybeast.network.BuddyNetworkHandler;
+import com.nobody174.buddybeast.client.ClientSetup;
 
 @Mod("buddybeast")
 public class BuddyBeast {
@@ -30,6 +32,9 @@ public class BuddyBeast {
 
         // Register network handlers
         modEventBus.addListener(BuddyNetworkHandler::register);
+
+        // Register client-side renderer registration
+        modEventBus.addListener(ClientSetup::registerEntityRenderers);
 
         // Register entity spawn handlers (NeoForge event bus)
         NeoForge.EVENT_BUS.addListener(BuddySpawnHandler::onEntityJoinLevel);
