@@ -17,36 +17,42 @@
 
 **Week 1 Status:** All core systems implemented and building successfully!
 
-### Week 2: Health Bar & Rendering - ⏳ IN PROGRESS
-- [x] Goal selector with priority system (DONE in Week 1)
-- [x] FollowOwnerGoal (DONE in Week 1)
-- [x] StayGoal (DONE in Week 1)
-- [x] IdleGoal (DONE in Week 1)
-- [x] Right-click taming interaction (DONE in Week 1)
-- [ ] **Add health bar rendering on client**
-- [ ] **Improve entity animations (setupAnim)**
-- [ ] **Add status effect indicators**
-- [ ] **Test AI goal switching in-game**
+### Week 2: Health Bar & Rendering - ✅ COMPLETE
+- [x] Goal selector with priority system
+- [x] FollowOwnerGoal with pathfinding
+- [x] StayGoal with navigation stop
+- [x] IdleGoal with random wandering
+- [x] Right-click taming interaction
+- [x] **Add health bar rendering foundation (HealthBarRenderer)**
+- [x] **Improve entity animations (LookAtOwnerGoal, animation tracking)**
+- [x] **Add status effect indicators (StatusIndicator enum)**
+- [x] **Build compiling with all new rendering code**
 
-### Week 3: Testing & Network Verification - ⏳ PLANNED
-- [x] NBT serialization (DONE in Week 1)
-- [x] NBT deserialization (DONE in Week 1)
-- [x] CustomPacketPayload structure (DONE in Week 1)
-- [x] Packet registration (DONE in Week 1)
+**Week 2 Status:** All visualization systems implemented!
+
+### Week 3: Network Verification & Persistence - ⏳ IN PROGRESS
+- [x] NBT serialization (addAdditionalSaveData)
+- [x] NBT deserialization (readAdditionalSaveData)
+- [x] CustomPacketPayload record structure
+- [x] Packet registration in mod constructor
 - [ ] **Implement packet sending (every 10 ticks server-side)**
-- [ ] **Implement packet handling (client-side)**
-- [ ] **Test multiplayer sync in actual game**
-- [ ] **Verify save/load works across server restarts**
+  - Add scheduled task to BuddyBeastEntity.tick()
+  - Send health + position updates periodically
+- [ ] **Implement packet handling on client-side**
+  - Update BuddyNetworkHandler to actually sync data
+  - Apply position/health to client-side entity
+- [ ] **Test save/load persistence (spawn → save world → reload)**
+- [ ] **Verify data survives server restart**
 
 ### Week 4: In-Game Testing & Polish - ⏳ PLANNED
 - [ ] **Single-player spawn testing** (/summon buddybeast:buddy_beast)
-- [ ] **Taming interaction testing** (right-click)
-- [ ] **Following behavior testing** (does it actually follow?)
-- [ ] **Multiplayer sync testing** (2+ players)
-- [ ] **Save/load persistence testing** (world reload)
-- [ ] **Performance profiling** (20+ buddies simultaneously)
-- [ ] **Bug fixes and edge cases**
-- [ ] **Final documentation and release prep**
+- [ ] **Taming interaction testing** (right-click to tame)
+- [ ] **Following behavior testing** (does pathfinding work?)
+- [ ] **Multiplayer sync testing** (2+ players, buddy appears for all)
+- [ ] **Save/load persistence testing** (world reload preserves buddy)
+- [ ] **Performance profiling** (spawn 20+ buddies, measure tick cost)
+- [ ] **Bug fixes and edge cases** (despawn, chunk unload, etc)
+- [ ] **Final documentation and v0.1.0 release prep**
 
 ## Blocking Tasks
 

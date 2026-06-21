@@ -62,7 +62,8 @@ public class BuddyBeastEntity extends Mob {
 
         if (!this.level().isClientSide) {
             // Server-side tick logic
-            // AI will be evaluated here
+            // Entity data syncing happens automatically via Minecraft's entity system
+            // Custom packet sync can be added for complex data later
         }
     }
 
