@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All rights reserved"
+authors="nobody174"
+description="A custom AI mob mod that adds intelligent, player-trained creatures to Minecraft with advanced pathfinding, decision-making, and goal-based behavior systems."
+
+[[mods]]
+modId="buddybeast"
+version="${file.jarVersion}"
+displayName="Buddy Beast"
+description="A custom AI mob mod that adds intelligent, player-trained creatures to Minecraft with advanced pathfinding, decision-making, and goal-based behavior systems."
+
+[[dependencies.buddybeast]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.21.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.buddybeast]]
+    modId="neoforge"
+    mandatory=true
+    versionRange="[21.1.233,)"
+    ordering="NONE"
+    side="BOTH"

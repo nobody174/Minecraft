@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Specification-Title: buddybeast
+Implementation-Title: Buddy Beast
+Implementation-Version: 0.1.0
+Implementation-Vendor: nobody174
+
