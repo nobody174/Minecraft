@@ -23,7 +23,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
 import com.nobody174.buddybeast.ai.FollowOwnerGoal;
-import com.nobody174.buddybeast.ai.StayGoal;
 import com.nobody174.buddybeast.ai.IdleGoal;
 import com.nobody174.buddybeast.ai.LookAtOwnerGoal;
 import com.nobody174.buddybeast.network.BuddySyncPacket;
@@ -56,10 +55,13 @@ public class BuddyBeastEntity extends Mob {
         super.registerGoals();
 
         // Priority-based goal execution (lower number = higher priority)
+        // StayGoal is intentionally not registered yet: it always returns canUse()=true
+        // for tamed buddies, which would permanently starve IdleGoal at a lower priority.
+        // v0.1.0 has no player-triggered stay/follow toggle (see BUDDY_BEAST_PROMPT scope),
+        // so StayGoal has no real trigger condition until that command exists.
         this.goalSelector.addGoal(0, new FollowOwnerGoal(this, 1.0));
         this.goalSelector.addGoal(1, new LookAtOwnerGoal(this));
-        this.goalSelector.addGoal(2, new StayGoal(this));
-        this.goalSelector.addGoal(3, new IdleGoal(this));
+        this.goalSelector.addGoal(2, new IdleGoal(this));
     }
 
     @Override

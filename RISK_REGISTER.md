@@ -42,8 +42,13 @@ This document tracks technical, performance, and compatibility risks for Buddy B
 - Add retry logic for sync packets
 - Test heavily in multiplayer before release
 
+**Status update (Week 3):** Server-authoritative health sync implemented and verified
+via live dedicated server (entity attributes, taming, persistence all confirmed working).
+Actual 2+ client multiplayer sync testing still outstanding — requires connected clients,
+deferred to Week 4 manual testing session.
+
 **Owner:** Network synchronization  
-**Target Resolution:** Week 3 (v0.1.0)
+**Target Resolution:** Week 3 (v0.1.0) — sync logic done, multi-client verification pending
 
 ---
 
