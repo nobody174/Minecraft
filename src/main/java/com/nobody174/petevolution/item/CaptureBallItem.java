@@ -27,6 +27,7 @@ import net.minecraft.world.item.context.UseOnContext;
 
 import com.nobody174.petevolution.component.ModDataComponents;
 import com.nobody174.petevolution.component.PetData;
+import com.nobody174.petevolution.component.PetStatApplier;
 import com.nobody174.petevolution.component.SpeciesStats;
 
 public class CaptureBallItem extends Item {
@@ -92,6 +93,11 @@ public class CaptureBallItem extends Item {
 
         released.moveTo(releasePos.getX() + 0.5, releasePos.getY(), releasePos.getZ() + 0.5,
             context.getPlayer() != null ? context.getPlayer().getYRot() : 0f, 0f);
+
+        if (released instanceof LivingEntity livingReleased) {
+            PetStatApplier.apply(livingReleased, data);
+        }
+
         serverLevel.addFreshEntity(released);
 
         stack.remove(ModDataComponents.PET_DATA.get());

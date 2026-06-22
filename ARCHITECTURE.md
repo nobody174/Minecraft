@@ -27,6 +27,9 @@ Pattern reused from `buddy-beast`'s `BuddySyncPacket`/`BuddyNetworkHandler` (see
 ### Events
 - `event/PetXpEvent.java` — Listens for XP-granting actions (combat, crafting, exploration) and updates `PetData` on the held capture ball.
 
+### Gameplay Effects
+- `component/PetStatApplier.java` — Translates `PetData` into vanilla `Attributes` (MAX_HEALTH, ATTACK_DAMAGE, ARMOR, MOVEMENT_SPEED) on the released mob, so captured/trained/evolved stats have real combat impact rather than being purely cosmetic.
+
 ## Data Flow
 
 1. Player captures entity → server creates `PetData` from `EntityType` + base stats → sets on ItemStack via data component.

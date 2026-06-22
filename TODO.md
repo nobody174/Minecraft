@@ -14,7 +14,7 @@
 
 - [ ] In-game smoke test: capture → kill mob/craft/explore for XP → evolve → release (requires manual play-test)
 - [x] Additional XP sources: crafting (`PlayerEvent.ItemCraftedEvent`), exploration (`Player.walkDist` delta, 20-tick batched)
-- [ ] Stat-based combat effects (currently stats are tracked but not yet applied to gameplay)
+- [x] Stat-based combat effects: `PetStatApplier` sets MAX_HEALTH/ATTACK_DAMAGE/ARMOR from PetData and scales MOVEMENT_SPEED relative to vanilla base, applied to the released mob on spawn
 - [x] Multiple species base-stat variation (hostile/passive/neutral categories via `SpeciesStats`)
 - [x] Creative tab registration for `CaptureBallItem` (added to Tools & Utilities)
 

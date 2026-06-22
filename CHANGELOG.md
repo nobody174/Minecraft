@@ -18,3 +18,4 @@ All notable changes to Pet Evolution are documented here.
 - `SpeciesStats`: base stats now vary by captured species category (hostile/passive/neutral)
 - Crafting XP: `PlayerEvent.ItemCraftedEvent` grants XP to held capture ball
 - Exploration XP: tracks `Player.walkDist` delta per-player, batched every 20 ticks, grants XP per distance threshold
+- `PetStatApplier`: applies PetData stats to the released mob's vanilla attributes (max health, attack damage, armor, movement speed) so stats and evolution have real gameplay effect
