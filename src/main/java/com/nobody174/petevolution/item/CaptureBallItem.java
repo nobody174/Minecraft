@@ -27,6 +27,7 @@ import net.minecraft.world.item.context.UseOnContext;
 
 import com.nobody174.petevolution.component.ModDataComponents;
 import com.nobody174.petevolution.component.PetData;
+import com.nobody174.petevolution.component.SpeciesStats;
 
 public class CaptureBallItem extends Item {
 
@@ -53,7 +54,7 @@ public class CaptureBallItem extends Item {
         }
 
         ResourceLocation speciesId = BuiltInRegistries.ENTITY_TYPE.getKey(target.getType());
-        PetData captured = PetData.baseStatsFor(speciesId.toString());
+        PetData captured = SpeciesStats.baseStatsFor((Mob) target, speciesId.toString());
         stack.set(ModDataComponents.PET_DATA.get(), captured);
 
         target.discard();

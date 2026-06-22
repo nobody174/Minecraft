@@ -48,10 +48,6 @@ public record PetData(int hp, int atk, int def, int spd, int xp, int evoStage, S
         (core, xp, evoStage, speciesId) -> new PetData(core.hp(), core.atk(), core.def(), core.spd(), xp, evoStage, speciesId)
     );
 
-    public static PetData baseStatsFor(String speciesId) {
-        return new PetData(20, 5, 5, 5, 0, 0, speciesId);
-    }
-
     public PetData withXp(int gained) {
         int newXp = xp + gained;
         int newStage = evoStage;

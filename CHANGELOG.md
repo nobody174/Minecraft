@@ -15,3 +15,6 @@ All notable changes to Pet Evolution are documented here.
 - XP system: killing an entity while holding a captured pet ball grants XP (`PetXpEvent`)
 - Evolution: stat thresholds trigger automatic stage-up with stat gains (`EvolutionRules`)
 - HUD overlay showing active pet's stats, XP, and evolution stage
+- `SpeciesStats`: base stats now vary by captured species category (hostile/passive/neutral)
+- Crafting XP: `PlayerEvent.ItemCraftedEvent` grants XP to held capture ball
+- Exploration XP: tracks `Player.walkDist` delta per-player, batched every 20 ticks, grants XP per distance threshold

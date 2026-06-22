@@ -12,8 +12,12 @@
 
 ## Current (Week 2)
 
-- [ ] In-game smoke test: capture → kill mob for XP → evolve → release (requires manual play-test)
-- [ ] Additional XP sources: crafting, exploration (distance traveled while holding pet)
+- [ ] In-game smoke test: capture → kill mob/craft/explore for XP → evolve → release (requires manual play-test)
+- [x] Additional XP sources: crafting (`PlayerEvent.ItemCraftedEvent`), exploration (`Player.walkDist` delta, 20-tick batched)
 - [ ] Stat-based combat effects (currently stats are tracked but not yet applied to gameplay)
-- [ ] Multiple species base-stat variation (currently all captures use identical base stats)
+- [x] Multiple species base-stat variation (hostile/passive/neutral categories via `SpeciesStats`)
 - [x] Creative tab registration for `CaptureBallItem` (added to Tools & Utilities)
+
+## Technical debt flagged during Week 2
+
+- [x] Fixed: exploration/tick XP tracking now cleans up per-player map entries on `PlayerLoggedOutEvent`
