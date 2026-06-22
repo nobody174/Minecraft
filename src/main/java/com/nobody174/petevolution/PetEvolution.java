@@ -24,6 +24,7 @@ import com.nobody174.petevolution.client.PetTooltipHandler;
 import com.nobody174.petevolution.component.ModAttachments;
 import com.nobody174.petevolution.component.ModDataComponents;
 import com.nobody174.petevolution.event.PetBattleEvent;
+import com.nobody174.petevolution.event.PetBreedingEvent;
 import com.nobody174.petevolution.event.PetXpEvent;
 import com.nobody174.petevolution.item.ModItems;
 
@@ -39,6 +40,7 @@ public class PetEvolution {
         modEventBus.addListener(PetEvolution::addCreativeTabItems);
         NeoForge.EVENT_BUS.register(new PetXpEvent());
         NeoForge.EVENT_BUS.register(new PetBattleEvent());
+        NeoForge.EVENT_BUS.register(new PetBreedingEvent());
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             NeoForge.EVENT_BUS.register(new PetTooltipHandler());

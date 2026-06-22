@@ -36,6 +36,9 @@
 **Rarity tiers — Complete**
 - `PetRarity` enum (COMMON/UNCOMMON/RARE/EPIC), weighted roll on capture, stat multiplier applied to species base stats, color-coded in tooltip/HUD
 
-- Breeding mechanics
+**Breeding mechanics — Complete**
+- `PetBreedingEvent`: right-click your own fully-evolved released pet (holding an empty capture ball) while another of your own fully-evolved pets of the same species is within 6 blocks to breed an offspring
+- Offspring base stats are the average of both parents' stats, with a 5% chance to roll a one-tier rarity upgrade (proportionally scaling stats up)
+- 5-minute per-pet breeding cooldown prevents rapid re-breeding
 
 See [FUTURE_FEATURES.md](FUTURE_FEATURES.md) for ideas beyond v0.2.0.

@@ -42,3 +42,10 @@
 - [x] Applied at capture time in `SpeciesStats.baseStatsFor`
 - [x] Tooltip + HUD color-coded rarity display
 - [ ] In-game smoke test: capture several mobs, confirm rarity distribution looks roughly weighted-correct and stat multipliers apply (requires manual play-test)
+
+## Phase 2 — Breeding Mechanics
+
+- [x] `PetBreedingEvent`: right-click your own fully-evolved released pet (with an empty capture ball) while another of your own fully-evolved pets of the same species is nearby to breed an offspring
+- [x] Offspring stats are the average of both parents' stats, with a 5% chance to roll a rarity upgrade (scaling stats up proportionally)
+- [x] 5-minute per-pet breeding cooldown to prevent rapid re-breeding
+- [ ] In-game smoke test: breed two fully-evolved same-species pets, confirm offspring stats/rarity and cooldown behavior (requires manual play-test)
