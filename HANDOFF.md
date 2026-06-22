@@ -92,3 +92,19 @@ vanilla mobs (horse, pig, wolf, etc.) — should save a step every time.
 - The `BuddyDevConfig` live-reload pattern should be the default approach for
   any new tunable visual constant — don't hardcode another magic number into
   Java if it needs visual iteration.
+
+## Prompt to start tonight's chat
+
+Paste this verbatim into a new chat to resume:
+
+```
+Continuing work on an existing mod project: Buddy Beast
+
+System Paths:
+- Prompt System: D:\Claude AI Projects\projects\Minecraft-mods\prompt-system\
+- Project: D:\Claude AI Projects\projects\Minecraft-mods\buddy-beast\
+
+Please read prompt-system\QUICK_START.md and prompt-system\MASTER_PROMPT.md to load the full ruleset (autonomous mode, JAR deploy workflow, file headers, documentation standards, etc.), then read buddy-beast\HANDOFF.md for exactly where we left off and what to do next.
+
+Continue from there.
+```
