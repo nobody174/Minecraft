@@ -34,11 +34,15 @@ public class BuddyInteractionHandler {
             return InteractionResult.SUCCESS;
         }
 
-        // If tamed by player, cycle goals
+        // If tamed by player, toggle between following and staying
         if (buddy.getOwnerUUID() != null && buddy.getOwnerUUID().equals(player.getUUID())) {
-            // Cycle between goals on successive clicks
+            boolean nowStaying = !buddy.isStaying();
+            buddy.setStaying(nowStaying);
+
             player.displayClientMessage(
-                net.minecraft.network.chat.Component.literal("§6Buddy is following you"),
+                net.minecraft.network.chat.Component.literal(
+                    nowStaying ? "§6Buddy is staying" : "§6Buddy is following you"
+                ),
                 true
             );
             return InteractionResult.SUCCESS;

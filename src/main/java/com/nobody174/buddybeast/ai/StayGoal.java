@@ -26,7 +26,7 @@ public class StayGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.buddy.isTamed();
+        return this.buddy.isTamed() && this.buddy.isStaying();
     }
 
     @Override

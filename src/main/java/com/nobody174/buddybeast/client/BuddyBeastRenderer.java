@@ -26,8 +26,9 @@ public class BuddyBeastRenderer extends MobRenderer<BuddyBeastEntity, EntityMode
         ResourceLocation.fromNamespaceAndPath(BuddyBeast.MOD_ID, "textures/entity/buddy_beast.png");
 
     public BuddyBeastRenderer(EntityRendererProvider.Context context) {
-        // Use a basic entity model from context
-        super(context, new net.minecraft.client.model.CowModel(context.bakeLayer(net.minecraft.client.model.geom.ModelLayers.COW)), 0.7f);
+        // TwoHeadedCowModel reuses CowModel's existing baked head ModelPart and
+        // renders it a second time at the rear - no new cubes/UVs needed.
+        super(context, new TwoHeadedCowModel(context.bakeLayer(net.minecraft.client.model.geom.ModelLayers.COW)), 0.7f);
     }
 
     @Override

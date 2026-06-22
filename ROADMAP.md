@@ -40,6 +40,8 @@
 - Buddy customization (colors, names, size variants)
 - Improved multiplayer synchronization
 - Status effects system
+- Equippable armor for buddies (defense stat boost, visible on model)
+- Rideable saddle support for buddy variants large enough to ride (e.g. horse-based buddy), reusing vanilla saddle item/interaction
 
 ## v0.3.0 — Progression (Future)
 

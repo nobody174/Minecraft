@@ -11,20 +11,24 @@
 package com.nobody174.buddybeast.entity;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import com.nobody174.buddybeast.ai.FollowOwnerGoal;
 import com.nobody174.buddybeast.ai.IdleGoal;
 import com.nobody174.buddybeast.ai.LookAtOwnerGoal;
+import com.nobody174.buddybeast.ai.StayGoal;
 import com.nobody174.buddybeast.network.BuddySyncPacket;
 
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -38,6 +42,7 @@ public class BuddyBeastEntity extends Mob {
     private UUID ownerUUID;
     private String ownerName = "Unknown";
     private boolean isTamed = false;
+    private boolean isStaying = false;
 
     public BuddyBeastEntity(EntityType<? extends Mob> entityType, Level level) {
         super(entityType, level);
@@ -55,13 +60,12 @@ public class BuddyBeastEntity extends Mob {
         super.registerGoals();
 
         // Priority-based goal execution (lower number = higher priority)
-        // StayGoal is intentionally not registered yet: it always returns canUse()=true
-        // for tamed buddies, which would permanently starve IdleGoal at a lower priority.
-        // v0.1.0 has no player-triggered stay/follow toggle (see BUDDY_BEAST_PROMPT scope),
-        // so StayGoal has no real trigger condition until that command exists.
-        this.goalSelector.addGoal(0, new FollowOwnerGoal(this, 1.0));
-        this.goalSelector.addGoal(1, new LookAtOwnerGoal(this));
-        this.goalSelector.addGoal(2, new IdleGoal(this));
+        // StayGoal only returns canUse()=true when isStaying is set via right-click toggle,
+        // so it no longer permanently starves IdleGoal/FollowOwnerGoal.
+        this.goalSelector.addGoal(0, new StayGoal(this));
+        this.goalSelector.addGoal(1, new FollowOwnerGoal(this, 1.0));
+        this.goalSelector.addGoal(2, new LookAtOwnerGoal(this));
+        this.goalSelector.addGoal(3, new IdleGoal(this));
     }
 
     @Override
@@ -86,6 +90,7 @@ public class BuddyBeastEntity extends Mob {
         super.addAdditionalSaveData(tag);
 
         tag.putBoolean("Tamed", this.isTamed);
+        tag.putBoolean("Staying", this.isStaying);
         tag.putString("OwnerName", this.ownerName);
 
         if (this.ownerUUID != null) {
@@ -98,6 +103,7 @@ public class BuddyBeastEntity extends Mob {
         super.readAdditionalSaveData(tag);
 
         this.isTamed = tag.getBoolean("Tamed");
+        this.isStaying = tag.getBoolean("Staying");
         this.ownerName = tag.getString("OwnerName");
 
         if (tag.hasUUID("OwnerUUID")) {
@@ -117,6 +123,21 @@ public class BuddyBeastEntity extends Mob {
     @Override
     public net.minecraft.world.InteractionResult mobInteract(net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand) {
         return BuddyInteractionHandler.handleRightClick(this, player, hand);
+    }
+
+    @Override
+    public void die(DamageSource damageSource) {
+        super.die(damageSource);
+
+        if (this.isTamed) {
+            LivingEntity owner = this.findOwner();
+            if (owner instanceof Player player) {
+                player.displayClientMessage(
+                    Component.literal("§c" + this.ownerName + "'s buddy has died!"),
+                    true
+                );
+            }
+        }
     }
 
     // Animation and visual state tracking
@@ -141,6 +162,14 @@ public class BuddyBeastEntity extends Mob {
     public void setTamed(boolean tamed) {
         this.isTamed = tamed;
         this.setPersistenceRequired();
+    }
+
+    public boolean isStaying() {
+        return this.isStaying;
+    }
+
+    public void setStaying(boolean staying) {
+        this.isStaying = staying;
     }
 
     public UUID getOwnerUUID() {

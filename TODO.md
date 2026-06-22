@@ -79,6 +79,13 @@ See `prompt-system/SIDE_PROMPTS/RESEARCH_FIRST.md`
 
 See RISK_REGISTER.md for details.
 
+## v0.2.0 Planned Features
+
+- [ ] **Armor for buddies** — equippable armor item, defense stat boost, rendered on model
+- [ ] **Saddle/riding for large buddy variants** — reuse vanilla saddle item/interaction for buddies big enough to ride (e.g. horse-based buddy)
+
+See ROADMAP.md v0.2.0 section.
+
 ## Technical Debt
 
 None yet (project just started).

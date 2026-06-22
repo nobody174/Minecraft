@@ -13,12 +13,14 @@ package com.nobody174.buddybeast;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
 import com.nobody174.buddybeast.entity.ModEntities;
 import com.nobody174.buddybeast.entity.BuddyBeastEntity;
 import com.nobody174.buddybeast.network.BuddyNetworkHandler;
 import com.nobody174.buddybeast.client.ClientSetup;
+import com.nobody174.buddybeast.client.BuddyDevConfig;
 
 @Mod("buddybeast")
 public class BuddyBeast {
@@ -37,6 +39,11 @@ public class BuddyBeast {
         // Register entity attributes (required for any Mob/LivingEntity)
         modEventBus.addListener((EntityAttributeCreationEvent event) ->
             event.put(ModEntities.BUDDY_BEAST.get(), BuddyBeastEntity.createAttributes().build()));
+
+        // Dev-tuning config (client-only): NeoForge watches the TOML file on
+        // disk and live-reloads it, so visual constants can be tuned without
+        // rebuilding/restarting the game.
+        container.registerConfig(ModConfig.Type.CLIENT, BuddyDevConfig.SPEC);
     }
 }
 
