@@ -21,7 +21,9 @@ import net.minecraft.world.item.CreativeModeTabs;
 
 import com.nobody174.petevolution.client.ClientSetup;
 import com.nobody174.petevolution.client.PetTooltipHandler;
+import com.nobody174.petevolution.component.ModAttachments;
 import com.nobody174.petevolution.component.ModDataComponents;
+import com.nobody174.petevolution.event.PetBattleEvent;
 import com.nobody174.petevolution.event.PetXpEvent;
 import com.nobody174.petevolution.item.ModItems;
 
@@ -31,10 +33,12 @@ public class PetEvolution {
 
     public PetEvolution(ModContainer container, IEventBus modEventBus) {
         ModDataComponents.DATA_COMPONENT_TYPES.register(modEventBus);
+        ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
 
         modEventBus.addListener(PetEvolution::addCreativeTabItems);
         NeoForge.EVENT_BUS.register(new PetXpEvent());
+        NeoForge.EVENT_BUS.register(new PetBattleEvent());
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             NeoForge.EVENT_BUS.register(new PetTooltipHandler());

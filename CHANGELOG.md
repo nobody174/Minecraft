@@ -24,3 +24,12 @@ All notable changes to Pet Evolution are documented here.
 
 ### Removed
 - `PetSyncPacket`, `PetNetworkHandler`, `ClientPetState` — redundant once the HUD reads the (already vanilla-synced) ItemStack data component directly; see REUSED_FROM.md for rationale
+
+## [Unreleased] — v0.2.0 (Phase 2, in progress)
+
+### Added
+- `component/PetOwnerData.java` + `component/ModAttachments.java`: NeoForge entity attachments giving released pets a persistent owner UUID (`PET_OWNER`) and live stat snapshot (`RELEASED_PET_DATA`) independent of the original capture ball item
+- `event/PetBattleEvent.java`: pet-vs-pet battle system. Right-click another player's released pet while holding an empty capture ball to challenge it with your own nearby released pet; resolved instantly via derived battle power (`hp + atk*2 + def + spd`); winner gains XP and has stats reapplied; 30-second per-pet cooldown prevents rapid re-challenge XP farming
+
+### Fixed
+- Re-capturing a previously-released pet no longer resets it to species base stats — `CaptureBallItem` now checks for an existing `RELEASED_PET_DATA` attachment and preserves battle/XP progress if present

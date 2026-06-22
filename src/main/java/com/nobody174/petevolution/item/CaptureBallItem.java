@@ -25,8 +25,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 
+import com.nobody174.petevolution.component.ModAttachments;
 import com.nobody174.petevolution.component.ModDataComponents;
 import com.nobody174.petevolution.component.PetData;
+import com.nobody174.petevolution.component.PetOwnerData;
 import com.nobody174.petevolution.component.PetStatApplier;
 import com.nobody174.petevolution.component.SpeciesStats;
 
@@ -54,8 +56,14 @@ public class CaptureBallItem extends Item {
             return InteractionResult.FAIL;
         }
 
-        ResourceLocation speciesId = BuiltInRegistries.ENTITY_TYPE.getKey(target.getType());
-        PetData captured = SpeciesStats.baseStatsFor((Mob) target, speciesId.toString());
+        PetData existingProgress = target.getData(ModAttachments.RELEASED_PET_DATA.get());
+        PetData captured;
+        if (existingProgress != null) {
+            captured = existingProgress;
+        } else {
+            ResourceLocation speciesId = BuiltInRegistries.ENTITY_TYPE.getKey(target.getType());
+            captured = SpeciesStats.baseStatsFor((Mob) target, speciesId.toString());
+        }
         stack.set(ModDataComponents.PET_DATA.get(), captured);
 
         target.discard();
@@ -96,6 +104,10 @@ public class CaptureBallItem extends Item {
 
         if (released instanceof LivingEntity livingReleased) {
             PetStatApplier.apply(livingReleased, data);
+            released.setData(ModAttachments.RELEASED_PET_DATA.get(), data);
+            if (context.getPlayer() != null) {
+                released.setData(ModAttachments.PET_OWNER.get(), new PetOwnerData(context.getPlayer().getUUID()));
+            }
         }
 
         serverLevel.addFreshEntity(released);

@@ -27,3 +27,11 @@
 
 - [ ] In-game smoke test of full capture → XP → evolve → release → combat-stat-effect loop (requires manual play-test)
 - [ ] Testing pass, RC1 → RC2 → RC3
+
+## Phase 2 — Battle System
+
+- [x] `PET_OWNER`/`RELEASED_PET_DATA` attachments for persistent released-pet identity
+- [x] `PetBattleEvent`: right-click challenge, nearby-pet lookup, instant power-based resolution, XP reward
+- [x] Fix: re-capturing a released pet preserves progress instead of resetting to species base
+- [ ] In-game smoke test: release two pets (different players/test accounts), trigger a battle, confirm winner XP + message, confirm re-capture preserves progress (requires manual play-test)
+- [x] Fixed: 30-second per-pet battle cooldown added to prevent rapid re-challenge XP farming
