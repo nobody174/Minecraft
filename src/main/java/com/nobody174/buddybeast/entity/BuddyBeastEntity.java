@@ -18,6 +18,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
 import com.nobody174.buddybeast.ai.FollowOwnerGoal;
@@ -40,6 +42,13 @@ public class BuddyBeastEntity extends Mob {
 
     public BuddyBeastEntity(EntityType<? extends Mob> entityType, Level level) {
         super(entityType, level);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+            .add(Attributes.MAX_HEALTH, 20.0)
+            .add(Attributes.MOVEMENT_SPEED, 0.3)
+            .add(Attributes.FOLLOW_RANGE, 16.0);
     }
 
     @Override
@@ -92,6 +101,10 @@ public class BuddyBeastEntity extends Mob {
         if (tag.hasUUID("OwnerUUID")) {
             this.ownerUUID = tag.getUUID("OwnerUUID");
         }
+
+        if (this.isTamed) {
+            this.setPersistenceRequired();
+        }
     }
 
     @Override
@@ -125,6 +138,7 @@ public class BuddyBeastEntity extends Mob {
 
     public void setTamed(boolean tamed) {
         this.isTamed = tamed;
+        this.setPersistenceRequired();
     }
 
     public UUID getOwnerUUID() {

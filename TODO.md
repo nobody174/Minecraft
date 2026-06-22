@@ -30,7 +30,7 @@
 
 **Week 2 Status:** All visualization systems implemented!
 
-### Week 3: Network Verification & Persistence - ⏳ IN PROGRESS
+### Week 3: Network Verification & Persistence - ✅ COMPLETE
 - [x] NBT serialization (addAdditionalSaveData)
 - [x] NBT deserialization (readAdditionalSaveData)
 - [x] CustomPacketPayload record structure
@@ -41,15 +41,23 @@
 - [x] **Implement packet handling on client-side**
   - BuddyNetworkHandler resolves entity by ID via ClientLevel.getEntity()
   - Applies synced health to client-side BuddyBeastEntity
-- [ ] **Test save/load persistence (spawn → save world → reload)**
-- [ ] **Verify data survives server restart**
+- [x] **Test save/load persistence (spawn → save world → reload)**
+  - Verified via RCON against live dedicated test server
+- [x] **Verify data survives server restart**
+  - Tamed/OwnerName/PersistenceRequired all confirmed intact after full restart
 
-### Week 4: In-Game Testing & Polish - ⏳ PLANNED
-- [ ] **Single-player spawn testing** (/summon buddybeast:buddy_beast)
-- [ ] **Taming interaction testing** (right-click to tame)
+**Week 3 bugs found and fixed during live server testing:**
+- Entity attributes were never registered (`EntityAttributeCreationEvent` missing) — caused "Entity has no attributes" error on mod load. Fixed by adding `BuddyBeastEntity.createAttributes()` and registering it.
+- `BuddySpawnHandler` redundantly called `finalizeSpawn()` a second time on every `EntityJoinLevelEvent` — vanilla already calls it exactly once per real spawn flow (natural spawn, `/summon`, spawn egg) with the correct `MobSpawnType`. Removed the handler entirely.
+- Tamed buddies didn't persist through world reload — `setTamed()` never set `setPersistenceRequired()`, so an untamed-looking entity could be reaped on chunk unload. Fixed in both `setTamed()` and `readAdditionalSaveData()`.
+- `HealthBarRenderer` existed but was never registered on any event bus — wired into `ClientSetup.registerEntityRenderers` (client-only, avoids crashing dedicated servers) and implemented real billboard text rendering via `Font.drawInBatch` (previous code was a non-functional stub).
+
+### Week 4: In-Game Testing & Polish - ⏳ IN PROGRESS
+- [x] **Single-player/server spawn testing** (`/summon buddybeast:buddy_beast`) — verified via RCON, no crash, correct attributes/health
+- [ ] **Taming interaction testing** (right-click to tame) — NBT-level taming verified; actual player right-click interaction not yet tested in a real client session
 - [ ] **Following behavior testing** (does pathfinding work?)
 - [ ] **Multiplayer sync testing** (2+ players, buddy appears for all)
-- [ ] **Save/load persistence testing** (world reload preserves buddy)
+- [x] **Save/load persistence testing** (world reload preserves buddy) — verified via full server restart
 - [ ] **Performance profiling** (spawn 20+ buddies, measure tick cost)
 - [ ] **Bug fixes and edge cases** (despawn, chunk unload, etc)
 - [ ] **Final documentation and v0.1.0 release prep**

@@ -11,6 +11,7 @@
 package com.nobody174.buddybeast.client;
 
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 import com.nobody174.buddybeast.BuddyBeast;
 import com.nobody174.buddybeast.entity.ModEntities;
@@ -18,6 +19,7 @@ import com.nobody174.buddybeast.entity.ModEntities;
 public class ClientSetup {
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.BUDDY_BEAST.get(), BuddyBeastRenderer::new);
+        NeoForge.EVENT_BUS.addListener(HealthBarRenderer::onRenderLivingPost);
     }
 }
 

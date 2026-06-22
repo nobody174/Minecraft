@@ -11,45 +11,38 @@
 package com.nobody174.buddybeast.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import org.joml.Matrix4f;
 
 import com.nobody174.buddybeast.entity.BuddyBeastEntity;
 
 public class HealthBarRenderer {
 
-    public static void onRenderLivingPre(RenderLivingEvent.Pre<?, ?> event) {
-        if (event.getEntity() instanceof BuddyBeastEntity buddy) {
-            // Health bar will render post-render
-        }
-    }
-
     public static void onRenderLivingPost(RenderLivingEvent.Post<?, ?> event) {
         if (event.getEntity() instanceof BuddyBeastEntity buddy) {
-            renderHealthBar(buddy, event.getPartialTick());
+            renderHealthBar(buddy, event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight());
         }
     }
 
-    private static void renderHealthBar(BuddyBeastEntity buddy, float partialTick) {
-        // Health bar positioned above entity
-        // Width: 8 pixels, Height: 1 pixel
-        // Green for full health, red for low health
+    private static void renderHealthBar(BuddyBeastEntity buddy, PoseStack poseStack,
+            MultiBufferSource buffer, int packedLight) {
+        Minecraft mc = Minecraft.getInstance();
+        Font font = mc.font;
+        String text = (int) buddy.getHealth() + " / " + (int) buddy.getMaxHealth();
+        int color = buddy.getHealth() < buddy.getMaxHealth() * 0.3f ? 0xFFFF5555 : 0xFF55FF55;
 
-        float health = buddy.getHealth();
-        float maxHealth = buddy.getMaxHealth();
-        float healthPercent = health / maxHealth;
-
-        // Store pose for restoration
-        PoseStack poseStack = new PoseStack();
         poseStack.pushPose();
+        poseStack.translate(0.0, buddy.getBbHeight() + 0.5, 0.0);
+        poseStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
+        poseStack.scale(-0.025F, -0.025F, 0.025F);
 
-        // Position above entity head
-        poseStack.translate(0, buddy.getBbHeight() + 0.5f, 0);
-
-        // This would render the bar, but we need GuiGraphics context
-        // For now, reserve the space - actual rendering in RenderLivingEvent.Post with GuiGraphics
+        Matrix4f matrix = poseStack.last().pose();
+        float halfWidth = -font.width(text) / 2.0f;
+        font.drawInBatch(text, halfWidth, 0, color, false, matrix, buffer,
+                Font.DisplayMode.NORMAL, 0, packedLight);
 
         poseStack.popPose();
     }

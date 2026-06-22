@@ -2,7 +2,16 @@
 
 ## v0.1.0
 
-Currently in development. No known issues yet.
+Currently in development.
+
+### Resolved (found via live server testing, Week 3)
+- Entity had no attributes registered → fixed via `EntityAttributeCreationEvent`
+- Redundant `finalizeSpawn()` call in spawn handler caused unrelated downstream issues → handler removed
+- Tamed buddies did not survive world reload → `setPersistenceRequired()` now called on tame and on load
+
+### Open
+- Right-click taming has only been verified at the NBT/data level (via RCON), not through an actual player client interaction
+- No multiplayer (2+ client) sync testing performed yet
 
 ## Planned Limitations
 

@@ -13,11 +13,10 @@ package com.nobody174.buddybeast;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
 import com.nobody174.buddybeast.entity.ModEntities;
-import com.nobody174.buddybeast.entity.BuddySpawnHandler;
+import com.nobody174.buddybeast.entity.BuddyBeastEntity;
 import com.nobody174.buddybeast.network.BuddyNetworkHandler;
 import com.nobody174.buddybeast.client.ClientSetup;
 
@@ -27,7 +26,6 @@ public class BuddyBeast {
 
     public BuddyBeast(ModContainer container, IEventBus modEventBus) {
         // Register deferred registries
-        modEventBus.register(ModEntities.class);
         ModEntities.ENTITY_TYPES.register(modEventBus);
 
         // Register network handlers
@@ -36,8 +34,9 @@ public class BuddyBeast {
         // Register client-side renderer registration
         modEventBus.addListener(ClientSetup::registerEntityRenderers);
 
-        // Register entity spawn handlers (NeoForge event bus)
-        NeoForge.EVENT_BUS.addListener(BuddySpawnHandler::onEntityJoinLevel);
+        // Register entity attributes (required for any Mob/LivingEntity)
+        modEventBus.addListener((EntityAttributeCreationEvent event) ->
+            event.put(ModEntities.BUDDY_BEAST.get(), BuddyBeastEntity.createAttributes().build()));
     }
 }
 
