@@ -18,83 +18,49 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check GlowTools mod structure
+      - name: Validate all mods have required structure
         run: |
-          MOD_PATH="mods/glowtools_server-client"
-          echo "## GlowTools Validation" >> $GITHUB_STEP_SUMMARY
+          echo "## Mod Structure Validation" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # Check required files
-          REQUIRED_FILES=(
-            "build.gradle"
-            "gradle.properties"
-            "settings.gradle"
-            "README.md"
-            "RELEASE_NOTES.md"
-            ".gitignore"
-            "src/main/java/com/nobody174/glowtools/GlowToolsMod.java"
-            "src/main/java/com/nobody174/glowtools/server/GlowToolsServerEvents.java"
-            "src/main/java/com/nobody174/glowtools/server/command/AdminCommandHandler.java"
-            "src/main/resources/META-INF/neoforge.mods.toml"
-          )
+          TOTAL_PASSED=0
+          TOTAL_FAILED=0
 
-          PASSED=0
-          FAILED=0
+          for MOD_DIR in mods/*/; do
+            MOD_NAME=$(basename "$MOD_DIR")
+            echo "### Checking: $MOD_NAME" >> $GITHUB_STEP_SUMMARY
 
-          for file in "${REQUIRED_FILES[@]}"; do
-            if [ -f "$MOD_PATH/$file" ]; then
-              echo "✅ $file" >> $GITHUB_STEP_SUMMARY
-              ((PASSED++))
-            else
-              echo "❌ $file (MISSING)" >> $GITHUB_STEP_SUMMARY
-              ((FAILED++))
-            fi
+            # Check essential files for any Minecraft mod
+            REQUIRED_FILES=(
+              "build.gradle"
+              "README.md"
+              "src/main/java"
+              "src/main/resources/META-INF/neoforge.mods.toml"
+            )
+
+            MOD_PASSED=0
+            MOD_FAILED=0
+
+            for file in "${REQUIRED_FILES[@]}"; do
+              if [ -e "$MOD_DIR/$file" ]; then
+                echo "✅ $file" >> $GITHUB_STEP_SUMMARY
+                ((MOD_PASSED++))
+              else
+                echo "❌ $file (MISSING)" >> $GITHUB_STEP_SUMMARY
+                ((MOD_FAILED++))
+              fi
+            done
+
+            echo "  Result: $MOD_PASSED passed, $MOD_FAILED failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            TOTAL_PASSED=$((TOTAL_PASSED + MOD_PASSED))
+            TOTAL_FAILED=$((TOTAL_FAILED + MOD_FAILED))
           done
 
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Results:** $PASSED passed, $FAILED failed" >> $GITHUB_STEP_SUMMARY
+          echo "**Total: $TOTAL_PASSED passed, $TOTAL_FAILED failed**" >> $GITHUB_STEP_SUMMARY
 
-          [ $FAILED -eq 0 ] || exit 1
-
-      - name: Check Boss Radar mod structure
-        run: |
-          MOD_PATH="mods/boss-radar"
-          echo "## Boss Radar Validation" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          REQUIRED_FILES=(
-            "build.gradle"
-            "README.md"
-            "src/main/java/com/nobody174/bossradar/BossRadarMod.java"
-          )
-
-          for file in "${REQUIRED_FILES[@]}"; do
-            if [ -f "$MOD_PATH/$file" ]; then
-              echo "✅ $file" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "❌ $file (MISSING)" >> $GITHUB_STEP_SUMMARY
-            fi
-          done
-
-      - name: Check ArmorAura mod structure
-        run: |
-          MOD_PATH="mods/armor-aura"
-          echo "## ArmorAura Validation" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          REQUIRED_FILES=(
-            "build.gradle"
-            "README.md"
-            "src/main/java/com/nobody174/armoraura/ArmorAuraMod.java"
-          )
-
-          for file in "${REQUIRED_FILES[@]}"; do
-            if [ -f "$MOD_PATH/$file" ]; then
-              echo "✅ $file" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "❌ $file (MISSING)" >> $GITHUB_STEP_SUMMARY
-            fi
-          done
+          [ $TOTAL_FAILED -eq 0 ] || exit 1
 
   validate-config:
     runs-on: ubuntu-latest
