@@ -21,3 +21,9 @@
 ## Technical debt flagged during Week 2
 
 - [x] Fixed: exploration/tick XP tracking now cleans up per-player map entries on `PlayerLoggedOutEvent`
+- [x] Fixed: HUD showed stale pet stats after release (no packet fired on release) — removed push-packet networking entirely, HUD now reads the held item's data component directly each frame
+
+## Week 3
+
+- [ ] In-game smoke test of full capture → XP → evolve → release → combat-stat-effect loop (requires manual play-test)
+- [ ] Testing pass, RC1 → RC2 → RC3

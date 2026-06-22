@@ -11,15 +11,25 @@
 package com.nobody174.petevolution.client;
 
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import com.nobody174.petevolution.component.EvolutionRules;
+import com.nobody174.petevolution.component.ModDataComponents;
 import com.nobody174.petevolution.component.PetData;
 
 public class PetHudOverlay {
 
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
-        PetData data = ClientPetState.getActivePetData();
+        Player player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+
+        ItemStack heldBall = player.getMainHandItem();
+        PetData data = heldBall.get(ModDataComponents.PET_DATA.get());
         if (data == null) {
             return;
         }
@@ -29,12 +39,12 @@ public class PetHudOverlay {
         int threshold = EvolutionRules.xpThresholdFor(data.evoStage());
 
         graphics.drawString(
-            net.minecraft.client.Minecraft.getInstance().font,
+            Minecraft.getInstance().font,
             data.speciesId() + " | HP " + data.hp() + " ATK " + data.atk() + " DEF " + data.def() + " SPD " + data.spd(),
             x, y, 0xFFFFFF
         );
         graphics.drawString(
-            net.minecraft.client.Minecraft.getInstance().font,
+            Minecraft.getInstance().font,
             "XP " + data.xp() + "/" + (threshold == Integer.MAX_VALUE ? "MAX" : threshold) + " | Stage " + data.evoStage(),
             x, y + 10, 0x55FF55
         );

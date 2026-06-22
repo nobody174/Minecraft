@@ -19,3 +19,9 @@ All notable changes to Pet Evolution are documented here.
 - Crafting XP: `PlayerEvent.ItemCraftedEvent` grants XP to held capture ball
 - Exploration XP: tracks `Player.walkDist` delta per-player, batched every 20 ticks, grants XP per distance threshold
 - `PetStatApplier`: applies PetData stats to the released mob's vanilla attributes (max health, attack damage, armor, movement speed) so stats and evolution have real gameplay effect
+
+### Fixed
+- HUD stale-state bug: `PetHudOverlay` now reads `PetData` directly from the held capture ball's data component each frame instead of relying on a server-pushed `PetSyncPacket`, which never fired on release and left the HUD showing outdated stats
+
+### Removed
+- `PetSyncPacket`, `PetNetworkHandler`, `ClientPetState` — redundant once the HUD reads the (already vanilla-synced) ItemStack data component directly; see REUSED_FROM.md for rationale

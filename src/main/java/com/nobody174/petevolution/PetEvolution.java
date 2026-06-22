@@ -24,7 +24,6 @@ import com.nobody174.petevolution.client.PetTooltipHandler;
 import com.nobody174.petevolution.component.ModDataComponents;
 import com.nobody174.petevolution.event.PetXpEvent;
 import com.nobody174.petevolution.item.ModItems;
-import com.nobody174.petevolution.network.PetNetworkHandler;
 
 @Mod(PetEvolution.MOD_ID)
 public class PetEvolution {
@@ -34,7 +33,6 @@ public class PetEvolution {
         ModDataComponents.DATA_COMPONENT_TYPES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
 
-        modEventBus.addListener(PetNetworkHandler::register);
         modEventBus.addListener(PetEvolution::addCreativeTabItems);
         NeoForge.EVENT_BUS.register(new PetXpEvent());
 

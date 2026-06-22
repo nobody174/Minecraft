@@ -22,11 +22,9 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import com.nobody174.petevolution.component.ModDataComponents;
 import com.nobody174.petevolution.component.PetData;
-import com.nobody174.petevolution.network.PetSyncPacket;
 
 public class PetXpEvent {
 
@@ -98,8 +96,6 @@ public class PetXpEvent {
 
         PetData updated = data.withXp(amount);
         heldBall.set(ModDataComponents.PET_DATA.get(), updated);
-
-        PacketDistributor.sendToPlayer(player, new PetSyncPacket(player.getId(), updated));
     }
 }
 

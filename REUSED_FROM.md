@@ -1,14 +1,12 @@
 # Reused From Portfolio
 
-## Networking Pattern — from `buddy-beast`
+## Networking Pattern — from `buddy-beast` (later removed, see below)
 
 **Reused:** Record-based `CustomPacketPayload` + `StreamCodec.composite` + `RegisterPayloadHandlersEvent`/`PayloadRegistrar` registration pattern.
 
 **Source:** `buddy-beast/src/main/java/com/nobody174/buddybeast/network/BuddySyncPacket.java` and `BuddyNetworkHandler.java`.
 
-**Adapted into:** `pet-evolution/src/main/java/com/nobody174/petevolution/network/PetSyncPacket.java` and `PetNetworkHandler.java`.
-
-**Why:** Saves re-deriving the correct NeoForge 1.21.1 networking boilerplate (payload type registration, StreamCodec wiring, client-side `enqueueWork` handling) — roughly 1-2 hours of API research avoided since the pattern was already verified working in buddy-beast.
+**Why it was removed:** Pet Evolution only ever needs to show the *local* player's own held capture ball stats (tooltip + HUD), and `ItemStack` data components already travel with vanilla inventory sync. The custom `PetSyncPacket` push was redundant and had a real staleness bug — the HUD kept showing the last-known stats after release because no packet fires for that case. Removed `PetSyncPacket`/`PetNetworkHandler`/`ClientPetState`; `PetHudOverlay` now reads `ModDataComponents.PET_DATA` directly off `Minecraft.getInstance().player.getMainHandItem()` every frame, which is always correct and self-healing. Kept this entry as a record of the dead end — a custom packet would become necessary again only if the HUD needed to show another player's pet (e.g. in Phase 2 pet-vs-pet battles).
 
 ## Status/Display Pattern — conceptual reuse from `buddy-beast`
 
