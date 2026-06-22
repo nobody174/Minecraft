@@ -103,8 +103,9 @@ Continuing work on an existing mod project: Buddy Beast
 System Paths:
 - Prompt System: D:\Claude AI Projects\projects\Minecraft-mods\prompt-system\
 - Project: D:\Claude AI Projects\projects\Minecraft-mods\buddy-beast\
+- Handoff: D:\Claude AI Projects\projects\Minecraft-mods\buddy-beast\HANDOFF.md
 
-Please read prompt-system\QUICK_START.md and prompt-system\MASTER_PROMPT.md to load the full ruleset (autonomous mode, JAR deploy workflow, file headers, documentation standards, etc.), then read buddy-beast\HANDOFF.md for exactly where we left off and what to do next.
+Please read prompt-system\QUICK_START.md and prompt-system\MASTER_PROMPT.md to load the full ruleset (autonomous mode, JAR deploy workflow, file headers, documentation standards, etc.), then read HANDOFF.md for exactly where we left off and what to do next.
 
 Continue from there.
 ```
