@@ -24,6 +24,9 @@ import com.nobody174.buddybeast.ai.FollowOwnerGoal;
 import com.nobody174.buddybeast.ai.StayGoal;
 import com.nobody174.buddybeast.ai.IdleGoal;
 import com.nobody174.buddybeast.ai.LookAtOwnerGoal;
+import com.nobody174.buddybeast.network.BuddySyncPacket;
+
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.UUID;
 
@@ -56,14 +59,14 @@ public class BuddyBeastEntity extends Mob {
         builder.define(DATA_OWNER_NAME, "Unknown");
     }
 
+    private static final int SYNC_INTERVAL_TICKS = 10;
+
     @Override
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide) {
-            // Server-side tick logic
-            // Entity data syncing happens automatically via Minecraft's entity system
-            // Custom packet sync can be added for complex data later
+        if (!this.level().isClientSide && this.tickCount % SYNC_INTERVAL_TICKS == 0) {
+            PacketDistributor.sendToPlayersTrackingEntity(this, new BuddySyncPacket(this.getId(), this.getHealth()));
         }
     }
 

@@ -35,12 +35,12 @@
 - [x] NBT deserialization (readAdditionalSaveData)
 - [x] CustomPacketPayload record structure
 - [x] Packet registration in mod constructor
-- [ ] **Implement packet sending (every 10 ticks server-side)**
-  - Add scheduled task to BuddyBeastEntity.tick()
-  - Send health + position updates periodically
-- [ ] **Implement packet handling on client-side**
-  - Update BuddyNetworkHandler to actually sync data
-  - Apply position/health to client-side entity
+- [x] **Implement packet sending (every 10 ticks server-side)**
+  - Added SYNC_INTERVAL_TICKS check in BuddyBeastEntity.tick()
+  - Sends health update via PacketDistributor.sendToPlayersTrackingEntity
+- [x] **Implement packet handling on client-side**
+  - BuddyNetworkHandler resolves entity by ID via ClientLevel.getEntity()
+  - Applies synced health to client-side BuddyBeastEntity
 - [ ] **Test save/load persistence (spawn → save world → reload)**
 - [ ] **Verify data survives server restart**
 
