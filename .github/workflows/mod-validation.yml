@@ -76,6 +76,26 @@ jobs:
             fi
           done
 
+      - name: Check ArmorAura mod structure
+        run: |
+          MOD_PATH="mods/armor-aura"
+          echo "## ArmorAura Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          REQUIRED_FILES=(
+            "build.gradle"
+            "README.md"
+            "src/main/java/com/nobody174/armoraura/ArmorAuraMod.java"
+          )
+
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ -f "$MOD_PATH/$file" ]; then
+              echo "✅ $file" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ $file (MISSING)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
   validate-config:
     runs-on: ubuntu-latest
     name: Validate Configuration Files

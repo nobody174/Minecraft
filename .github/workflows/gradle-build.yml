@@ -24,6 +24,7 @@ jobs:
         mod:
           - glowtools_server-client
           - boss-radar
+          - armor-aura
 
     steps:
       - name: Checkout repository
@@ -75,7 +76,7 @@ jobs:
 
       - name: Verify mod structure
         run: |
-          for mod in mods/glowtools_server-client mods/boss-radar; do
+          for mod in mods/glowtools_server-client mods/boss-radar mods/armor-aura; do
             if [ -d "$mod" ]; then
               echo "✓ $mod structure valid"
               [ -f "$mod/build.gradle" ] && echo "  - build.gradle ✓" || echo "  - build.gradle ✗"
