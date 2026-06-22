@@ -1,0 +1,15 @@
+{
+  "armoraura:aura_ambient": {
+    "sounds": [
+      {
+        "name": "armoraura:ambient/aura_ambient",
+        "volume": 0.8,
+        "pitch": 1.0,
+        "weight": 1,
+        "stream": true
+      }
+    ],
+    "subtitle": "armoraura.sound.aura_ambient",
+    "replace": false
+  }
+}

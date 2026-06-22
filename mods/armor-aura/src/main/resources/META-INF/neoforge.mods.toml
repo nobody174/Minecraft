@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All rights reserved"
+authors="nobody174"
+description="ArmorAura - Animated armor auras for all players"
+
+[[mods]]
+modId="armoraura"
+version="1.0.0"
+displayName="ArmorAura"
+logoFile="assets/armoraura/icon.png"
+credits=""
+authors="nobody174"
+description="ArmorAura is a NeoForge mod that displays animated particle auras around players wearing armor."
+
+[[dependencies.armoraura]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.21.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.armoraura]]
+    modId="neoforge"
+    mandatory=true
+    versionRange="[21.1.233,)"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+.DS_Store
+
+# Maven
+target/
+
+# Local properties
+local.properties
+
+# Run directories
+run/
+.minecraft/
+
+# IntelliJ
+*.class
+*.jar
+*.war
+*.ear
+
+# Misc
+.classpath
+.project
+.settings/
