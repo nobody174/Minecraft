@@ -27,8 +27,8 @@ public class PetTooltipHandler {
             return;
         }
 
-        event.getToolTip().add(Component.literal("Species: " + data.speciesId())
-            .withStyle(ChatFormatting.GRAY));
+        event.getToolTip().add(Component.literal(data.rarity().name() + " " + data.speciesId())
+            .withStyle(data.rarity().color()));
         event.getToolTip().add(Component.literal(
             "HP: " + data.hp() + " | ATK: " + data.atk() + " | DEF: " + data.def() + " | SPD: " + data.spd())
             .withStyle(ChatFormatting.GREEN));

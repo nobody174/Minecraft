@@ -40,8 +40,8 @@ public class PetHudOverlay {
 
         graphics.drawString(
             Minecraft.getInstance().font,
-            data.speciesId() + " | HP " + data.hp() + " ATK " + data.atk() + " DEF " + data.def() + " SPD " + data.spd(),
-            x, y, 0xFFFFFF
+            "[" + data.rarity().name() + "] " + data.speciesId() + " | HP " + data.hp() + " ATK " + data.atk() + " DEF " + data.def() + " SPD " + data.spd(),
+            x, y, data.rarity().color().getColor() != null ? data.rarity().color().getColor() : 0xFFFFFF
         );
         graphics.drawString(
             Minecraft.getInstance().font,

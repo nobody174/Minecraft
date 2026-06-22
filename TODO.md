@@ -35,3 +35,10 @@
 - [x] Fix: re-capturing a released pet preserves progress instead of resetting to species base
 - [ ] In-game smoke test: release two pets (different players/test accounts), trigger a battle, confirm winner XP + message, confirm re-capture preserves progress (requires manual play-test)
 - [x] Fixed: 30-second per-pet battle cooldown added to prevent rapid re-challenge XP farming
+
+## Phase 2 — Rarity Tiers
+
+- [x] `PetRarity` enum: COMMON/UNCOMMON/RARE/EPIC, weighted roll, stat multiplier
+- [x] Applied at capture time in `SpeciesStats.baseStatsFor`
+- [x] Tooltip + HUD color-coded rarity display
+- [ ] In-game smoke test: capture several mobs, confirm rarity distribution looks roughly weighted-correct and stat multipliers apply (requires manual play-test)

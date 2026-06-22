@@ -10,8 +10,6 @@
 
 package com.nobody174.petevolution.component;
 
-import java.util.Map;
-
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
@@ -30,7 +28,15 @@ public final class SpeciesStats {
 
     public static PetData baseStatsFor(Mob mob, String speciesId) {
         BaseStats stats = classify(mob);
-        return new PetData(stats.hp(), stats.atk(), stats.def(), stats.spd(), 0, 0, speciesId);
+        PetRarity rarity = PetRarity.roll(mob.getRandom());
+        double multiplier = rarity.statMultiplier();
+
+        return new PetData(
+            (int) Math.round(stats.hp() * multiplier),
+            (int) Math.round(stats.atk() * multiplier),
+            (int) Math.round(stats.def() * multiplier),
+            (int) Math.round(stats.spd() * multiplier),
+            0, 0, speciesId, rarity);
     }
 
     private static BaseStats classify(Mob mob) {

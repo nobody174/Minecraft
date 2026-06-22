@@ -7,7 +7,8 @@ Pet Evolution uses **Data Components** (NeoForge 1.21.1's NBT replacement) to at
 ## Core Systems
 
 ### Data Layer
-- `component/PetData.java` — Record holding species id, stats (HP/ATK/DEF/SPD), XP, evolution stage.
+- `component/PetData.java` — Record holding species id, stats (HP/ATK/DEF/SPD), XP, evolution stage, rarity.
+- `component/PetRarity.java` — Enum (COMMON/UNCOMMON/RARE/EPIC) with a per-tier stat multiplier and weighted roll (`PetRarity.roll`, weights 60/25/12/3) used at capture time.
 - `component/ModDataComponents.java` — DeferredRegister for the custom `DataComponentType<PetData>` (item-bound, for the capture ball while a pet is stored).
 - `component/PetOwnerData.java` / `component/ModAttachments.java` — NeoForge `AttachmentType`s on released pet *entities* (not items): `PET_OWNER` records which player's pet this is, `RELEASED_PET_DATA` carries the live `PetData` snapshot so a released pet keeps evolving/battling independent of any item.
 
@@ -28,7 +29,7 @@ Pet Evolution uses **Data Components** (NeoForge 1.21.1's NBT replacement) to at
 
 ## Data Flow
 
-1. Player captures entity → server creates `PetData` from `EntityType` + base stats → sets on ItemStack via data component.
+1. Player captures entity → server classifies it (`SpeciesStats`), rolls a `PetRarity`, scales base stats by the rarity multiplier → creates `PetData` → sets on ItemStack via data component.
 2. XP-granting event fires → server reads `PetData`, computes new XP/stats, writes back immutable copy via `stack.set(component, updated)`.
 3. If evolution threshold met → server updates `PetData.evolutionStage` and stat gains.
 4. The data component travels with the ItemStack via vanilla inventory sync — no custom packet needed. `PetTooltipHandler` and `PetHudOverlay` both read the component directly off the (already-synced) held ItemStack on the client.

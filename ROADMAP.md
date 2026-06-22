@@ -33,7 +33,9 @@
 - Winner gains XP and has stats reapplied
 - Re-capturing a previously-released pet now preserves its battle/XP progress instead of resetting to species base stats (fixed alongside this feature)
 
-- Multiple pet types / rarity tiers
+**Rarity tiers — Complete**
+- `PetRarity` enum (COMMON/UNCOMMON/RARE/EPIC), weighted roll on capture, stat multiplier applied to species base stats, color-coded in tooltip/HUD
+
 - Breeding mechanics
 
 See [FUTURE_FEATURES.md](FUTURE_FEATURES.md) for ideas beyond v0.2.0.
