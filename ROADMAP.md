@@ -10,16 +10,19 @@
 - HUD overlay + tooltip stat display
 - Pushed to private GitHub repo
 
-**Week 2 (In Progress)**
+**Week 2 — Complete**
 - Stat tracking (HP, ATK, DEF, SPD)
 - Experience system (battle/crafting/exploration XP sources)
 - Evolution logic (stat-threshold triggered)
+- Species-based base stat variation (hostile/passive/neutral)
+- Stat-based combat effects applied to released mobs (`PetStatApplier`)
 
-**Week 3**
-- Pet UI / HUD (status display, evolution progress)
-- Tooltip stat display
-- Networking sync (client/server pet data consistency)
-- Testing pass, RC1 → RC2 → RC3
+**Week 3 — RC1**
+- Pet UI / HUD (status display, evolution progress) — Complete
+- Tooltip stat display — Complete
+- Client/server pet data consistency — resolved by reading the data component directly off the synced ItemStack rather than a custom packet (see REUSED_FROM.md)
+- Code-review pass for capture/release/XP/evolution/stat-apply logic — Complete
+- **RC1 tagged**: all Phase 1 core systems implemented and build-verified; in-game manual smoke test still outstanding (see TODO.md)
 
 ## Phase 2 — v0.2.0 (Extended Features)
 
