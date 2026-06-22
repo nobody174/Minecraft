@@ -16,9 +16,13 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraft.world.item.CreativeModeTabs;
 
+import com.nobody174.petevolution.client.ClientSetup;
 import com.nobody174.petevolution.client.PetTooltipHandler;
 import com.nobody174.petevolution.component.ModDataComponents;
+import com.nobody174.petevolution.event.PetXpEvent;
 import com.nobody174.petevolution.item.ModItems;
 import com.nobody174.petevolution.network.PetNetworkHandler;
 
@@ -31,9 +35,18 @@ public class PetEvolution {
         ModItems.ITEMS.register(modEventBus);
 
         modEventBus.addListener(PetNetworkHandler::register);
+        modEventBus.addListener(PetEvolution::addCreativeTabItems);
+        NeoForge.EVENT_BUS.register(new PetXpEvent());
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             NeoForge.EVENT_BUS.register(new PetTooltipHandler());
+            modEventBus.addListener(ClientSetup::registerGuiLayers);
+        }
+    }
+
+    private static void addCreativeTabItems(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(ModItems.CAPTURE_BALL.get());
         }
     }
 }

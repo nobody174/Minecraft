@@ -7,3 +7,11 @@ All notable changes to Pet Evolution are documented here.
 ### Added
 - Project scaffolding (Gradle, NeoForge metadata, folder structure)
 - Initial mod class and event bus registration
+- `PetData` data component (Codec + StreamCodec) with HP/ATK/DEF/SPD/XP/evolution stage
+- `CaptureBallItem`: capture wild mobs (right-click), release them back into the world (right-click block)
+- Capture restrictions: players, vehicles, leashed mobs cannot be captured
+- Networking: `PetSyncPacket`/`PetNetworkHandler` (pattern reused from buddy-beast)
+- Tooltip display of pet stats on the capture ball
+- XP system: killing an entity while holding a captured pet ball grants XP (`PetXpEvent`)
+- Evolution: stat thresholds trigger automatic stage-up with stat gains (`EvolutionRules`)
+- HUD overlay showing active pet's stats, XP, and evolution stage

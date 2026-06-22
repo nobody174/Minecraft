@@ -2,12 +2,15 @@
 
 ## Phase 1 — v0.1.0 (Core Pet System)
 
-**Week 1**
+**Week 1 — Complete**
 - Data component structure (`PetData`)
 - Capture ball item + capture mechanic
 - Release mechanic (spawn pet back into world)
+- XP system (kill-based) and evolution stage-up
+- HUD overlay + tooltip stat display
+- Pushed to private GitHub repo
 
-**Week 2**
+**Week 2 (In Progress)**
 - Stat tracking (HP, ATK, DEF, SPD)
 - Experience system (battle/crafting/exploration XP sources)
 - Evolution logic (stat-threshold triggered)
