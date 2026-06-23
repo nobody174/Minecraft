@@ -16,6 +16,7 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.minecraft.resources.ResourceLocation;
 
 import com.nobody174.petevolution.PetEvolution;
+import com.nobody174.petevolution.client.ui.PetHudOverlay;
 
 public final class ClientSetup {
 

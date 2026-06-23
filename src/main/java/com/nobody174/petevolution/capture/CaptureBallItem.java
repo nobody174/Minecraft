@@ -8,7 +8,7 @@
 // "It's never too late to give up!"
 //
 
-package com.nobody174.petevolution.item;
+package com.nobody174.petevolution.capture;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,12 +25,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 
-import com.nobody174.petevolution.component.ModAttachments;
-import com.nobody174.petevolution.component.ModDataComponents;
-import com.nobody174.petevolution.component.PetData;
-import com.nobody174.petevolution.component.PetOwnerData;
-import com.nobody174.petevolution.component.PetStatApplier;
-import com.nobody174.petevolution.component.SpeciesStats;
+import com.nobody174.petevolution.creature.ModAttachments;
+import com.nobody174.petevolution.creature.ModDataComponents;
+import com.nobody174.petevolution.creature.PetData;
+import com.nobody174.petevolution.creature.PetOwnerData;
+import com.nobody174.petevolution.creature.PetStatApplier;
+import com.nobody174.petevolution.creature.SpeciesStats;
 
 public class CaptureBallItem extends Item {
 

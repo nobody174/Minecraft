@@ -8,7 +8,7 @@
 // "It's never too late to give up!"
 //
 
-package com.nobody174.petevolution.item;
+package com.nobody174.petevolution.capture;
 
 import java.util.function.Supplier;
 

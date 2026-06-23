@@ -23,8 +23,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-import com.nobody174.petevolution.component.ModDataComponents;
-import com.nobody174.petevolution.component.PetData;
+import com.nobody174.petevolution.creature.ModDataComponents;
+import com.nobody174.petevolution.creature.PetData;
 
 public class PetXpEvent {
 

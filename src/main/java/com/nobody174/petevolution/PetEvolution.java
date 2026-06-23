@@ -20,13 +20,13 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraft.world.item.CreativeModeTabs;
 
 import com.nobody174.petevolution.client.ClientSetup;
-import com.nobody174.petevolution.client.PetTooltipHandler;
-import com.nobody174.petevolution.component.ModAttachments;
-import com.nobody174.petevolution.component.ModDataComponents;
-import com.nobody174.petevolution.event.PetBattleEvent;
+import com.nobody174.petevolution.client.ui.PetTooltipHandler;
+import com.nobody174.petevolution.creature.ModAttachments;
+import com.nobody174.petevolution.creature.ModDataComponents;
+import com.nobody174.petevolution.battle.PetBattleEvent;
 import com.nobody174.petevolution.event.PetBreedingEvent;
 import com.nobody174.petevolution.event.PetXpEvent;
-import com.nobody174.petevolution.item.ModItems;
+import com.nobody174.petevolution.capture.ModItems;
 
 @Mod(PetEvolution.MOD_ID)
 public class PetEvolution {

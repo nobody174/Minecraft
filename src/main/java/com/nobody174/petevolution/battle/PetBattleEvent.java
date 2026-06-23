@@ -8,7 +8,7 @@
 // "It's never too late to give up!"
 //
 
-package com.nobody174.petevolution.event;
+package com.nobody174.petevolution.battle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,12 +25,12 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-import com.nobody174.petevolution.component.ModAttachments;
-import com.nobody174.petevolution.component.ModDataComponents;
-import com.nobody174.petevolution.component.PetData;
-import com.nobody174.petevolution.component.PetOwnerData;
-import com.nobody174.petevolution.component.PetStatApplier;
-import com.nobody174.petevolution.item.ModItems;
+import com.nobody174.petevolution.creature.ModAttachments;
+import com.nobody174.petevolution.creature.ModDataComponents;
+import com.nobody174.petevolution.creature.PetData;
+import com.nobody174.petevolution.creature.PetOwnerData;
+import com.nobody174.petevolution.creature.PetStatApplier;
+import com.nobody174.petevolution.capture.ModItems;
 
 public class PetBattleEvent {
 

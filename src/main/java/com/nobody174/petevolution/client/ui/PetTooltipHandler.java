@@ -8,15 +8,15 @@
 // "It's never too late to give up!"
 //
 
-package com.nobody174.petevolution.client;
+package com.nobody174.petevolution.client.ui;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
-import com.nobody174.petevolution.component.ModDataComponents;
-import com.nobody174.petevolution.component.PetData;
+import com.nobody174.petevolution.creature.ModDataComponents;
+import com.nobody174.petevolution.creature.PetData;
 
 public class PetTooltipHandler {
 
