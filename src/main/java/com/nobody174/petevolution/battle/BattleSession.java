@@ -134,14 +134,14 @@ public final class BattleSession {
 
         boolean challengerFirst = challenger.petData().spd() >= defender.petData().spd();
         if (challengerFirst) {
-            applySkill(challenger, defender, challengerSkill);
+            applySkill(challenger, defender, challengerSkill, defenderSkill.element());
             if (!defender.isDefeated()) {
-                applySkill(defender, challenger, defenderSkill);
+                applySkill(defender, challenger, defenderSkill, challengerSkill.element());
             }
         } else {
-            applySkill(defender, challenger, defenderSkill);
+            applySkill(defender, challenger, defenderSkill, challengerSkill.element());
             if (!challenger.isDefeated()) {
-                applySkill(challenger, defender, challengerSkill);
+                applySkill(challenger, defender, challengerSkill, defenderSkill.element());
             }
         }
 
@@ -156,18 +156,24 @@ public final class BattleSession {
         }
     }
 
-    private void applySkill(BattleParticipant user, BattleParticipant target, Skill skill) {
+    /**
+     * @param targetSkillElement the element of the skill the target is using THIS round
+     *                           (already chosen earlier in resolveRound) — used purely for
+     *                           the advantage/disadvantage multiplier, not re-derived via a
+     *                           fresh AI call, which could otherwise disagree with the skill
+     *                           actually being applied for the target this round.
+     */
+    private void applySkill(BattleParticipant user, BattleParticipant target, Skill skill, SkillElement targetSkillElement) {
         switch (skill.effectType()) {
             case HEAL -> user.heal(skill.power() + user.petData().special() / 4);
             case DEFENSE_BUFF -> user.heal(0); // placeholder no-op effect beyond reduced incoming damage next hit is out of scope for v2.0
-            case PHYSICAL_DAMAGE -> target.applyDamage(computeDamage(user, target, skill, user.petData().atk()));
-            case SPECIAL_DAMAGE -> target.applyDamage(computeDamage(user, target, skill, user.petData().special()));
+            case PHYSICAL_DAMAGE -> target.applyDamage(computeDamage(user, target, skill, user.petData().atk(), targetSkillElement));
+            case SPECIAL_DAMAGE -> target.applyDamage(computeDamage(user, target, skill, user.petData().special(), targetSkillElement));
         }
     }
 
-    private int computeDamage(BattleParticipant user, BattleParticipant target, Skill skill, int offenseStat) {
-        SkillElement targetElement = BattleAi.chooseSkill(target).element();
-        double advantage = skill.element().advantageMultiplierAgainst(targetElement);
+    private int computeDamage(BattleParticipant user, BattleParticipant target, Skill skill, int offenseStat, SkillElement targetSkillElement) {
+        double advantage = skill.element().advantageMultiplierAgainst(targetSkillElement);
         double raw = (skill.power() + offenseStat) * advantage - target.petData().def() * 0.5;
         return (int) Math.max(1, Math.round(raw));
     }
