@@ -14,8 +14,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
+import com.nobody174.buddybeast.command.BuddyCommand;
 import com.nobody174.buddybeast.entity.ModEntities;
 import com.nobody174.buddybeast.entity.BuddyBeastEntity;
 import com.nobody174.buddybeast.network.BuddyNetworkHandler;
@@ -44,6 +46,9 @@ public class BuddyBeast {
         // disk and live-reloads it, so visual constants can be tuned without
         // rebuilding/restarting the game.
         container.registerConfig(ModConfig.Type.CLIENT, BuddyDevConfig.SPEC);
+
+        // /buddybeast spawnmany <count> - performance testing aid
+        NeoForge.EVENT_BUS.addListener(BuddyCommand::register);
     }
 }
 

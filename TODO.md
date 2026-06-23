@@ -58,9 +58,13 @@
 - [ ] **Following behavior testing** (does pathfinding work?)
 - [ ] **Multiplayer sync testing** (2+ players, buddy appears for all)
 - [x] **Save/load persistence testing** (world reload preserves buddy) — verified via full server restart
-- [ ] **Performance profiling** (spawn 20+ buddies, measure tick cost)
-- [ ] **Bug fixes and edge cases** (despawn, chunk unload, etc)
+- [ ] **Performance profiling** (spawn 20+ buddies, measure tick cost) — tooling ready, see `/buddybeast spawnmany <count>` below
+- [x] **Despawn/chunk-unload review** — audited; tamed buddies rely on vanilla `setPersistenceRequired()` (already called in `setTamed()`/`readAdditionalSaveData()`), which is the standard NeoForge mechanism and is sufficient. Untamed buddies despawning like normal mobs is correct, expected behavior, not a bug. No code change needed.
 - [ ] **Final documentation and v0.1.0 release prep**
+
+**New dev tool:** `/buddybeast spawnmany <count>` (op-only, max 100) spawns buddies
+in a ring around the command source for performance profiling — use with
+F3 debug overlay or a profiler to measure tick cost with 20+ buddies active.
 
 ## Blocking Tasks
 
