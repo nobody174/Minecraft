@@ -110,7 +110,7 @@ JAR Location: `build/libs/buddybeast-0.1.0-mc1_21_1.jar`
 
 ## Repository
 
-All commits pushed to: https://github.com/nobody174/buddy-beast (private)
+All commits pushed to: https://github.com/nobody174/Minecraft/tree/main/mods/buddy-beast (private)
 
 ---
 

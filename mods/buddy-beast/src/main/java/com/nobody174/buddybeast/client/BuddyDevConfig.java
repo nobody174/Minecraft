@@ -2,7 +2,7 @@
 // Buddy Beast
 //
 // Author: nobody174 (nobodylearn174@gmail.com)
-// Repo: https://github.com/nobody174/buddy-beast
+// Repo: https://github.com/nobody174/Minecraft/tree/main/mods/buddy-beast
 // Patreon: https://www.patreon.com/c/Nobody174
 // License: All rights reserved © 2025 nobody174
 // "It's never too late to give up!"

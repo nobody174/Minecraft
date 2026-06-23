@@ -17,7 +17,7 @@
 - ✅ Initial gradle build verified
 
 ### Repository
-- **GitHub:** https://github.com/nobody174/buddy-beast (private)
+- **GitHub:** https://github.com/nobody174/Minecraft/tree/main/mods/buddy-beast (private)
 - **Local:** D:\Claude AI Projects\projects\Minecraft-mods\buddy-beast
 
 ### Next Phase: Development Week 1
