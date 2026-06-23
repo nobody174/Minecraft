@@ -13,8 +13,11 @@ package com.nobody174.petevolution.creature;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomModelData;
 
 /**
  * Core persistent stat/progress record for a captured or released pet.
@@ -103,6 +106,17 @@ public record PetData(int hp, int atk, int def, int spd, int special, int xp, in
         }
 
         return new PetData(newHp, newAtk, newDef, newSpd, newSpecial, newXp, newStage, speciesId, rarity);
+    }
+
+    /**
+     * Syncs the vanilla {@code custom_model_data} component to this pet's rarity so the
+     * capture ball's item model (whose JSON {@code overrides} key off custom_model_data,
+     * since 1.21.1 predates the data-component-driven model system added in 1.21.2)
+     * renders the matching rarity-tinted texture. {@code ordinal() + 1} reserves 0 for
+     * the neutral default texture used when no PetData/rarity is present on the stack.
+     */
+    public void syncCustomModelData(ItemStack stack) {
+        stack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(rarity.ordinal() + 1));
     }
 }
 

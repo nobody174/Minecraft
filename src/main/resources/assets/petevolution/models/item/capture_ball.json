@@ -2,5 +2,11 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "petevolution:item/capture_ball"
-  }
+  },
+  "overrides": [
+    { "predicate": { "custom_model_data": 1 }, "model": "petevolution:item/capture_ball_common" },
+    { "predicate": { "custom_model_data": 2 }, "model": "petevolution:item/capture_ball_uncommon" },
+    { "predicate": { "custom_model_data": 3 }, "model": "petevolution:item/capture_ball_rare" },
+    { "predicate": { "custom_model_data": 4 }, "model": "petevolution:item/capture_ball_epic" }
+  ]
 }

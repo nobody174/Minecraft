@@ -11,6 +11,7 @@
 package com.nobody174.petevolution.capture;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -65,6 +66,7 @@ public class CaptureBallItem extends Item {
             captured = SpeciesStats.baseStatsFor((Mob) target, speciesId.toString());
         }
         stack.set(ModDataComponents.PET_DATA.get(), captured);
+        captured.syncCustomModelData(stack);
 
         target.discard();
 
@@ -113,6 +115,7 @@ public class CaptureBallItem extends Item {
         serverLevel.addFreshEntity(released);
 
         stack.remove(ModDataComponents.PET_DATA.get());
+        stack.remove(DataComponents.CUSTOM_MODEL_DATA);
 
         return InteractionResult.CONSUME;
     }
