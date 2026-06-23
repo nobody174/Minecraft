@@ -29,12 +29,16 @@ import com.nobody174.petevolution.creature.ModAttachments;
 import com.nobody174.petevolution.creature.ModDataComponents;
 import com.nobody174.petevolution.creature.PetData;
 import com.nobody174.petevolution.creature.PetOwnerData;
-import com.nobody174.petevolution.creature.PetStatApplier;
 import com.nobody174.petevolution.capture.ModItems;
 
+/**
+ * Battle-trigger interaction handler. v2.0: starts a tick-driven {@link BattleSession}
+ * via {@link BattleEngine} instead of resolving instantly via stat-power comparison.
+ * The right-click trigger, nearby-owned-pet lookup, and 30-second per-pet anti-farm
+ * cooldown are all preserved unchanged from v0.2.0.
+ */
 public class PetBattleEvent {
 
-    private static final int XP_REWARD_FOR_WIN = 25;
     private static final int BATTLE_COOLDOWN_TICKS = 20 * 30;
 
     private final Map<UUID, Long> lastBattleTick = new HashMap<>();
@@ -68,7 +72,7 @@ public class PetBattleEvent {
             return;
         }
 
-        if (isOnCooldown(targetPet, serverLevel.getGameTime())) {
+        if (isOnCooldown(targetPet, serverLevel.getGameTime()) || BattleEngine.hasActiveSession(targetPet.getUUID())) {
             challenger.displayClientMessage(
                 Component.literal("That pet is still recovering from its last battle.").withStyle(ChatFormatting.RED), true);
             return;
@@ -86,13 +90,20 @@ public class PetBattleEvent {
             return;
         }
 
-        if (isOnCooldown(challengerPet, serverLevel.getGameTime())) {
+        if (isOnCooldown(challengerPet, serverLevel.getGameTime()) || BattleEngine.hasActiveSession(challengerPet.getUUID())) {
             challenger.displayClientMessage(
                 Component.literal("Your pet is still recovering from its last battle.").withStyle(ChatFormatting.RED), true);
             return;
         }
 
-        resolveBattle(challenger, challengerPet, challengerPetData, targetPet, targetPetData, targetOwnerData.ownerId());
+        BattleParticipant challengerParticipant = new BattleParticipant(challengerPet, challenger.getUUID(), challengerPetData);
+        BattleParticipant defenderParticipant = new BattleParticipant(targetPet, targetOwnerData.ownerId(), targetPetData);
+
+        BattleSession session = new BattleSession(serverLevel.getServer(), challenger, challengerParticipant, defenderParticipant);
+        BattleEngine.startSession(session);
+
+        challenger.displayClientMessage(
+            Component.literal("Battle started! Watch the battle HUD.").withStyle(ChatFormatting.YELLOW), true);
 
         long now = serverLevel.getGameTime();
         lastBattleTick.put(challengerPet.getUUID(), now);
@@ -116,36 +127,6 @@ public class PetBattleEvent {
             })
             .findFirst()
             .orElse(null);
-    }
-
-    private void resolveBattle(ServerPlayer challenger, LivingEntity challengerPet, PetData challengerData,
-                                LivingEntity targetPet, PetData targetData, UUID defenderId) {
-        int challengerPower = battlePower(challengerData);
-        int defenderPower = battlePower(targetData);
-
-        boolean challengerWins = challengerPower >= defenderPower;
-
-        LivingEntity winnerPet = challengerWins ? challengerPet : targetPet;
-        PetData winnerData = challengerWins ? challengerData : targetData;
-        PetData updatedWinnerData = winnerData.withXp(XP_REWARD_FOR_WIN);
-        winnerPet.setData(ModAttachments.RELEASED_PET_DATA.get(), updatedWinnerData);
-        PetStatApplier.apply(winnerPet, updatedWinnerData);
-
-        challenger.displayClientMessage(
-            Component.literal(challengerWins ? "Your pet won the battle!" : "Your pet lost the battle.")
-                .withStyle(challengerWins ? ChatFormatting.GREEN : ChatFormatting.RED),
-            true);
-
-        if (challenger.server.getPlayerList().getPlayer(defenderId) instanceof ServerPlayer defender) {
-            defender.displayClientMessage(
-                Component.literal(challengerWins ? "Your pet lost the battle." : "Your pet won the battle!")
-                    .withStyle(challengerWins ? ChatFormatting.RED : ChatFormatting.GREEN),
-                true);
-        }
-    }
-
-    private int battlePower(PetData data) {
-        return data.hp() + data.atk() * 2 + data.def() + data.spd() + data.special();
     }
 }
 
