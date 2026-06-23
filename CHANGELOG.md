@@ -2,7 +2,7 @@
 
 All notable changes to Buddy Beast are documented here.
 
-## [0.1.0] - Release Candidate
+## [0.1.0] - Released
 
 ### Added
 - `BuddyBeastEntity` with goal-based AI: `FollowOwnerGoal`, `StayGoal`, `IdleGoal`, `LookAtOwnerGoal`
