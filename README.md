@@ -2,18 +2,24 @@
 
 A custom AI mob mod that adds intelligent, player-trained creatures to Minecraft with advanced pathfinding, decision-making, and goal-based behavior systems.
 
-**Version:** 0.1.0 (Early Development)  
+**Version:** 0.1.0 (Released)  
 **Minecraft:** 1.21.1  
 **NeoForge:** 21.1.233+
 
 ## Features (v0.1.0)
 
-- **Custom Entity System** — BuddyBeast mobs with custom model and rendering
-- **Goal-Based AI** — Intelligent behavior using NeoForge goal system (Follow, Stay, Idle)
-- **Taming Mechanic** — Right-click to tame buddies and make them your companion
-- **Data Persistence** — Buddies saved in player NBT and survive world reloads
-- **Multiplayer Sync** — Network packet synchronization for multiplayer worlds
-- **Visual Feedback** — Health bar, status effects, and animations
+- **Custom Entity System** — BuddyBeast mobs, currently rendered as a
+  two-headed cow (a reused vanilla model + recolor, not a custom Blockbench
+  model — see Roadmap)
+- **Goal-Based AI** — Follow, stay, idle, and look-at-owner behavior, with
+  pathfinding confirmed working (including swimming)
+- **Taming Mechanic** — Right-click an untamed buddy to tame it; right-click
+  again to toggle between following you and staying in place
+- **Data Persistence** — Tamed status and ownership survive world reload and
+  server restart
+- **Multiplayer Sync** — Health and state sync over the network; confirmed
+  working live with multiple players on separate machines
+- **Visual Feedback** — Health bar above the buddy's head
 
 ## Installation
 
@@ -24,17 +30,19 @@ A custom AI mob mod that adds intelligent, player-trained creatures to Minecraft
 
 ## Quick Start
 
-- Find a BuddyBeast in the wild (spawn command: `/summon buddybeast:buddy_beast`)
-- Right-click with an empty hand to tame
-- Right-click again to command (Follow / Stay / Idle)
-- Buddies follow you and protect the area
+- Find or spawn a BuddyBeast (`/summon buddybeast:buddy_beast`)
+- Right-click to tame
+- Right-click a tamed buddy to toggle follow/stay
+- Tamed buddies persist through world reload and server restarts
 
 ## Limits
 
-- **Max buddies per world:** 50 (performance)
-- **Max buddies per player:** 10
-- **Chunk loading:** Buddies despawn if chunk unloads (technical limitation)
+- **Max buddies per world:** ~50 before tick cost becomes a concern
+  (tested up to 30 simultaneously with no issues)
+- **Chunk loading:** Untamed buddies despawn if their chunk unloads, like
+  any vanilla mob — this is intentional, not a bug
 - **Multiplayer sync:** May be jittery in high-latency environments
+  (untested above typical LAN latency)
 
 ## Known Issues
 
