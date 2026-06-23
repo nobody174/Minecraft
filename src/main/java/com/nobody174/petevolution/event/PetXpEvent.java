@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -88,7 +89,11 @@ public class PetXpEvent {
             return;
         }
 
-        ItemStack heldBall = player.getMainHandItem();
+        ItemStack heldBall = findHeldBall(player);
+        if (heldBall == null) {
+            return;
+        }
+
         PetData data = heldBall.get(ModDataComponents.PET_DATA.get());
         if (data == null) {
             return;
@@ -96,6 +101,20 @@ public class PetXpEvent {
 
         PetData updated = data.withXp(amount);
         heldBall.set(ModDataComponents.PET_DATA.get(), updated);
+    }
+
+    private ItemStack findHeldBall(ServerPlayer player) {
+        ItemStack mainHand = player.getItemInHand(InteractionHand.MAIN_HAND);
+        if (mainHand.has(ModDataComponents.PET_DATA.get())) {
+            return mainHand;
+        }
+
+        ItemStack offHand = player.getItemInHand(InteractionHand.OFF_HAND);
+        if (offHand.has(ModDataComponents.PET_DATA.get())) {
+            return offHand;
+        }
+
+        return null;
     }
 }
 
