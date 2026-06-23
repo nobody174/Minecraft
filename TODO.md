@@ -62,13 +62,30 @@
 - [x] **Despawn/chunk-unload review** — audited; tamed buddies rely on vanilla `setPersistenceRequired()` (already called in `setTamed()`/`readAdditionalSaveData()`), which is the standard NeoForge mechanism and is sufficient. Untamed buddies despawning like normal mobs is correct, expected behavior, not a bug. No code change needed.
 - [ ] **Final documentation and v0.1.0 release prep**
 
-**Bug found and fixed:** the two-headed cow's rear-head offset (`rearHeadOffset`)
-was only tuned in a local `config/buddybeast-client.toml` on the dev machine,
-not baked into code — so a second player with the identical JAR saw the
-untuned (floating/misaligned) head, since they didn't have that config file.
-Fixed by baking the confirmed-good value (`0.4`) as the code default in
-`BuddyDevConfig.java`; the TOML remains available for further live-tuning
-experiments on top of that default.
+**Bug found and fixed (round 1):** the two-headed cow's rear-head offset
+(`rearHeadOffset`) was only tuned in a local `config/buddybeast-client.toml`
+on the dev machine, not baked into code — so a second player with the
+identical JAR saw the untuned (floating/misaligned) head, since they didn't
+have that config file. Fixed by baking the confirmed-good value (`0.4`) as
+the code default in `BuddyDevConfig.java`.
+
+**Bug found and fixed (round 2):** after the round-1 fix, a third client
+(second test machine) *still* showed an almost-but-not-quite-right head.
+Cause: that machine had a **stale `buddybeast-client.toml` already on disk**
+from before the offset was tuned, containing the old `rearHeadOffset = 0.0`
+explicitly — since the file existed, NeoForge loaded that stored value
+instead of the new code default. Not a platform/client difference at all.
+Fixed by deleting the stale config file on that machine (NeoForge
+regenerates it from the code default on next launch). **Lesson:** any
+machine with a `config/buddybeast-client.toml` predating this fix needs that
+file deleted/reset, or it will keep overriding the new default.
+
+**Bug found and fixed:** `/buddybeast killall` removed 0 entities even with
+`includeTamed=true`. Cause: it searched `level.getWorldBorder().getCollisionShape().bounds()`,
+which is not the actual playable area and returned an empty/degenerate
+result. Fixed by iterating `level.getAllEntities()` directly and filtering
+by type, which is the standard approach for "all entities of type X in the
+level" commands.
 
 **Dev tools:**
 - `/buddybeast spawnmany <count>` (op-only, max 100) — spawns buddies in a

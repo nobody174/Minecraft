@@ -26,8 +26,6 @@ import com.nobody174.buddybeast.entity.ModEntities;
 
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
-import java.util.List;
-
 public class BuddyCommand {
     private static final int MAX_SPAWN_COUNT = 100;
 
@@ -54,10 +52,12 @@ public class BuddyCommand {
             return 0;
         }
 
-        List<BuddyBeastEntity> buddies = level.getEntitiesOfClass(BuddyBeastEntity.class, level.getWorldBorder().getCollisionShape().bounds());
         int removed = 0;
 
-        for (BuddyBeastEntity buddy : buddies) {
+        for (var entity : level.getAllEntities()) {
+            if (!(entity instanceof BuddyBeastEntity buddy)) {
+                continue;
+            }
             if (!includeTamed && buddy.isTamed()) {
                 continue;
             }
