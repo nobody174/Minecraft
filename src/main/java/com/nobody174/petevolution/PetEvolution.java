@@ -28,10 +28,12 @@ import com.nobody174.petevolution.creature.ModAttachments;
 import com.nobody174.petevolution.creature.ModDataComponents;
 import com.nobody174.petevolution.battle.PetBattleEvent;
 import com.nobody174.petevolution.battle.BattleEngine;
+import com.nobody174.petevolution.battle.BattleNetworking;
 import com.nobody174.petevolution.event.PetBreedingEvent;
 import com.nobody174.petevolution.event.PetXpEvent;
 import com.nobody174.petevolution.capture.ModItems;
 import com.nobody174.petevolution.testing.TestCommand;
+import com.nobody174.petevolution.client.ui.BattleHudOverlay;
 
 @Mod(PetEvolution.MOD_ID)
 public class PetEvolution {
@@ -52,6 +54,7 @@ public class PetEvolution {
         ModItems.ITEMS.register(modEventBus);
 
         modEventBus.addListener(PetEvolution::addCreativeTabItems);
+        modEventBus.addListener(BattleNetworking::register);
         NeoForge.EVENT_BUS.register(new PetXpEvent());
         NeoForge.EVENT_BUS.register(new PetBattleEvent());
         NeoForge.EVENT_BUS.register(new PetBreedingEvent());
@@ -61,6 +64,7 @@ public class PetEvolution {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             NeoForge.EVENT_BUS.register(new PetTooltipHandler());
             modEventBus.addListener(ClientSetup::registerGuiLayers);
+            NeoForge.EVENT_BUS.addListener(BattleHudOverlay::onClientTick);
         }
     }
 

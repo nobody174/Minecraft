@@ -58,6 +58,7 @@ public final class BattleSession {
             PetEvolution.LOGGER.info("[Battle] Session {} started: challenger HP {} vs defender HP {}",
                 sessionId, challenger.maxHp(), defender.maxHp());
         }
+        syncStateToChallenger(true);
     }
 
     public UUID sessionId() {
@@ -101,9 +102,26 @@ public final class BattleSession {
 
         if (challenger.isDefeated() || defender.isDefeated()) {
             concludeBattle();
+        } else {
+            syncStateToChallenger(true);
         }
 
         return finished;
+    }
+
+    private void syncStateToChallenger(boolean active) {
+        if (!(server.getPlayerList().getPlayer(challengerOwnerId) instanceof ServerPlayer challengerOwner)) {
+            return;
+        }
+        java.util.List<String> skillIds = challenger.unlockedSkills().stream().map(Skill::id).toList();
+        BattleStateSyncPayload payload = new BattleStateSyncPayload(
+            active,
+            (float) challenger.currentHp() / Math.max(1, challenger.maxHp()),
+            (float) defender.currentHp() / Math.max(1, defender.maxHp()),
+            true,
+            skillIds
+        );
+        net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(challengerOwner, payload);
     }
 
     private void resolveRound() {
@@ -157,6 +175,7 @@ public final class BattleSession {
     private void concludeBattle() {
         finished = true;
         boolean challengerWins = !challenger.isDefeated();
+        syncStateToChallenger(false);
 
         if (PetEvolution.DEBUG_LOGGING) {
             PetEvolution.LOGGER.info("[Battle] Session {} concluded: {} wins", sessionId, challengerWins ? "challenger" : "defender");
