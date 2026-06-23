@@ -16,17 +16,22 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.minecraft.resources.ResourceLocation;
 
 import com.nobody174.petevolution.PetEvolution;
+import com.nobody174.petevolution.client.ui.PetHudOverlay;
+import com.nobody174.petevolution.client.ui.BattleHudOverlay;
 
 public final class ClientSetup {
 
     private static final ResourceLocation PET_HUD_ID =
         ResourceLocation.fromNamespaceAndPath(PetEvolution.MOD_ID, "pet_hud");
+    private static final ResourceLocation BATTLE_HUD_ID =
+        ResourceLocation.fromNamespaceAndPath(PetEvolution.MOD_ID, "battle_hud");
 
     private ClientSetup() {
     }
 
     public static void registerGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAboveAll(PET_HUD_ID, PetHudOverlay::render);
+        event.registerAboveAll(BATTLE_HUD_ID, BattleHudOverlay::render);
     }
 }
 

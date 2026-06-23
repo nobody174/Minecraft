@@ -8,7 +8,7 @@
 // "It's never too late to give up!"
 //
 
-package com.nobody174.petevolution.client;
+package com.nobody174.petevolution.client.ui;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -16,9 +16,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-import com.nobody174.petevolution.component.EvolutionRules;
-import com.nobody174.petevolution.component.ModDataComponents;
-import com.nobody174.petevolution.component.PetData;
+import com.nobody174.petevolution.creature.EvolutionRules;
+import com.nobody174.petevolution.creature.ModDataComponents;
+import com.nobody174.petevolution.creature.PetData;
 
 public class PetHudOverlay {
 
@@ -40,12 +40,12 @@ public class PetHudOverlay {
 
         graphics.drawString(
             Minecraft.getInstance().font,
-            "[" + data.rarity().name() + "] " + data.speciesId() + " | HP " + data.hp() + " ATK " + data.atk() + " DEF " + data.def() + " SPD " + data.spd(),
+            "[" + data.rarity().name() + "] " + data.speciesId() + " | HP " + data.hp() + " ATK " + data.atk() + " DEF " + data.def() + " SPD " + data.spd() + " SPC " + data.special(),
             x, y, data.rarity().color().getColor() != null ? data.rarity().color().getColor() : 0xFFFFFF
         );
         graphics.drawString(
             Minecraft.getInstance().font,
-            "XP " + data.xp() + "/" + (threshold == Integer.MAX_VALUE ? "MAX" : threshold) + " | Stage " + data.evoStage(),
+            "XP " + data.xp() + "/" + (threshold == Integer.MAX_VALUE ? "MAX" : threshold) + " | Lv " + data.level() + " (Stage " + data.evoStage() + ")",
             x, y + 10, 0x55FF55
         );
     }

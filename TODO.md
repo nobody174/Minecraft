@@ -50,3 +50,42 @@
 - [x] 5-minute per-pet breeding cooldown to prevent rapid re-breeding
 - [x] In-game smoke test: confirmed the evolution-stage gate correctly rejects breeding attempts on non-fully-evolved pets (chat message shown as designed)
 - [ ] Still outstanding: confirm a successful breed (two fully-evolved same-species pets) actually spawns an offspring with correct averaged stats/rarity
+
+## Phase 3 — v2.0.0 Major Expansion (built autonomously; everything below requires manual play-testing — none of it has been verified in an actual running game, only by successful compilation and code-tracing)
+
+### Modular restructure
+- [x] Package restructure into capture/creature/battle/skills/client.ui/render — build-verified, zero intended behavior change
+- [ ] In-game smoke test: confirm capture/release/XP/evolve/battle/breed all still work identically post-refactor (requires manual play-test)
+
+### Creature stats/leveling
+- [x] `special` 5th core stat added to `PetData`, `StreamCodec` re-nested to fit
+- [x] `level()` derived from `evoStage` (no parallel level field)
+- [x] `SpeciesStats`/`PetStatApplier`/`EvolutionRules`/tooltip/HUD/breeding updated for Special
+- [ ] In-game smoke test: capture a mob, confirm Special stat shows correctly in tooltip/HUD, evolve and confirm Special increases (requires manual play-test)
+
+### Skills system
+- [x] `Skill`/`SkillEffectType`/`SkillElement`/`SkillRegistry` (fixed in-code registry, not JSON datapack — see CHANGELOG.md for reasoning)
+- [x] Level-gated skill unlocking (3-5 skills by full evolution)
+- [ ] In-game smoke test: confirm a freshly-captured pet has fewer unlocked skills than a fully-evolved one (requires manual play-test)
+
+### Battle engine
+- [x] `BattleParticipant`/`BattleAi`/`BattleSession`/`BattleEngine` replacing instant stat comparison
+- [x] HP-based auto-combat behavior change (defensive/heal preference below 35% HP)
+- [x] Skill cooldowns enforced via tick-based round resolution (one round per 2 seconds)
+- [x] Existing right-click trigger, nearby-pet lookup, and 30-second cooldown preserved
+- [x] Fixed during regression pass: damage advantage multiplier now uses the actually-applied skill's element, not a re-derived one
+- [ ] In-game smoke test: trigger a battle between two released pets, confirm it takes multiple rounds (not instant), confirm low-HP creature uses a defensive/heal skill, confirm winner gets XP (requires manual play-test)
+
+### Minimal battle UI + networking
+- [x] `BattleHudOverlay` (HP bars + numbered skill prompts), `BattleSkillChoicePayload`, `BattleStateSyncPayload`, `BattleNetworking`
+- [ ] In-game smoke test: confirm the battle HUD appears when a battle starts, confirm pressing 1-5 during the input window actually overrides the AI's choice, confirm the HUD disappears when the battle ends (requires manual play-test — this is the area most likely to have an unnoticed client-rendering or packet-registration issue, since it could not be visually verified in this autonomous run)
+
+### Original capture device visuals
+- [x] "Rune-Bound Vessel" item model + procedurally-generated textures (1 default + 4 rarity variants, rarity switching NOT yet wired up — documented limitation)
+- [ ] In-game smoke test: confirm the capture ball renders with the new texture instead of the missing-texture placeholder it had before (requires manual play-test — also could not be visually verified in this autonomous run)
+- [ ] Follow-up (not done): wire up rarity-based texture switching via a custom ItemModel or custom_model_data range_dispatch (see FUTURE_FEATURES.md)
+
+### Testing infrastructure
+- [x] `PetEvolution.DEBUG_LOGGING` toggle (`-Dpetevolution.debug=true`)
+- [x] `/petevolution test` command spawns a fully-statted, fully-skilled test pet
+- [ ] In-game smoke test: run `/petevolution test`, confirm a wolf spawns with the expected stats and can immediately participate in a battle (requires manual play-test)

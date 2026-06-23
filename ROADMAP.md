@@ -41,4 +41,29 @@
 - Offspring base stats are the average of both parents' stats, with a 5% chance to roll a one-tier rarity upgrade (proportionally scaling stats up)
 - 5-minute per-pet breeding cooldown prevents rapid re-breeding
 
-See [FUTURE_FEATURES.md](FUTURE_FEATURES.md) for ideas beyond v0.2.0.
+## Phase 3 — v2.0.0 (Major Expansion — built autonomously, manual play-testing outstanding)
+
+**Modular package restructure — Complete**
+- Flat package layout reorganized into `capture/`, `creature/`, `battle/`, `skills/` (new), `client/ui/`, `render/` (new); `event/` retains XP and breeding. Pure refactor, build-verified before any further work.
+
+**Creature stats/leveling upgrade — Complete**
+- 5th core stat (`special`) added to `PetData`, re-nested `StreamCodec.composite` groups to fit. `level()` derives from `evoStage` rather than introducing a parallel level field. `SpeciesStats`/`PetStatApplier`/`EvolutionRules`/tooltip/HUD/breeding all updated.
+
+**Skills system — Complete**
+- Data-driven `Skill` model (id, effect type, element, power, cooldown) with a fixed in-code `SkillRegistry` (5 skills + universal heal). Creatures unlock skills progressively by level (3-5 unlocked by full evolution).
+
+**Battle engine upgrade — Complete**
+- Replaced instant stat-power comparison with a tick-driven `BattleSession`/`BattleEngine`: HP-based auto-combat AI (`BattleAi`), skill cooldowns, speed-based turn order, element advantage multiplier. Existing right-click trigger and 30-second cooldown preserved.
+
+**Minimal battle UI + networking — Complete**
+- `BattleHudOverlay` (HP bars + numbered skill prompts, no GUI Screen). `BattleSkillChoicePayload` (player input, client-to-server) and `BattleStateSyncPayload` (server-to-client, event-driven) — see CHANGELOG.md for why these are intentionally NOT a regression of the removed `PetSyncPacket` pattern.
+
+**Original capture device visuals — Complete, with a documented limitation**
+- "Rune-Bound Vessel" item model + procedurally-generated textures (1 default + 4 rarity variants). Rarity-variant texture switching is NOT yet wired up in-game (documented limitation; see FUTURE_FEATURES.md).
+
+**Testing infrastructure — Complete**
+- `PetEvolution.DEBUG_LOGGING` toggle, `/petevolution test` command for quick manual verification.
+
+**Outstanding for v2.0.0**: in-game manual play-testing of every new system above (battle engine turn resolution, skill unlocks, HUD rendering, network payloads, capture ball visuals) — this autonomous run verified everything via successful compilation and code-tracing only; see TODO.md.
+
+See [FUTURE_FEATURES.md](FUTURE_FEATURES.md) for ideas beyond v2.0.0.

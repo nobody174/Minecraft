@@ -8,7 +8,7 @@
 // "It's never too late to give up!"
 //
 
-package com.nobody174.petevolution.component;
+package com.nobody174.petevolution.creature;
 
 import java.util.UUID;
 

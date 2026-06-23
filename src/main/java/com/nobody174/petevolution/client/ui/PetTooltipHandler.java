@@ -8,15 +8,15 @@
 // "It's never too late to give up!"
 //
 
-package com.nobody174.petevolution.client;
+package com.nobody174.petevolution.client.ui;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
-import com.nobody174.petevolution.component.ModDataComponents;
-import com.nobody174.petevolution.component.PetData;
+import com.nobody174.petevolution.creature.ModDataComponents;
+import com.nobody174.petevolution.creature.PetData;
 
 public class PetTooltipHandler {
 
@@ -30,9 +30,9 @@ public class PetTooltipHandler {
         event.getToolTip().add(Component.literal(data.rarity().name() + " " + data.speciesId())
             .withStyle(data.rarity().color()));
         event.getToolTip().add(Component.literal(
-            "HP: " + data.hp() + " | ATK: " + data.atk() + " | DEF: " + data.def() + " | SPD: " + data.spd())
+            "HP: " + data.hp() + " | ATK: " + data.atk() + " | DEF: " + data.def() + " | SPD: " + data.spd() + " | SPECIAL: " + data.special())
             .withStyle(ChatFormatting.GREEN));
-        event.getToolTip().add(Component.literal("XP: " + data.xp() + " | Evolution Stage: " + data.evoStage())
+        event.getToolTip().add(Component.literal("XP: " + data.xp() + " | Level " + data.level() + " (Stage " + data.evoStage() + ")")
             .withStyle(ChatFormatting.AQUA));
     }
 }
