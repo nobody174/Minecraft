@@ -74,16 +74,17 @@
 - [x] Skill cooldowns enforced via tick-based round resolution (one round per 2 seconds)
 - [x] Existing right-click trigger, nearby-pet lookup, and 30-second cooldown preserved
 - [x] Fixed during regression pass: damage advantage multiplier now uses the actually-applied skill's element, not a re-derived one
-- [ ] In-game smoke test: trigger a battle between two released pets, confirm it takes multiple rounds (not instant), confirm low-HP creature uses a defensive/heal skill, confirm winner gets XP (requires manual play-test)
+- [x] Fixed: DEFENSE_BUFF skill effect was a documented no-op — now halves the next incoming damage instance, consumed on that hit
+- [ ] In-game smoke test: trigger a battle between two released pets, confirm it takes multiple rounds (not instant), confirm low-HP creature uses a defensive/heal skill (and that DEFENSE_BUFF actually reduces the next hit), confirm winner gets XP (requires manual play-test)
 
 ### Minimal battle UI + networking
 - [x] `BattleHudOverlay` (HP bars + numbered skill prompts), `BattleSkillChoicePayload`, `BattleStateSyncPayload`, `BattleNetworking`
 - [ ] In-game smoke test: confirm the battle HUD appears when a battle starts, confirm pressing 1-5 during the input window actually overrides the AI's choice, confirm the HUD disappears when the battle ends (requires manual play-test — this is the area most likely to have an unnoticed client-rendering or packet-registration issue, since it could not be visually verified in this autonomous run)
 
 ### Original capture device visuals
-- [x] "Rune-Bound Vessel" item model + procedurally-generated textures (1 default + 4 rarity variants, rarity switching NOT yet wired up — documented limitation)
-- [ ] In-game smoke test: confirm the capture ball renders with the new texture instead of the missing-texture placeholder it had before (requires manual play-test — also could not be visually verified in this autonomous run)
-- [ ] Follow-up (not done): wire up rarity-based texture switching via a custom ItemModel or custom_model_data range_dispatch (see FUTURE_FEATURES.md)
+- [x] "Rune-Bound Vessel" item model + procedurally-generated textures (1 default + 4 rarity variants)
+- [x] Rarity-based texture switching wired up via vanilla `custom_model_data` overrides (the only mechanism available pre-1.21.2); set on capture via `PetData.syncCustomModelData()`, cleared on release
+- [ ] In-game smoke test: confirm the capture ball renders with the new texture, and that the texture changes to match rolled rarity (common/uncommon/rare/epic), and reverts to default after release (requires manual play-test)
 
 ### Testing infrastructure
 - [x] `PetEvolution.DEBUG_LOGGING` toggle (`-Dpetevolution.debug=true`)

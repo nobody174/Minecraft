@@ -26,24 +26,20 @@ package com.nobody174.petevolution.render;
  * {@code _epic}), with the glow/vessel colors matched to each rarity's
  * existing {@code ChatFormatting} color from {@code PetRarity}.
  *
- * <h2>Known limitation: rarity variants are not yet wired up in-game</h2>
- * The item model ({@code assets/petevolution/models/item/capture_ball.json})
- * currently references only the neutral {@code capture_ball.png} texture.
- * Dynamically switching the rendered texture based on the item's
- * {@code PetData.rarity()} data component in NeoForge 1.21.1 requires either:
- * (a) a custom {@code ItemModel}/{@code ItemModel.Unbaked} implementation
- *     registered via the item model deserializer registry, reading the
- *     component at bake/render time, or
- * (b) a numeric range_dispatch keyed off a custom int (e.g. mapping rarity
- *     ordinal to {@code custom_model_data}) set on the stack at capture time.
- * Both are real, supported approaches, but both add render-pipeline code with
- * a meaningful chance of subtly breaking item rendering if a CMD/component
- * key mismatches, and there was no way to visually verify the result in this
- * autonomous, no-game-launch run. Per the task's explicit fallback guidance,
- * the conservative choice was made: ship the single base texture now, leave
- * the 4 rarity-variant PNGs in {@code textures/item/} ready to use, and
- * document this as a follow-up (see FUTURE_FEATURES.md) for a human to wire
- * up and visually verify in-game.
+ * <h2>Rarity variants are wired up via vanilla custom_model_data overrides</h2>
+ * NeoForge 1.21.1 predates the data-component-driven item model system added
+ * in 1.21.2 ({@code minecraft:select}/{@code range_dispatch}), so the only
+ * available mechanism is the older vanilla {@code overrides} predicate system
+ * keyed off the {@code custom_model_data} float component. The item model
+ * ({@code assets/petevolution/models/item/capture_ball.json}) declares one
+ * override per rarity tier, each pointing at its own model JSON
+ * ({@code capture_ball_common.json}, {@code _uncommon}, {@code _rare},
+ * {@code _epic}). {@code PetData.syncCustomModelData(ItemStack)} sets the
+ * component to {@code rarity.ordinal() + 1} (0 is reserved for the neutral
+ * default, used when no PetData/rarity is present); {@code CaptureBallItem}
+ * calls it on capture and clears the component on release so an emptied ball
+ * reverts to the default texture. Not yet visually confirmed in-game — see
+ * TODO.md for the outstanding manual smoke test.
  */
 public final class CaptureBallRenderNotes {
 
