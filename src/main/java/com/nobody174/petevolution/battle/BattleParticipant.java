@@ -33,11 +33,15 @@ import com.nobody174.petevolution.skills.SkillRegistry;
  */
 public final class BattleParticipant {
 
+    /** Fraction of incoming damage absorbed by an active DEFENSE_BUFF, consumed by the next hit taken. */
+    private static final double DEFENSE_BUFF_DAMAGE_REDUCTION = 0.5;
+
     private final UUID entityId;
     private final UUID ownerId;
     private final PetData petData;
     private int currentHp;
     private final Map<String, Integer> cooldownRemaining = new HashMap<>();
+    private boolean defenseBuffActive;
 
     public BattleParticipant(LivingEntity entity, UUID ownerId, PetData petData) {
         this.entityId = entity.getUUID();
@@ -70,8 +74,15 @@ public final class BattleParticipant {
         return currentHp <= 0;
     }
 
+    /** Applies the active defense buff's damage reduction (if any), consuming it, before reducing HP. */
     public void applyDamage(int amount) {
-        currentHp = Math.max(0, currentHp - amount);
+        int reduced = defenseBuffActive ? (int) Math.round(amount * (1 - DEFENSE_BUFF_DAMAGE_REDUCTION)) : amount;
+        defenseBuffActive = false;
+        currentHp = Math.max(0, currentHp - Math.max(1, reduced));
+    }
+
+    public void activateDefenseBuff() {
+        defenseBuffActive = true;
     }
 
     public void heal(int amount) {

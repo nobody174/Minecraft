@@ -166,7 +166,7 @@ public final class BattleSession {
     private void applySkill(BattleParticipant user, BattleParticipant target, Skill skill, SkillElement targetSkillElement) {
         switch (skill.effectType()) {
             case HEAL -> user.heal(skill.power() + user.petData().special() / 4);
-            case DEFENSE_BUFF -> user.heal(0); // placeholder no-op effect beyond reduced incoming damage next hit is out of scope for v2.0
+            case DEFENSE_BUFF -> user.activateDefenseBuff();
             case PHYSICAL_DAMAGE -> target.applyDamage(computeDamage(user, target, skill, user.petData().atk(), targetSkillElement));
             case SPECIAL_DAMAGE -> target.applyDamage(computeDamage(user, target, skill, user.petData().special(), targetSkillElement));
         }
