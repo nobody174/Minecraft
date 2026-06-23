@@ -60,7 +60,10 @@
 - [x] **Save/load persistence testing** (world reload preserves buddy) — verified via full server restart
 - [x] **Performance profiling** (spawn 20+ buddies, measure tick cost) — `/buddybeast spawnmany 30` confirmed no problems.
 - [x] **Despawn/chunk-unload review** — audited; tamed buddies rely on vanilla `setPersistenceRequired()` (already called in `setTamed()`/`readAdditionalSaveData()`), which is the standard NeoForge mechanism and is sufficient. Untamed buddies despawning like normal mobs is correct, expected behavior, not a bug. No code change needed.
-- [ ] **Final documentation and v0.1.0 release prep**
+- [x] **Final documentation and v0.1.0 release prep** — CHANGELOG/KNOWN_ISSUES/TECHNICAL_DEBT updated, RC1 → RC2 → RC3 → v0.1.0 tagged and pushed (see RELEASE_NOTES.md)
+
+**v0.1.0 — RELEASED.** All Week 1-4 work complete, verified live including
+multiplayer with a second player on a separate machine. No open issues.
 
 **Bug found and fixed (round 1):** the two-headed cow's rear-head offset
 (`rearHeadOffset`) was only tuned in a local `config/buddybeast-client.toml`

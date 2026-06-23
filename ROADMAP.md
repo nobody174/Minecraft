@@ -2,7 +2,7 @@
 
 ## v0.1.0 — Core System (3-4 weeks)
 
-**Status:** In Development
+**Status:** Released (RC1 → RC2 → RC3 → v0.1.0 tagged)
 
 ### Week 1: Entity Foundation
 - [x] Project structure initialization
