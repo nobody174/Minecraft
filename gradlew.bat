@@ -83,4 +83,7 @@ if not "%ERRORLEVEL%"=="0" set GRADLE_EXIT_CONSOLE=%ERRORLEVEL%
 if exist "%EXIT_CONSOLE%" exit "%EXIT_CONSOLE%"
 exit /b %ERRORLEVEL%
 
+:mainEnd
+if "%OS%"=="Windows_NT" endlocal
+
 :omega

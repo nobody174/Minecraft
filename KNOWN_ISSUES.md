@@ -9,9 +9,14 @@ Currently in development.
 - Redundant `finalizeSpawn()` call in spawn handler caused unrelated downstream issues → handler removed
 - Tamed buddies did not survive world reload → `setPersistenceRequired()` now called on tame and on load
 
+### Resolved (found via live multiplayer testing, Week 4)
+- `StayGoal` ran unconditionally and starved `FollowOwnerGoal`/`IdleGoal` → now gated on the `isStaying` toggle
+- Two-headed cow rear-head offset only existed in a local dev config, not the code default → baked confirmed value (`0.4`) into `BuddyDevConfig`
+- A stale `buddybeast-client.toml` on a second test machine kept overriding the new default with the old pre-fix value → resolved by deleting the stale file; documented as a one-time migration trap for any machine with a config predating this fix
+- `/buddybeast killall` always removed 0 entities (wrong bounding box used) → now iterates all level entities directly
+
 ### Open
-- Right-click taming has only been verified at the NBT/data level (via RCON), not through an actual player client interaction
-- No multiplayer (2+ client) sync testing performed yet
+None currently open for v0.1.0.
 
 ## Planned Limitations
 
@@ -41,6 +46,6 @@ If you find an issue:
 
 ## Status
 
-**v0.1.0** - Early Development (In Progress)
+**v0.1.0** - Release Candidate (all Week 1-4 testing complete, including live multiplayer)
 
 Stability and compatibility will improve as development continues.

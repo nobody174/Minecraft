@@ -7,11 +7,13 @@ This document tracks intentional shortcuts and deferred work.
 ## Current Debt
 
 ```
-Debt: BuddyBeastRenderer uses vanilla CowModel as a placeholder
-  Why: Custom Blockbench model not yet created; CowModel + MobRenderer compiles and renders correctly
-  When: Before v0.1.0 release, or defer to v0.2.0 if visuals are acceptable for initial testing
+Debt: BuddyBeastRenderer uses vanilla CowModel (two-headed, hue-shifted) as a placeholder
+  Why: Custom Blockbench model not yet created; CowModel + MobRenderer compiles, renders
+  correctly, and was confirmed looking good in live multiplayer testing
+  When: Deferred to v0.2.0+. Decision made explicitly: ship as-is for v0.1.0 per
+  MVP-first philosophy - don't over-invest in art until there's evidence of usage
   Cost: 3-4 hours (model creation, texture, renderer update)
-  Status: MONITORING
+  Status: DEFERRED (v0.1.0 release decision)
 
 Debt: BuddySyncPacket only carries entityId + health
   Why: StreamCodec.composite() has a fixed arity ceiling; UUID has no built-in ByteBufCodecs entry
