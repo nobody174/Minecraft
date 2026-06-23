@@ -1,3 +1,24 @@
+# Handoff — 2026-06-23 session (continued from 2026-06-22)
+
+Pushed `c63f35cb`. Added `/buddybeast spawnmany <count>` (op-only, max 100,
+spawns in a ring around the command source) so the remaining Week 4
+performance-profiling TODO no longer needs manual `/summon` spam — run it
+with the F3 debug overlay or a profiler attached to measure tick cost at
+20+ buddies.
+
+Also audited despawn/chunk-unload handling per the open TODO item:
+`setPersistenceRequired()` is already called correctly in `setTamed()` and
+`readAdditionalSaveData()`, which is the standard NeoForge mechanism and is
+sufficient — no bug found, no code change needed. Untamed buddies despawning
+like normal mobs is expected/correct.
+
+**Remaining Week 4 items all require a real client session with the user**
+(taming right-click, following/pathfinding, multiplayer sync with 2+
+players) — none of these can be progressed further without hands-on
+testing, so this is a natural pause point.
+
+---
+
 # Handoff — 2026-06-22 session
 
 ## Where things stand
