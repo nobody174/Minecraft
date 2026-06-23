@@ -16,12 +16,12 @@ import net.minecraft.world.entity.monster.Enemy;
 
 public final class SpeciesStats {
 
-    private record BaseStats(int hp, int atk, int def, int spd) {
+    private record BaseStats(int hp, int atk, int def, int spd, int special) {
     }
 
-    private static final BaseStats HOSTILE = new BaseStats(24, 8, 4, 6);
-    private static final BaseStats PASSIVE = new BaseStats(18, 3, 6, 4);
-    private static final BaseStats NEUTRAL = new BaseStats(20, 5, 5, 5);
+    private static final BaseStats HOSTILE = new BaseStats(24, 8, 4, 6, 5);
+    private static final BaseStats PASSIVE = new BaseStats(18, 3, 6, 4, 7);
+    private static final BaseStats NEUTRAL = new BaseStats(20, 5, 5, 5, 6);
 
     private SpeciesStats() {
     }
@@ -36,6 +36,7 @@ public final class SpeciesStats {
             (int) Math.round(stats.atk() * multiplier),
             (int) Math.round(stats.def() * multiplier),
             (int) Math.round(stats.spd() * multiplier),
+            (int) Math.round(stats.special() * multiplier),
             0, 0, speciesId, rarity);
     }
 

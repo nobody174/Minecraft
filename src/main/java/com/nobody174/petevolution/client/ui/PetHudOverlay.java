@@ -40,12 +40,12 @@ public class PetHudOverlay {
 
         graphics.drawString(
             Minecraft.getInstance().font,
-            "[" + data.rarity().name() + "] " + data.speciesId() + " | HP " + data.hp() + " ATK " + data.atk() + " DEF " + data.def() + " SPD " + data.spd(),
+            "[" + data.rarity().name() + "] " + data.speciesId() + " | HP " + data.hp() + " ATK " + data.atk() + " DEF " + data.def() + " SPD " + data.spd() + " SPC " + data.special(),
             x, y, data.rarity().color().getColor() != null ? data.rarity().color().getColor() : 0xFFFFFF
         );
         graphics.drawString(
             Minecraft.getInstance().font,
-            "XP " + data.xp() + "/" + (threshold == Integer.MAX_VALUE ? "MAX" : threshold) + " | Stage " + data.evoStage(),
+            "XP " + data.xp() + "/" + (threshold == Integer.MAX_VALUE ? "MAX" : threshold) + " | Lv " + data.level() + " (Stage " + data.evoStage() + ")",
             x, y + 10, 0x55FF55
         );
     }

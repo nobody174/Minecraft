@@ -14,6 +14,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
+/**
+ * Applies {@link PetData} stats to a released mob's vanilla attributes.
+ *
+ * Note: {@code special} (v2.0) has no vanilla attribute equivalent and is
+ * intentionally not applied here — it is consumed entirely by the skills
+ * and battle engine for non-physical skill power scaling.
+ */
 public final class PetStatApplier {
 
     private static final int BASELINE_SPD = 5;

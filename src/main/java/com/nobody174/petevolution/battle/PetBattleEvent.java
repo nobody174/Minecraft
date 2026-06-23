@@ -145,7 +145,7 @@ public class PetBattleEvent {
     }
 
     private int battlePower(PetData data) {
-        return data.hp() + data.atk() * 2 + data.def() + data.spd();
+        return data.hp() + data.atk() * 2 + data.def() + data.spd() + data.special();
     }
 }
 

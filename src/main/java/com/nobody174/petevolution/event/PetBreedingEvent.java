@@ -155,6 +155,7 @@ public class PetBreedingEvent {
             averageStat(dataA.atk(), dataB.atk(), rarityUpgradeFactor),
             averageStat(dataA.def(), dataB.def(), rarityUpgradeFactor),
             averageStat(dataA.spd(), dataB.spd(), rarityUpgradeFactor),
+            averageStat(dataA.special(), dataB.special(), rarityUpgradeFactor),
             0, 0, dataA.speciesId(), offspringRarity);
 
         if (offspring instanceof LivingEntity livingOffspring) {
