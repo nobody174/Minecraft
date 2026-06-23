@@ -79,13 +79,16 @@ Fixed by deleting the stale config file on that machine (NeoForge
 regenerates it from the code default on next launch). **Lesson:** any
 machine with a `config/buddybeast-client.toml` predating this fix needs that
 file deleted/reset, or it will keep overriding the new default.
+**Confirmed fixed live:** two-headed cow now renders correctly in
+multiplayer on the second test machine.
 
 **Bug found and fixed:** `/buddybeast killall` removed 0 entities even with
 `includeTamed=true`. Cause: it searched `level.getWorldBorder().getCollisionShape().bounds()`,
 which is not the actual playable area and returned an empty/degenerate
 result. Fixed by iterating `level.getAllEntities()` directly and filtering
 by type, which is the standard approach for "all entities of type X in the
-level" commands.
+level" commands. **Confirmed fixed live:** `/buddybeast killall true` now
+correctly removes all buddies.
 
 **Dev tools:**
 - `/buddybeast spawnmany <count>` (op-only, max 100) — spawns buddies in a
