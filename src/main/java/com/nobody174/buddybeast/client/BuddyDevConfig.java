@@ -28,7 +28,7 @@ public class BuddyDevConfig {
             "Increase to slide it toward the tail. Edit and save this file while",
             "the game is running - no restart needed."
         )
-        .defineInRange("rearHeadOffset", 0.0, -2.0, 2.0);
+        .defineInRange("rearHeadOffset", 0.4, -2.0, 2.0);
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 }

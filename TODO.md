@@ -54,17 +54,29 @@
 
 ### Week 4: In-Game Testing & Polish - ⏳ IN PROGRESS
 - [x] **Single-player/server spawn testing** (`/summon buddybeast:buddy_beast`) — verified via RCON, no crash, correct attributes/health
-- [ ] **Taming interaction testing** (right-click to tame) — NBT-level taming verified; actual player right-click interaction not yet tested in a real client session
-- [ ] **Following behavior testing** (does pathfinding work?)
-- [ ] **Multiplayer sync testing** (2+ players, buddy appears for all)
+- [x] **Taming interaction testing** (right-click to tame) — confirmed live by a second player: tame → stay → follow all worked correctly.
+- [x] **Following behavior testing** (does pathfinding work?) — confirmed live: pet attempted to follow owner swimming to an island and drowned just short of shore. Good pathing; drowning-while-following is expected vanilla swim AI behavior, not a bug.
+- [x] **Multiplayer sync testing** (2+ players, buddy appears for all) — confirmed: second player on a different machine could see the buddy and interact with it (tame/stay/follow, and could damage/kill it).
 - [x] **Save/load persistence testing** (world reload preserves buddy) — verified via full server restart
-- [ ] **Performance profiling** (spawn 20+ buddies, measure tick cost) — tooling ready, see `/buddybeast spawnmany <count>` below
+- [x] **Performance profiling** (spawn 20+ buddies, measure tick cost) — `/buddybeast spawnmany 30` confirmed no problems.
 - [x] **Despawn/chunk-unload review** — audited; tamed buddies rely on vanilla `setPersistenceRequired()` (already called in `setTamed()`/`readAdditionalSaveData()`), which is the standard NeoForge mechanism and is sufficient. Untamed buddies despawning like normal mobs is correct, expected behavior, not a bug. No code change needed.
 - [ ] **Final documentation and v0.1.0 release prep**
 
-**New dev tool:** `/buddybeast spawnmany <count>` (op-only, max 100) spawns buddies
-in a ring around the command source for performance profiling — use with
-F3 debug overlay or a profiler to measure tick cost with 20+ buddies active.
+**Bug found and fixed:** the two-headed cow's rear-head offset (`rearHeadOffset`)
+was only tuned in a local `config/buddybeast-client.toml` on the dev machine,
+not baked into code — so a second player with the identical JAR saw the
+untuned (floating/misaligned) head, since they didn't have that config file.
+Fixed by baking the confirmed-good value (`0.4`) as the code default in
+`BuddyDevConfig.java`; the TOML remains available for further live-tuning
+experiments on top of that default.
+
+**Dev tools:**
+- `/buddybeast spawnmany <count>` (op-only, max 100) — spawns buddies in a
+  ring around the command source for performance profiling.
+- `/buddybeast killall [includeTamed]` (op-only) — removes all buddy_beast
+  entities in the level; defaults to untamed only (so test pets aren't
+  wiped by accident), pass `true` to also remove tamed ones. Use this
+  between `spawnmany` test runs instead of letting them pile up.
 
 ## Blocking Tasks
 
