@@ -1,0 +1,4 @@
+# Gradle wrapper shell scripts must stay LF - a CRLF shebang line
+# (#!/bin/sh\r) is invalid and breaks every Linux CI runner silently.
+gradlew text eol=lf
+*.sh text eol=lf
