@@ -24,7 +24,8 @@ A custom AI mob mod that adds intelligent, player-trained creatures to Minecraft
 ## Installation
 
 1. Install [NeoForge 21.1.233+](https://neoforged.net/)
-2. Download the latest JAR from Releases
+2. Download `buddybeast-0.1.0-mc1_21_1.jar` from the
+   [v0.1.0 release](https://github.com/nobody174/Minecraft/releases/tag/buddy-beast-v0.1.0)
 3. Place in `%appdata%\.minecraft\mods\`
 4. Launch Minecraft
 
