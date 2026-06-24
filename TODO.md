@@ -78,7 +78,9 @@
 - [x] Fixed: DEFENSE_BUFF skill effect was a documented no-op — now halves the next incoming damage instance, consumed on that hit
 - [x] In-game smoke test (real 2-player co-op via laptop): battle triggered correctly, HUD/HP bars showed for both pets, took multiple rounds, winner message displayed correctly — confirmed working
 - [x] Found and fixed: pets visually wandered independently with normal AI during battle, totally decoupled from the HP/skill simulation — added `BattleVisuals` (AI freeze, mutual facing, per-round lunge)
-- [ ] In-game smoke test: re-test the same battle now that `BattleVisuals` is in place — confirm both pets freeze, face each other, and lunge on each round instead of wandering off; confirm low-HP creature uses a defensive/heal skill and DEFENSE_BUFF actually reduces the next hit (requires manual play-test)
+- [x] In-game smoke test (2-player co-op): pets froze and faced each other correctly, confirmed working
+- [x] Found and fixed: pets ended up standing inside each other after a few rounds — lunge had no way to return home, so repeated lunges compounded; now records a home spot per entity and returns to it the tick after lunging
+- [ ] In-game smoke test: re-test the same battle now that the lunge/overlap fix is in place — confirm pets stay visually separated across many rounds instead of converging; confirm low-HP creature uses a defensive/heal skill and DEFENSE_BUFF actually reduces the next hit (requires manual play-test)
 
 ### Minimal battle UI + networking
 - [x] `BattleHudOverlay` (HP bars + numbered skill prompts), `BattleSkillChoicePayload`, `BattleStateSyncPayload`, `BattleNetworking`

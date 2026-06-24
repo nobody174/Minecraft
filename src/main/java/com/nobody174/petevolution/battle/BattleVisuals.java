@@ -10,6 +10,12 @@
 
 package com.nobody174.petevolution.battle;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,29 +34,54 @@ import net.minecraft.world.phys.Vec3;
  * synced to its skill landing each round — mirroring the player's existing
  * attack-lunge feel, but as a real position nudge server-side since there is no
  * client animation hook for an arbitrary vanilla mob's attack swing.
+ *
+ * Each entity's position when the session starts is recorded as its "home spot"
+ * and it's snapped back there after each lunge — without this, repeated lunges
+ * toward the opponent's current (already-lunged) position compound over rounds
+ * and the two pets end up standing inside each other (observed in a real
+ * two-player test before this fix).
  */
 final class BattleVisuals {
 
-    private static final double LUNGE_DISTANCE = 0.5;
+    private static final double LUNGE_DISTANCE = 0.4;
+    private static final double MIN_SEPARATION = 1.5;
+
+    private static final Map<UUID, Vec3> HOME_POSITIONS = new HashMap<>();
+    private static final Set<UUID> LUNGED = new HashSet<>();
 
     private BattleVisuals() {
     }
 
-    /** Call once when a session starts: disables normal AI and snaps both to face each other. */
+    /** Call once when a session starts: disables normal AI, records home positions, and snaps both to face each other. */
     static void lockOnStart(MinecraftServer server, BattleParticipant a, BattleParticipant b) {
         withBoth(server, a, b, (entityA, entityB) -> {
             setNoAi(entityA, true);
             setNoAi(entityB, true);
+            HOME_POSITIONS.put(entityA.getUUID(), entityA.position());
+            HOME_POSITIONS.put(entityB.getUUID(), entityB.position());
             faceEachOther(entityA, entityB);
         });
     }
 
-    /** Call once per server tick while a session is active: keeps both pets facing each other. */
+    /**
+     * Call once per server tick while a session is active: keeps both pets facing each
+     * other, and returns any entity mid-lunge back to its home spot (one tick after the
+     * lunge was triggered, so the forward step is briefly visible before snapping back).
+     */
     static void tickFacing(MinecraftServer server, BattleParticipant a, BattleParticipant b) {
-        withBoth(server, a, b, BattleVisuals::faceEachOther);
+        withBoth(server, a, b, (entityA, entityB) -> {
+            returnHomeIfLunged(entityA);
+            returnHomeIfLunged(entityB);
+            faceEachOther(entityA, entityB);
+        });
     }
 
-    /** Call when a round resolves: a brief lunge toward the opponent for the participant whose skill just landed. */
+    /**
+     * Call when a round resolves: a brief lunge toward the opponent for the participant
+     * whose skill just landed. The next {@link #tickFacing} call returns it to its
+     * recorded home spot, so repeated lunges across rounds don't compound into the two
+     * pets standing inside each other (observed in a real two-player test before this fix).
+     */
     static void lunge(MinecraftServer server, BattleParticipant user, BattleParticipant target) {
         LivingEntity userEntity = resolve(server, user);
         LivingEntity targetEntity = resolve(server, target);
@@ -58,21 +89,40 @@ final class BattleVisuals {
             return;
         }
 
-        Vec3 toTarget = targetEntity.position().subtract(userEntity.position());
+        Vec3 home = HOME_POSITIONS.getOrDefault(userEntity.getUUID(), userEntity.position());
+        Vec3 targetHome = HOME_POSITIONS.getOrDefault(targetEntity.getUUID(), targetEntity.position());
+
+        Vec3 toTarget = targetHome.subtract(home);
         double length = toTarget.length();
         if (length < 1.0e-4) {
             return;
         }
-        Vec3 lungeOffset = toTarget.normalize().scale(LUNGE_DISTANCE);
-        Vec3 lungePos = userEntity.position().add(lungeOffset);
+
+        double travel = Math.max(0, Math.min(LUNGE_DISTANCE, length - MIN_SEPARATION));
+        Vec3 lungePos = home.add(toTarget.normalize().scale(travel));
         userEntity.teleportTo(lungePos.x, lungePos.y, lungePos.z);
+        LUNGED.add(userEntity.getUUID());
     }
 
-    /** Call once when a session concludes: restores normal AI so the pet resumes wandering. */
+    private static void returnHomeIfLunged(LivingEntity entity) {
+        if (!LUNGED.remove(entity.getUUID())) {
+            return;
+        }
+        Vec3 home = HOME_POSITIONS.get(entity.getUUID());
+        if (home != null) {
+            entity.teleportTo(home.x, home.y, home.z);
+        }
+    }
+
+    /** Call once when a session concludes: restores normal AI and forgets recorded home positions. */
     static void unlockOnEnd(MinecraftServer server, BattleParticipant a, BattleParticipant b) {
         withBoth(server, a, b, (entityA, entityB) -> {
             setNoAi(entityA, false);
             setNoAi(entityB, false);
+            HOME_POSITIONS.remove(entityA.getUUID());
+            HOME_POSITIONS.remove(entityB.getUUID());
+            LUNGED.remove(entityA.getUUID());
+            LUNGED.remove(entityB.getUUID());
         });
     }
 

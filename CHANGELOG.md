@@ -7,6 +7,7 @@ All notable changes to Pet Evolution are documented here.
 ### Added
 - Mining/chopping XP: `BlockEvent.BreakEvent` now grants 1 XP per block broken while holding/off-handing a filled vessel — previously "exploration XP" only counted walking distance (`Player.walkDist`), so standing still and digging/chopping granted nothing even though TODO/CHANGELOG described it as covering mining
 - `battle/BattleVisuals.java`: a real two-player battle test confirmed the battle math/HUD/outcome all worked correctly, but the two pets just wandered independently with normal AI — completely decoupled from the battle simulation. Pets now have their AI frozen (`Mob#setNoAi`) for the duration of a session, face each other every tick, and lunge toward their opponent (a real position nudge, since there's no client animation hook for an arbitrary vanilla mob's attack swing) each time their skill lands in a round. AI is restored when the battle concludes.
+- **Follow-up fix**: a second real test showed the two pets ending up standing inside each other after a few rounds — the lunge moved each pet toward the *opponent's current position* with nothing to move it back, so repeated lunges compounded. Now each entity's starting position is recorded as a "home spot" when the battle begins; the lunge travels toward it (capped short of a minimum separation distance) and is returned home on the following tick, so it reads as a brief forward step rather than a permanent drift.
 
 ## [Unreleased] — v0.1.0-rc1
 
