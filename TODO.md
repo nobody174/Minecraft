@@ -114,4 +114,4 @@
 ### Testing infrastructure
 - [x] `PetEvolution.DEBUG_LOGGING` toggle (`-Dpetevolution.debug=true`)
 - [x] `/petevolution test` command spawns a fully-statted, fully-skilled test pet
-- [ ] In-game smoke test: run `/petevolution test`, confirm a wolf spawns with the expected stats and can immediately participate in a battle (requires manual play-test)
+- [x] In-game smoke test: confirmed `/petevolution test` spawns the expected EPIC wolf with correct stats (this was the same wolf referenced in earlier battle testing)
