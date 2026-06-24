@@ -22,6 +22,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import com.nobody174.petevolution.creature.ModDataComponents;
@@ -31,6 +32,7 @@ public class PetXpEvent {
 
     private static final int XP_PER_KILL = 10;
     private static final int XP_PER_CRAFT = 2;
+    private static final int XP_PER_BLOCK_BROKEN = 1;
     private static final float DISTANCE_PER_XP = 50.0f;
     private static final int EXPLORATION_CHECK_INTERVAL_TICKS = 20;
 
@@ -52,6 +54,14 @@ public class PetXpEvent {
             return;
         }
         grantXpToHeldBall(player, XP_PER_CRAFT);
+    }
+
+    @SubscribeEvent
+    public void onBlockBreak(BlockEvent.BreakEvent event) {
+        if (!(event.getPlayer() instanceof ServerPlayer player)) {
+            return;
+        }
+        grantXpToHeldBall(player, XP_PER_BLOCK_BROKEN);
     }
 
     @SubscribeEvent

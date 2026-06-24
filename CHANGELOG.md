@@ -2,6 +2,11 @@
 
 All notable changes to Pet Evolution are documented here.
 
+## [Unreleased] — post-v2.0.0 fixes
+
+### Added
+- Mining/chopping XP: `BlockEvent.BreakEvent` now grants 1 XP per block broken while holding/off-handing a filled vessel — previously "exploration XP" only counted walking distance (`Player.walkDist`), so standing still and digging/chopping granted nothing even though TODO/CHANGELOG described it as covering mining
+
 ## [Unreleased] — v0.1.0-rc1
 
 ### Added

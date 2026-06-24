@@ -13,7 +13,8 @@
 ## Current (Week 2)
 
 - [x] In-game smoke test: capture and release confirmed working (cow/pig/sheep); HUD and tooltip confirmed showing live stats on the held ball
-- [x] Additional XP sources: crafting (`PlayerEvent.ItemCraftedEvent`), exploration (`Player.walkDist` delta, 20-tick batched)
+- [x] Additional XP sources: crafting (`PlayerEvent.ItemCraftedEvent`), exploration (`Player.walkDist` delta, 20-tick batched), mining/chopping (`BlockEvent.BreakEvent`, 1 XP/block)
+- [x] In-game smoke test: confirmed kill XP grants correctly via off-hand vessel; confirmed walking-only exploration XP did NOT cover block-breaking as expected — fixed with the BlockEvent.BreakEvent source above (still needs in-game re-test)
 - [x] Stat-based combat effects: `PetStatApplier` sets MAX_HEALTH/ATTACK_DAMAGE/ARMOR from PetData and scales MOVEMENT_SPEED relative to vanilla base, applied to the released mob on spawn
 - [x] Multiple species base-stat variation (hostile/passive/neutral categories via `SpeciesStats`)
 - [x] Creative tab registration for `CaptureBallItem` (added to Tools & Utilities)
