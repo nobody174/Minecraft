@@ -4,7 +4,7 @@ A NeoForge mod for Minecraft 1.21.1 that lets players capture, train, evolve, an
 
 ## Status
 
-✅ Core systems implemented and manually verified through real multiplayer play-testing (v0.2.0 / v2.0.0 expansion). See [CHANGELOG.md](CHANGELOG.md) for the full history and [TODO.md](TODO.md) for verification status.
+**v2.0.0 — Released.** Core systems implemented and manually verified through real multiplayer play-testing. See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
 ## Features
 
@@ -17,6 +17,14 @@ A NeoForge mod for Minecraft 1.21.1 that lets players capture, train, evolve, an
 - **Ownership Protection** — Released pets display a name tag, can't be stolen or attacked by other players, and default to standing in place until you choose otherwise.
 - **Pet Behavior Modes** — Left-click your own released pet to cycle Stay → Follow → release from ownership.
 - **Multiplayer Sync** — Pet data persists across server restarts and client transfers.
+
+## Installation
+
+1. Install [NeoForge 21.1.233+](https://neoforged.net/)
+2. Download `petevolution-2.0.0-mc1_21_1.jar` from the
+   [v2.0.0 release](https://github.com/nobody174/Minecraft/releases/tag/pet-evolution-v2.0.0)
+3. Place in `%appdata%\.minecraft\mods\`
+4. Launch Minecraft
 
 ## Requirements
 
