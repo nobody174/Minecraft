@@ -4,13 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       mod_name:
-        description: 'Mod to release (glowtools_server-client or boss-radar)'
+        description: 'Mod to release'
         required: true
         default: 'glowtools_server-client'
         type: choice
         options:
           - glowtools_server-client
           - boss-radar
+          - armor-aura
+          - buddy-beast
+          - pet-evolution
       version:
         description: 'Release version (e.g., 1.0.0)'
         required: true
