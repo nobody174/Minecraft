@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All rights reserved"
+authors="nobody174"
+description="Capture, train, and evolve companion pets with persistent stats and multiplayer sync."
+
+[[mods]]
+modId="petevolution"
+version="0.1.0"
+displayName="Pet Evolution"
+description="Capture, train, and evolve companion pets with persistent stats and multiplayer sync."
+
+[[dependencies.petevolution]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.21.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.petevolution]]
+    modId="neoforge"
+    mandatory=true
+    versionRange="[21.1.233,)"
+    ordering="NONE"
+    side="BOTH"
