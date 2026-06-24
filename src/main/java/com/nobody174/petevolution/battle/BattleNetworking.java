@@ -59,17 +59,28 @@ public final class BattleNetworking {
     }
 
     private static void handleServer(BattleSkillChoicePayload payload, net.neoforged.neoforge.network.handling.IPayloadContext context) {
+        if (PetEvolution.DEBUG_LOGGING) {
+            PetEvolution.LOGGER.info("[Battle] Received skill choice payload: skillId={}, player={}",
+                payload.skillId(), context.player() != null ? context.player().getGameProfile().getName() : "null");
+        }
+
         if (!(context.player() instanceof ServerPlayer player)) {
             return;
         }
 
         Skill chosen = SkillRegistry.byId(payload.skillId());
         if (chosen == null) {
+            if (PetEvolution.DEBUG_LOGGING) {
+                PetEvolution.LOGGER.info("[Battle] Rejected: unknown skillId {}", payload.skillId());
+            }
             return;
         }
 
         BattleSession session = BattleEngine.findSessionForChallenger(player.getUUID());
         if (session == null || session.isFinished()) {
+            if (PetEvolution.DEBUG_LOGGING) {
+                PetEvolution.LOGGER.info("[Battle] Rejected: no active session found for challenger {}", player.getGameProfile().getName());
+            }
             return;
         }
 
@@ -78,9 +89,15 @@ public final class BattleNetworking {
         // an arbitrary/unlocked skill id.
         boolean isLegal = session.challenger().unlockedSkills().contains(chosen) || chosen.id().equals(SkillRegistry.RECOVER.id());
         if (!isLegal) {
+            if (PetEvolution.DEBUG_LOGGING) {
+                PetEvolution.LOGGER.info("[Battle] Rejected: skill {} is not unlocked for this challenger", chosen.id());
+            }
             return;
         }
 
+        if (PetEvolution.DEBUG_LOGGING) {
+            PetEvolution.LOGGER.info("[Battle] Accepted skill choice: {}", chosen.id());
+        }
         session.submitPlayerChoice(chosen);
     }
 }

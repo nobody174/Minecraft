@@ -57,6 +57,11 @@ public class CaptureBallItem extends Item {
             return InteractionResult.FAIL;
         }
 
+        PetOwnerData ownerData = target.getData(ModAttachments.PET_OWNER.get());
+        if (ownerData != null && !ownerData.ownerId().equals(player.getUUID())) {
+            return InteractionResult.FAIL;
+        }
+
         PetData existingProgress = target.getData(ModAttachments.RELEASED_PET_DATA.get());
         PetData captured;
         if (existingProgress != null) {
@@ -109,7 +114,11 @@ public class CaptureBallItem extends Item {
             released.setData(ModAttachments.RELEASED_PET_DATA.get(), data);
             if (context.getPlayer() != null) {
                 released.setData(ModAttachments.PET_OWNER.get(), new PetOwnerData(context.getPlayer().getUUID()));
+                String speciesName = data.speciesId().contains(":") ? data.speciesId().substring(data.speciesId().indexOf(':') + 1) : data.speciesId();
+                released.setCustomName(net.minecraft.network.chat.Component.literal(context.getPlayer().getGameProfile().getName() + "'s " + speciesName));
+                released.setCustomNameVisible(true);
             }
+            PetBehaviorController.applyMode(livingReleased, livingReleased.getData(ModAttachments.PET_BEHAVIOR_MODE.get()));
         }
 
         serverLevel.addFreshEntity(released);

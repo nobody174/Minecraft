@@ -10,6 +10,7 @@
 
 package com.nobody174.petevolution.testing;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import net.minecraft.ChatFormatting;
@@ -49,6 +50,8 @@ public final class TestCommand {
     private static final int TEST_SPD = 9;
     private static final int TEST_SPECIAL = 12;
 
+    private static final double NEAREST_OWNED_PET_RADIUS = 16.0;
+
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {
         event.getDispatcher().register(
@@ -56,7 +59,59 @@ public final class TestCommand {
                 .then(Commands.literal("test")
                     .requires(source -> source.hasPermission(2))
                     .executes(this::spawnTestPet))
+                .then(Commands.literal("xp")
+                    .requires(source -> source.hasPermission(2))
+                    .then(Commands.argument("amount", IntegerArgumentType.integer(1))
+                        .executes(this::grantXpToNearestOwnedPet)))
         );
+    }
+
+    /**
+     * Grants XP directly to the nearest released pet owned by the command issuer,
+     * for quickly testing evolution/skill-unlock thresholds without needing to
+     * grind real kills/mining/crafting. OP-only ({@code hasPermission(2)}, same
+     * gate as {@code /petevolution test}).
+     */
+    private int grantXpToNearestOwnedPet(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
+        int amount = IntegerArgumentType.getInteger(context, "amount");
+
+        if (!(source.getEntity() instanceof ServerPlayer player)) {
+            source.sendFailure(Component.literal("This command must be run by a player."));
+            return 0;
+        }
+
+        LivingEntity nearestPet = player.level().getEntitiesOfClass(LivingEntity.class,
+                player.getBoundingBox().inflate(NEAREST_OWNED_PET_RADIUS))
+            .stream()
+            .filter(entity -> {
+                PetOwnerData ownerData = entity.getData(ModAttachments.PET_OWNER.get());
+                return ownerData != null && ownerData.ownerId().equals(player.getUUID());
+            })
+            .min(java.util.Comparator.comparingDouble(player::distanceToSqr))
+            .orElse(null);
+
+        if (nearestPet == null) {
+            source.sendFailure(Component.literal("No owned released pet found within " + (int) NEAREST_OWNED_PET_RADIUS + " blocks."));
+            return 0;
+        }
+
+        PetData current = nearestPet.getData(ModAttachments.RELEASED_PET_DATA.get());
+        if (current == null) {
+            source.sendFailure(Component.literal("Nearest owned entity has no PetData attached."));
+            return 0;
+        }
+
+        PetData updated = current.withXp(amount);
+        nearestPet.setData(ModAttachments.RELEASED_PET_DATA.get(), updated);
+        PetStatApplier.apply(nearestPet, updated);
+
+        source.sendSuccess(() -> Component.literal(
+            "Granted " + amount + " XP to nearest owned pet — now XP " + updated.xp() + ", stage " + updated.evoStage()
+                + (updated.evoStage() > current.evoStage() ? " (evolved!)" : "")
+        ).withStyle(ChatFormatting.GREEN), false);
+
+        return 1;
     }
 
     private int spawnTestPet(CommandContext<CommandSourceStack> context) {

@@ -18,6 +18,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import com.nobody174.petevolution.PetEvolution;
 import com.nobody174.petevolution.battle.BattleSkillChoicePayload;
 import com.nobody174.petevolution.battle.BattleStateSyncPayload;
 import com.nobody174.petevolution.skills.Skill;
@@ -92,6 +93,28 @@ public final class BattleHudOverlay {
         }
     }
 
+    /**
+     * Drains pending clicks on the vanilla hotbar-slot-switch keybinds (1-5) while a
+     * battle is active, so pressing a digit to pick a skill doesn't also switch the
+     * player's hotbar slot — found during a real co-op test where pressing 1/2 during
+     * a battle prompt swapped hotbar slots and never registered as a skill choice.
+     * Must run in {@link ClientTickEvent.Pre} (before vanilla's own keybind handling
+     * in {@code Minecraft.tick()} consumes the click) rather than {@code Post}.
+     */
+    public static void onClientTickPre(ClientTickEvent.Pre event) {
+        if (!ClientBattleState.isActive()) {
+            return;
+        }
+        var options = Minecraft.getInstance().options;
+        var hotbarKeys = new net.minecraft.client.KeyMapping[] {
+            options.keyHotbarSlots[0], options.keyHotbarSlots[1], options.keyHotbarSlots[2],
+            options.keyHotbarSlots[3], options.keyHotbarSlots[4]
+        };
+        for (net.minecraft.client.KeyMapping key : hotbarKeys) {
+            key.consumeClick();
+        }
+    }
+
     /** Polls digit keys 1-5 once per client tick and sends a skill choice payload on press (not hold). */
     public static void onClientTick(ClientTickEvent.Post event) {
         if (!ClientBattleState.isActive()) {
@@ -103,6 +126,9 @@ public final class BattleHudOverlay {
         for (int i = 0; i < DIGIT_KEYS.length && i < available.size(); i++) {
             boolean isDown = org.lwjgl.glfw.GLFW.glfwGetKey(windowHandle, DIGIT_KEYS[i]) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
             if (isDown && !WAS_DOWN[i]) {
+                if (PetEvolution.DEBUG_LOGGING) {
+                    PetEvolution.LOGGER.info("[Battle] Sending skill choice payload for key {}: {}", i + 1, available.get(i));
+                }
                 PacketDistributor.sendToServer(new BattleSkillChoicePayload(available.get(i)));
             }
             WAS_DOWN[i] = isDown;

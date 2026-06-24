@@ -9,6 +9,21 @@ All notable changes to Pet Evolution are documented here.
 - `battle/BattleVisuals.java`: a real two-player battle test confirmed the battle math/HUD/outcome all worked correctly, but the two pets just wandered independently with normal AI — completely decoupled from the battle simulation. Pets now have their AI frozen (`Mob#setNoAi`) for the duration of a session, face each other every tick, and lunge toward their opponent (a real position nudge, since there's no client animation hook for an arbitrary vanilla mob's attack swing) each time their skill lands in a round. AI is restored when the battle concludes.
 - **Follow-up fix**: a second real test showed the two pets ending up standing inside each other after a few rounds — the lunge moved each pet toward the *opponent's current position* with nothing to move it back, so repeated lunges compounded. Now each entity's starting position is recorded as a "home spot" when the battle begins; the lunge travels toward it (capped short of a minimum separation distance) and is returned home on the following tick, so it reads as a brief forward step rather than a permanent drift.
 
+### Added — Pet ownership protection and behavior modes
+- **Fixed a real exploit**: any player could simply right-click another player's released pet with an empty vessel and steal it outright — `CaptureBallItem.interactLivingEntity` never checked the target's `PET_OWNER` attachment before allowing capture. Now blocked unless the capturing player is the pet's actual owner.
+- **Fixed**: released pets had no visible ownership indicator. They now get a custom name tag ("PlayerName's species") set on release.
+- **Fixed**: any player could melee-attack and damage another player's (or even their own) released pet — there was no damage protection at all for owned pets. `PetBehaviorEvent` now cancels `AttackEntityEvent` outright against any pet with a `PET_OWNER` attachment, regardless of attacker.
+- **New**: `creature/PetBehaviorMode.java` (STAY/FOLLOW) + `creature/ModAttachments.PET_BEHAVIOR_MODE`/`PET_TOGGLE_COUNT`. Released pets now default to STAY (`Mob#setNoAi(true)`) instead of vanilla wandering AI — a real two-player test showed players unable to relocate a pet after releasing it, and pets wandering off mid-battle before `BattleVisuals` existed.
+- **New**: left-clicking (attacking) your own released pet while holding any vessel cycles its mode instead of dealing damage — STAY → FOLLOW (a lightweight custom `Goal`, `capture/PetBehaviorController.FollowOwnerGoal`, paths the pet toward its owner) → STAY → a 3rd click abandons ownership entirely (clears the name tag and `PET_OWNER` attachment, reverts to STAY so it doesn't wander off as a free-for-all wild mob, and becomes recapturable by anyone via the existing right-click action).
+- `BattleVisuals.unlockOnEnd` now restores each pet's actual stored STAY/FOLLOW mode via `PetBehaviorController.applyMode` when a battle concludes, rather than a blanket `setNoAi(false)` that would have silently reset STAY pets back to wandering.
+
+### Added — Testing infrastructure
+- `/petevolution xp <amount>` (OP-only, same permission gate as `/petevolution test`): grants XP directly to the nearest released pet owned by the command issuer, for testing evolution/skill-unlock thresholds without grinding real kills/mining/crafting.
+
+### Fixed — Battle skill-choice keys swapped hotbar slots instead of registering a choice
+- A real co-op test showed pressing 1/2 during the battle HUD's skill prompt just switched the player's hotbar slot and never picked a skill. Root cause: `BattleHudOverlay`'s raw GLFW key polling for digits 1-5 ran alongside vanilla's own hotbar-switch keybind handling, which consumed the same key press independently. Added `BattleHudOverlay.onClientTickPre` (registered on `ClientTickEvent.Pre`, which fires before vanilla's keybind handling in `Minecraft.tick()`) that drains the pending click on the 5 hotbar-switch `KeyMapping`s via `consumeClick()` while a battle is active, so vanilla never sees them.
+- Added debug logging (`PetEvolution.DEBUG_LOGGING`) to the full skill-choice payload path — client-side send and server-side accept/reject reasons — to make this class of bug faster to diagnose without needing a temporary debug build next time.
+
 ## [Unreleased] — v0.1.0-rc1
 
 ### Added

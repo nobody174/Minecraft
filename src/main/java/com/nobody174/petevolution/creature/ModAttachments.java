@@ -12,6 +12,7 @@ package com.nobody174.petevolution.creature;
 
 import java.util.function.Supplier;
 
+import com.mojang.serialization.Codec;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -32,6 +33,19 @@ public final class ModAttachments {
         ATTACHMENT_TYPES.register("released_pet_data",
             () -> AttachmentType.builder(() -> (PetData) null)
                 .serialize(PetData.CODEC)
+                .build());
+
+    public static final Supplier<AttachmentType<PetBehaviorMode>> PET_BEHAVIOR_MODE =
+        ATTACHMENT_TYPES.register("pet_behavior_mode",
+            () -> AttachmentType.builder(() -> PetBehaviorMode.STAY)
+                .serialize(Codec.STRING.xmap(PetBehaviorMode::valueOf, PetBehaviorMode::name))
+                .build());
+
+    /** Counts consecutive left-click toggles since release: 0=STAY, 1=FOLLOW, 2=STAY, 3rd click abandons ownership. */
+    public static final Supplier<AttachmentType<Integer>> PET_TOGGLE_COUNT =
+        ATTACHMENT_TYPES.register("pet_toggle_count",
+            () -> AttachmentType.builder(() -> 0)
+                .serialize(Codec.INT)
                 .build());
 
     private ModAttachments() {

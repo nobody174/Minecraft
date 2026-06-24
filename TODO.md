@@ -84,7 +84,21 @@
 
 ### Minimal battle UI + networking
 - [x] `BattleHudOverlay` (HP bars + numbered skill prompts), `BattleSkillChoicePayload`, `BattleStateSyncPayload`, `BattleNetworking`
-- [ ] In-game smoke test: confirm the battle HUD appears when a battle starts, confirm pressing 1-5 during the input window actually overrides the AI's choice, confirm the HUD disappears when the battle ends (requires manual play-test — this is the area most likely to have an unnoticed client-rendering or packet-registration issue, since it could not be visually verified in this autonomous run)
+- [x] In-game smoke test (2-player co-op): battle HUD top-center confirmed showing, took multiple rounds, winner message displayed — confirmed working
+- [x] Found and fixed: pressing 1/2 during the "press 1 for X, 2 for Y" prompt swapped the player's hotbar slot — vanilla's hotbar-switch keybinds also consumed the same digit-key press alongside the mod's own GLFW polling. Now drains the pending click on those 5 keybinds every tick while a battle is active (`KeyMapping.consumeClick()`), so vanilla never sees them.
+- [x] Added debug logging (`-Dpetevolution.debug=true`) to the skill-choice payload's full path (client send + server accept/reject reasons) for diagnosing this kind of issue faster in future
+- [ ] In-game smoke test: re-test pressing 1-5 during a battle prompt — confirm it no longer swaps hotbar slots AND confirm it actually overrides the AI's skill choice this time (requires manual play-test)
+
+## Pet ownership protection and behavior modes (found during real co-op testing)
+
+- [x] Fixed real exploit: any player could right-click and steal another player's released pet — `CaptureBallItem` now blocks capture unless the capturing player is the pet's actual owner
+- [x] Fixed: released pets had no visible ownership indicator — name tag ("PlayerName's species") now set on release
+- [x] Fixed: any player could melee-attack and damage an owned pet — `PetBehaviorEvent` now cancels all `AttackEntityEvent`s against owned pets regardless of attacker
+- [x] `PetBehaviorMode` (STAY/FOLLOW): released pets now default to STAY (`setNoAi(true)`) instead of vanilla wandering — fixes pets walking off and becoming unfindable after release
+- [x] Left-click cycle (holding any vessel, on your own pet): STAY → FOLLOW (custom goal paths toward owner) → STAY → 3rd click abandons ownership (clears name tag/owner, recapturable by anyone)
+- [x] `BattleVisuals.unlockOnEnd` now restores the pet's actual STAY/FOLLOW mode after a battle instead of blanket-resetting to wandering AI
+- [x] `/petevolution xp <amount>` OP command: grants XP to the nearest owned pet for testing evolution/skill thresholds without grinding
+- [ ] In-game smoke test (all of the above, requires manual play-test): confirm a non-owner cannot capture or damage another player's released pet; confirm the name tag shows; confirm left-click cycles Stay→Follow→Stay→abandon correctly and Follow actually paths toward the owner; confirm `/petevolution xp` grants XP and triggers evolution at the right threshold
 
 ### Original capture device visuals
 - [x] "Rune-Bound Vessel" item model + procedurally-generated textures (1 default + 4 rarity variants)

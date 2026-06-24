@@ -22,6 +22,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 
+import com.nobody174.petevolution.capture.PetBehaviorController;
+import com.nobody174.petevolution.creature.ModAttachments;
+
 /**
  * Makes the two pets in a {@link BattleSession} visually engage each other instead
  * of wandering independently with their normal AI, which is otherwise completely
@@ -114,11 +117,16 @@ final class BattleVisuals {
         }
     }
 
-    /** Call once when a session concludes: restores normal AI and forgets recorded home positions. */
+    /**
+     * Call once when a session concludes: restores each pet's actual STAY/FOLLOW
+     * mode (not just a blanket {@code setNoAi(false)}, which would silently undo
+     * STAY for any pet that had it set before the battle started) and forgets
+     * recorded home positions.
+     */
     static void unlockOnEnd(MinecraftServer server, BattleParticipant a, BattleParticipant b) {
         withBoth(server, a, b, (entityA, entityB) -> {
-            setNoAi(entityA, false);
-            setNoAi(entityB, false);
+            PetBehaviorController.applyMode(entityA, entityA.getData(ModAttachments.PET_BEHAVIOR_MODE.get()));
+            PetBehaviorController.applyMode(entityB, entityB.getData(ModAttachments.PET_BEHAVIOR_MODE.get()));
             HOME_POSITIONS.remove(entityA.getUUID());
             HOME_POSITIONS.remove(entityB.getUUID());
             LUNGED.remove(entityA.getUUID());
