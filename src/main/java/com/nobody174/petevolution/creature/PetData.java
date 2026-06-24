@@ -87,6 +87,13 @@ public record PetData(int hp, int atk, int def, int spd, int special, int xp, in
         return evoStage + 1;
     }
 
+    /**
+     * Loops through every eligible stage-up rather than checking only the
+     * immediate next threshold — found during play-testing that a pet sitting on
+     * a large XP surplus (e.g. from before the evolution cap was raised from 3 to
+     * 10 levels) would only climb one stage per call no matter how much excess XP
+     * it already had, requiring many small XP grants just to "catch up".
+     */
     public PetData withXp(int gained) {
         int newXp = xp + gained;
         int newStage = evoStage;
@@ -96,8 +103,8 @@ public record PetData(int hp, int atk, int def, int spd, int special, int xp, in
         int newSpd = spd;
         int newSpecial = special;
 
-        if (newXp >= EvolutionRules.xpThresholdFor(evoStage) && evoStage < EvolutionRules.MAX_STAGE) {
-            newStage = evoStage + 1;
+        while (newStage < EvolutionRules.MAX_STAGE && newXp >= EvolutionRules.xpThresholdFor(newStage)) {
+            newStage++;
             newHp += EvolutionRules.HP_GAIN_PER_STAGE;
             newAtk += EvolutionRules.ATK_GAIN_PER_STAGE;
             newDef += EvolutionRules.DEF_GAIN_PER_STAGE;

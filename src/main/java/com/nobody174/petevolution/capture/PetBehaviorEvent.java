@@ -86,11 +86,16 @@ public class PetBehaviorEvent {
 
     private void abandonOwnership(LivingEntity target) {
         target.removeData(ModAttachments.PET_OWNER);
-        target.setData(ModAttachments.PET_BEHAVIOR_MODE.get(), PetBehaviorMode.STAY);
-        target.setData(ModAttachments.PET_TOGGLE_COUNT.get(), 0);
+        target.removeData(ModAttachments.PET_BEHAVIOR_MODE);
+        target.removeData(ModAttachments.PET_TOGGLE_COUNT);
         target.setCustomName(null);
         target.setCustomNameVisible(false);
-        PetBehaviorController.applyMode(target, PetBehaviorMode.STAY);
+        // Restore full vanilla AI — it's a free wild mob now, not STAY-locked, which
+        // would have left it frozen in place forever (a real bug found in testing:
+        // setNoAi(true) was applied here, so an "abandoned" pet never actually moved).
+        if (target instanceof net.minecraft.world.entity.Mob mob) {
+            mob.setNoAi(false);
+        }
     }
 }
 

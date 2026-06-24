@@ -98,7 +98,10 @@
 - [x] Left-click cycle (holding any vessel, on your own pet): STAY → FOLLOW (custom goal paths toward owner) → STAY → 3rd click abandons ownership (clears name tag/owner, recapturable by anyone)
 - [x] `BattleVisuals.unlockOnEnd` now restores the pet's actual STAY/FOLLOW mode after a battle instead of blanket-resetting to wandering AI
 - [x] `/petevolution xp <amount>` OP command: grants XP to the nearest owned pet for testing evolution/skill thresholds without grinding
-- [ ] In-game smoke test (all of the above, requires manual play-test): confirm a non-owner cannot capture or damage another player's released pet; confirm the name tag shows; confirm left-click cycles Stay→Follow→Stay→abandon correctly and Follow actually paths toward the owner; confirm `/petevolution xp` grants XP and triggers evolution at the right threshold
+- [x] In-game smoke test (2-player co-op): pet-stealing blocked, name tag visible, damage immunity confirmed, Stay/Follow toggle confirmed working — all confirmed working
+- [x] Found and fixed: abandoning ownership (3rd left-click) left the pet permanently frozen instead of becoming a free wild mob — `abandonOwnership` was applying STAY mode (`setNoAi(true)`) after clearing ownership instead of restoring normal AI
+- [x] Found and fixed: `/petevolution xp` worked correctly (only affects the issuer's own nearby owned pet, correctly rejected affecting another player's pet) but a test pet sitting at 15,000+ XP never evolved past stage 2 — the old evolution cap (`MAX_STAGE = 2`, 100/300 XP thresholds) was far too short; expanded to 10 levels with a scaled XP curve, and fixed `withXp` to climb multiple stages per call instead of just one
+- [ ] In-game smoke test: confirm an abandoned pet now actually wanders/moves like a normal wild mob; confirm a high-XP pet evolves through multiple stages correctly with the new 10-level curve; re-confirm battle skill-override (1-5) now actually changes which skill is used, not just stops swapping hotbar slots (requires manual play-test)
 
 ### Original capture device visuals
 - [x] "Rune-Bound Vessel" item model + procedurally-generated textures (1 default + 4 rarity variants)
