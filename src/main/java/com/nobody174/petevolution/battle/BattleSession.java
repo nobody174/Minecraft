@@ -58,6 +58,7 @@ public final class BattleSession {
             PetEvolution.LOGGER.info("[Battle] Session {} started: challenger HP {} vs defender HP {}",
                 sessionId, challenger.maxHp(), defender.maxHp());
         }
+        BattleVisuals.lockOnStart(server, challenger, defender);
         syncStateToChallenger(true);
     }
 
@@ -91,6 +92,8 @@ public final class BattleSession {
         if (finished) {
             return true;
         }
+
+        BattleVisuals.tickFacing(server, challenger, defender);
 
         roundTimer--;
         if (roundTimer > 0) {
@@ -164,6 +167,7 @@ public final class BattleSession {
      *                           actually being applied for the target this round.
      */
     private void applySkill(BattleParticipant user, BattleParticipant target, Skill skill, SkillElement targetSkillElement) {
+        BattleVisuals.lunge(server, user, target);
         switch (skill.effectType()) {
             case HEAL -> user.heal(skill.power() + user.petData().special() / 4);
             case DEFENSE_BUFF -> user.activateDefenseBuff();
@@ -181,6 +185,7 @@ public final class BattleSession {
     private void concludeBattle() {
         finished = true;
         boolean challengerWins = !challenger.isDefeated();
+        BattleVisuals.unlockOnEnd(server, challenger, defender);
         syncStateToChallenger(false);
 
         if (PetEvolution.DEBUG_LOGGING) {

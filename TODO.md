@@ -76,7 +76,9 @@
 - [x] Existing right-click trigger, nearby-pet lookup, and 30-second cooldown preserved
 - [x] Fixed during regression pass: damage advantage multiplier now uses the actually-applied skill's element, not a re-derived one
 - [x] Fixed: DEFENSE_BUFF skill effect was a documented no-op — now halves the next incoming damage instance, consumed on that hit
-- [ ] In-game smoke test: trigger a battle between two released pets, confirm it takes multiple rounds (not instant), confirm low-HP creature uses a defensive/heal skill (and that DEFENSE_BUFF actually reduces the next hit), confirm winner gets XP (requires manual play-test)
+- [x] In-game smoke test (real 2-player co-op via laptop): battle triggered correctly, HUD/HP bars showed for both pets, took multiple rounds, winner message displayed correctly — confirmed working
+- [x] Found and fixed: pets visually wandered independently with normal AI during battle, totally decoupled from the HP/skill simulation — added `BattleVisuals` (AI freeze, mutual facing, per-round lunge)
+- [ ] In-game smoke test: re-test the same battle now that `BattleVisuals` is in place — confirm both pets freeze, face each other, and lunge on each round instead of wandering off; confirm low-HP creature uses a defensive/heal skill and DEFENSE_BUFF actually reduces the next hit (requires manual play-test)
 
 ### Minimal battle UI + networking
 - [x] `BattleHudOverlay` (HP bars + numbered skill prompts), `BattleSkillChoicePayload`, `BattleStateSyncPayload`, `BattleNetworking`
