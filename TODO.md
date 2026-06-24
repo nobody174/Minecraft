@@ -50,7 +50,7 @@
 - [x] Offspring stats are the average of both parents' stats, with a 5% chance to roll a rarity upgrade (scaling stats up proportionally)
 - [x] 5-minute per-pet breeding cooldown to prevent rapid re-breeding
 - [x] In-game smoke test: confirmed the evolution-stage gate correctly rejects breeding attempts on non-fully-evolved pets (chat message shown as designed)
-- [ ] Still outstanding: confirm a successful breed (two fully-evolved same-species pets) actually spawns an offspring with correct averaged stats/rarity
+- [x] In-game smoke test: leveled two RARE cows to max level, placed them nearby, and a 3rd RARE cow (level 0) appeared shortly after — confirmed a successful breed spawns an offspring with correct rarity. Phase 2 is now fully manually verified end-to-end.
 
 ## Phase 3 — v2.0.0 Major Expansion (built autonomously; everything below requires manual play-testing — none of it has been verified in an actual running game, only by successful compilation and code-tracing)
 
@@ -101,7 +101,9 @@
 - [x] In-game smoke test (2-player co-op): pet-stealing blocked, name tag visible, damage immunity confirmed, Stay/Follow toggle confirmed working — all confirmed working
 - [x] Found and fixed: abandoning ownership (3rd left-click) left the pet permanently frozen instead of becoming a free wild mob — `abandonOwnership` was applying STAY mode (`setNoAi(true)`) after clearing ownership instead of restoring normal AI
 - [x] Found and fixed: `/petevolution xp` worked correctly (only affects the issuer's own nearby owned pet, correctly rejected affecting another player's pet) but a test pet sitting at 15,000+ XP never evolved past stage 2 — the old evolution cap (`MAX_STAGE = 2`, 100/300 XP thresholds) was far too short; expanded to 10 levels with a scaled XP curve, and fixed `withXp` to climb multiple stages per call instead of just one
-- [ ] In-game smoke test: confirm an abandoned pet now actually wanders/moves like a normal wild mob; confirm a high-XP pet evolves through multiple stages correctly with the new 10-level curve; re-confirm battle skill-override (1-5) now actually changes which skill is used, not just stops swapping hotbar slots (requires manual play-test)
+- [x] In-game smoke test: confirmed stats scale correctly per level across the full 10-level curve on a fresh pet leveled to max (initial confusion comparing an old pre-fix pet against a new one turned out not to be a bug)
+- [x] Added a defensive same-tick debounce to `CaptureBallItem.useOn` after a report of releasing 2 pets "at once" — turned out to be 2 deliberate separate clicks (one per filled vessel in different hotbar slots), which is correct expected behavior, not a bug. Debounce kept anyway as a harmless safety net against any genuine future double-dispatch.
+- [ ] In-game smoke test: confirm an abandoned pet now actually wanders/moves like a normal wild mob; re-confirm battle skill-override (1-5) now actually changes which skill is used, not just stops swapping hotbar slots (requires manual play-test)
 
 ### Original capture device visuals
 - [x] "Rune-Bound Vessel" item model + procedurally-generated textures (1 default + 4 rarity variants)

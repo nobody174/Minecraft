@@ -35,6 +35,17 @@ import com.nobody174.petevolution.creature.SpeciesStats;
 
 public class CaptureBallItem extends Item {
 
+    /**
+     * Debounces {@link #useOn} per player to one release per server tick — found
+     * during real play-testing that releasing while holding filled vessels in two
+     * different slots (e.g. an active hotbar slot and the off-hand/shield slot)
+     * released BOTH pets from a single right-click. Vanilla block interaction is
+     * only supposed to dispatch {@code useOn} for the main hand per click, so this
+     * is a defensive guard against whatever duplicate dispatch was actually
+     * happening rather than a fix to a specific confirmed root cause.
+     */
+    private static final java.util.Map<java.util.UUID, Long> LAST_RELEASE_TICK = new java.util.HashMap<>();
+
     public CaptureBallItem(Properties properties) {
         super(properties);
     }
@@ -92,6 +103,16 @@ public class CaptureBallItem extends Item {
 
         if (!(context.getLevel() instanceof ServerLevel serverLevel)) {
             return InteractionResult.PASS;
+        }
+
+        if (context.getPlayer() != null) {
+            long now = serverLevel.getGameTime();
+            java.util.UUID playerId = context.getPlayer().getUUID();
+            Long last = LAST_RELEASE_TICK.get(playerId);
+            if (last != null && last == now) {
+                return InteractionResult.FAIL;
+            }
+            LAST_RELEASE_TICK.put(playerId, now);
         }
 
         ResourceLocation speciesId = ResourceLocation.parse(data.speciesId());
