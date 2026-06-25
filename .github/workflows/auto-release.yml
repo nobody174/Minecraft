@@ -1,0 +1,132 @@
+name: Auto Release on Version Bump
+
+# Watches every mod's gradle.properties for a mod_version change on push to
+# main. If a mod's version actually changed (and that tag doesn't already
+# exist), builds it and publishes a GitHub Release automatically — same
+# release format as the manual "Create Release" workflow, just triggered by
+# pushing a version bump instead of running the workflow by hand.
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'mods/*/gradle.properties'
+
+jobs:
+  detect-version-bumps:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.detect.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect mods with a version bump
+        id: detect
+        run: |
+          CHANGED_MODS="[]"
+          for props in $(git diff --name-only HEAD~1 HEAD -- 'mods/*/gradle.properties'); do
+            MOD_NAME=$(echo "$props" | cut -d/ -f2)
+            OLD_VERSION=$(git show HEAD~1:"$props" 2>/dev/null | grep '^mod_version=' | cut -d= -f2)
+            NEW_VERSION=$(grep '^mod_version=' "$props" | cut -d= -f2)
+
+            if [ -z "$OLD_VERSION" ] || [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
+              TAG="${MOD_NAME}-v${NEW_VERSION}"
+              if gh release view "$TAG" >/dev/null 2>&1; then
+                echo "Skipping $MOD_NAME: tag $TAG already exists"
+              else
+                echo "Detected version bump: $MOD_NAME $OLD_VERSION -> $NEW_VERSION"
+                CHANGED_MODS=$(echo "$CHANGED_MODS" | jq --arg mod "$MOD_NAME" --arg ver "$NEW_VERSION" '. + [{"mod_name": $mod, "version": $ver}]')
+              fi
+            fi
+          done
+          echo "matrix={\"include\":$CHANGED_MODS}" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: detect-version-bumps
+    if: needs.detect-version-bumps.outputs.matrix != '{"include":[]}'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.detect-version-bumps.outputs.matrix) }}
+    name: Release ${{ matrix.mod_name }} v${{ matrix.version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Build ${{ matrix.mod_name }}
+        working-directory: mods/${{ matrix.mod_name }}
+        run: |
+          chmod +x gradlew
+          ./gradlew clean build -x test
+
+      - name: Collect artifacts
+        id: artifacts
+        run: |
+          MOD_PATH="mods/${{ matrix.mod_name }}"
+          JAR_FILE=$(ls $MOD_PATH/build/libs/*.jar | head -1)
+          JAR_NAME=$(basename "$JAR_FILE")
+          FILE_SIZE=$(stat --printf='%s' "$JAR_FILE")
+          HUMAN_SIZE=$(numfmt --to=iec-i --suffix=B "$FILE_SIZE" 2>/dev/null || echo "${FILE_SIZE} bytes")
+          echo "jar_file=$JAR_FILE" >> "$GITHUB_OUTPUT"
+          echo "jar_name=$JAR_NAME" >> "$GITHUB_OUTPUT"
+          echo "human_size=$HUMAN_SIZE" >> "$GITHUB_OUTPUT"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ matrix.mod_name }}-v${{ matrix.version }}
+          name: ${{ matrix.mod_name }} v${{ matrix.version }}
+          body: |
+            # Release: ${{ matrix.mod_name }} v${{ matrix.version }}
+
+            Automatically published from the `mod_version` bump in this push.
+
+            ## Download
+
+            - **JAR File:** `${{ steps.artifacts.outputs.jar_name }}`
+            - **Size:** ${{ steps.artifacts.outputs.human_size }}
+
+            ## Release Notes
+
+            See [README.md](https://github.com/${{ github.repository }}/tree/main/mods/${{ matrix.mod_name }}) and [CLAUDE.md](https://github.com/${{ github.repository }}/blob/main/mods/${{ matrix.mod_name }}/CLAUDE.md) for full details on what changed.
+
+            ## Installation
+
+            1. Download the JAR file from the assets below
+            2. Place it in your mods folder:
+               - **Client:** `%APPDATA%/.minecraft/mods/`
+               - **Server:** `server/mods/`
+            3. Launch Minecraft with NeoForge
+
+            ## Support
+
+            - 📖 [Documentation](https://github.com/${{ github.repository }}/tree/main/mods/${{ matrix.mod_name }})
+            - 🐛 [Report Issues](https://github.com/${{ github.repository }}/issues)
+
+            ---
+
+            **Built at:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          files: ${{ steps.artifacts.outputs.jar_file }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Post release summary
+        run: |
+          echo "## 🎉 Auto-Release Created" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Mod:** ${{ matrix.mod_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ matrix.version }}" >> $GITHUB_STEP_SUMMARY

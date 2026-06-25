@@ -49,9 +49,11 @@ jobs:
           MOD_PATH="mods/${{ inputs.mod_name }}"
           JAR_FILE=$(ls $MOD_PATH/build/libs/*.jar | head -1)
           JAR_NAME=$(basename $JAR_FILE)
+          FILE_SIZE=$(stat --printf='%s' "$JAR_FILE")
+          HUMAN_SIZE=$(numfmt --to=iec-i --suffix=B "$FILE_SIZE" 2>/dev/null || echo "${FILE_SIZE} bytes")
           echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
           echo "jar_name=$JAR_NAME" >> $GITHUB_OUTPUT
-          echo "file_size=$(stat --printf='%s' $JAR_FILE)" >> $GITHUB_OUTPUT
+          echo "human_size=$HUMAN_SIZE" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -64,7 +66,7 @@ jobs:
             ## Download
 
             - **JAR File:** `${{ steps.artifacts.outputs.jar_name }}`
-            - **Size:** $(numfmt --to=iec-i --suffix=B ${{ steps.artifacts.outputs.file_size }} 2>/dev/null || echo "${{ steps.artifacts.outputs.file_size }} bytes")
+            - **Size:** ${{ steps.artifacts.outputs.human_size }}
 
             ## Release Notes
 
