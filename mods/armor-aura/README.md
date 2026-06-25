@@ -1,8 +1,10 @@
-# ArmorAura v1.0.0
+# ArmorAura v1.1.0
 
 **A Minecraft mod that adds a dynamic glowing aura around armored players.**
 
 A NeoForge mod for Minecraft 1.21.1 that creates a beautiful, customizable particle aura effect around your player whenever you wear armor. Features smooth rotating rings at different heights, 10+ particle types, automatic day/night variation, and zero-restart customization.
+
+**New in v1.1.0:** a lightweight, true colored "glow" outline effect (`/auraglow`) — a synced, multiplayer-visible silhouette glow independent of the particle ring system.
 
 ---
 
@@ -32,7 +34,46 @@ All commands are client-side and execute instantly:
 /armoraura effect TYPE          # Set particle type (glow, flame, etc.)
 /armoraura status               # View all current settings
 /armoraura reload               # Reload config from JSON file
+/armoraura enable               # Turn the particle aura on
+/armoraura disable              # Turn the particle aura off
+/armoraura toggle               # Flip particle aura on/off
 ```
+
+### Glow Aura (`/auraglow`) — New in v1.1.0
+
+A separate, lightweight effect: a soft pulsing colored outline rendered directly on the player's silhouette (no particles). Synced to the server so other players in multiplayer can see your glow too.
+
+```
+/auraglow toggle                # Turn glow on/off
+/auraglow on                    # Turn glow on
+/auraglow off                   # Turn glow off
+/auraglow color NAME|HEX        # Set glow color by name or hex, e.g. /auraglow color cyan
+/auraglow colors                # List all named colors and their hex codes
+/auraglow intensity X           # Set base brightness (0.05-1.0)
+/auraglow pulse X                # Set pulse speed (0 = static glow, up to 5.0)
+/auraglow status                # View current glow settings
+```
+
+#### Named Colors
+
+Tab-complete after `/auraglow color` to see these, or run `/auraglow colors` anytime:
+
+| Name | Hex |
+|------|-----|
+| cyan | #33CCFF |
+| white | #FFFFFF |
+| red | #FF2222 |
+| green | #33FF33 |
+| gold | #FFD700 |
+| purple | #9933FF |
+| orange | #FF8800 |
+| pink | #FF66CC |
+| blue | #3366FF |
+| yellow | #FFFF33 |
+
+Any other 6-digit hex code also works, e.g. `/auraglow color FF00AA`.
+
+The glow is purely cosmetic, client-rendered, and does not affect gameplay (no vanilla Glowing effect, no team changes). It works alongside the particle aura system above — you can run both at once. All `/armoraura` and `/auraglow` settings persist to `aura-config.json` automatically.
 
 ---
 
@@ -285,6 +326,15 @@ No game restart needed! 🚀
 | `/armoraura effect TYPE` | Set particle type | `/armoraura effect flame` |
 | `/armoraura status` | Show all settings | `/armoraura status` |
 | `/armoraura reload` | Reload from JSON | `/armoraura reload` |
+| `/armoraura enable` | Turn particle aura on | `/armoraura enable` |
+| `/armoraura disable` | Turn particle aura off | `/armoraura disable` |
+| `/armoraura toggle` | Flip particle aura on/off | `/armoraura toggle` |
+| `/auraglow toggle` / `on` / `off` | Toggle glow on/off | `/auraglow toggle` |
+| `/auraglow color NAME\|HEX` | Set glow color | `/auraglow color cyan` |
+| `/auraglow colors` | List named colors | `/auraglow colors` |
+| `/auraglow intensity X` | Set glow brightness (0.05-1.0) | `/auraglow intensity 0.8` |
+| `/auraglow pulse X` | Set pulse speed (0-5.0) | `/auraglow pulse 1.5` |
+| `/auraglow status` | Show glow settings | `/auraglow status` |
 
 ---
 

@@ -2,11 +2,59 @@
 
 ## Project Status
 
-**Version:** v1.0.0  
+**Version:** v1.1.0  
 **Status:** Public Release  
-**Last Updated:** June 21, 2026
+**Last Updated:** June 25, 2026
 
 All core features implemented, tested, and released. Ready for public use.
+
+### v1.1.0 — Glow Aura Feature
+
+Added a second, independent visual effect: `/auraglow`, a lightweight colored
+outline rendered directly on the player model (no particles, no custom
+shaders, no framebuffer). See `client/PlayerGlowAuraLayer.java` for the
+render-layer implementation and `client/AuraGlowConfig.java` /
+`client/AuraGlowManager.java` for state. Synced via
+`networking/AuraGlowRequestPacket.java` (client→server) and
+`networking/AuraGlowStatePacket.java` (server→all clients), so other players
+see your glow in multiplayer.
+
+Implementation note: the vanilla "Glowing" outline effect derives its color
+from `Entity.getTeamColor()` (scoreboard team color), which can't be hijacked
+per-player without abusing the team system. Instead, `PlayerGlowAuraLayer`
+renders a slightly scaled-up copy of the player model into
+`RenderType.entityTranslucentEmissive`, with a fully custom packed ARGB color
+and a sine-wave pulse — same general technique vanilla uses for things like
+`SlimeOuterLayer`, just with our own color logic instead of being gated by
+the outline buffer.
+
+This also fixed a pre-existing bug in `server/ArmorDetectionManager.java`:
+it was broadcasting an `AuraStatePacket` to every connected player, every
+single server tick, regardless of whether anything changed. It now tracks
+last-known state per player and only broadcasts on change.
+
+**Post-release follow-ups (same v1.1.0 cycle):**
+- Fixed dedicated-server crash (`NoClassDefFoundError: RenderLayerParent`) —
+  the glow layer registration was being touched from common code that also
+  runs on the server. Now gated behind `FMLEnvironment.dist == Dist.CLIENT`
+  in `ArmorAuraMod`'s constructor, with the actual client-only method
+  references isolated inside `AuraGlowLayerRegistration.register(IEventBus)`.
+- Made the glow noticeably brighter: switched from normal alpha blending to
+  **additive** blending (`PlayerGlowAuraLayer.additiveGlow(...)`, a custom
+  `RenderType` built from the same shader as `entityTranslucentEmissive` but
+  with `ADDITIVE_TRANSPARENCY`), and added a two-pass inner shine (1.08x) +
+  outer halo (1.22x) instead of one single 1.06x pass.
+- Added `/armoraura enable|disable|toggle` (was previously only possible to
+  silence the particle aura by setting particles to a low count).
+- Added `AuraGlowPalette` — named color shortcuts for `/auraglow color`
+  (`cyan`, `white`, `red`, `green`, `gold`, `purple`, `orange`, `pink`,
+  `blue`, `yellow`), tab-completable, with `/auraglow colors` to list them.
+  Raw hex still works for anything not on the list.
+- Fixed settings not persisting: `AuraConfigFile` previously never saved
+  `AuraConfig.enabled` and didn't know about `AuraGlowConfig` at all, so
+  toggling either off and restarting silently reverted to defaults. Both are
+  now part of `aura-config.json` (`enabled` top-level, glow settings under a
+  `glow` object) and every mutating command calls `AuraConfigFile.saveConfig()`.
 
 ## Repository Info
 
@@ -20,16 +68,22 @@ All core features implemented, tested, and released. Ready for public use.
 ### Core Implementation
 - `src/main/java/com/nobody174/armoraura/ArmorAuraMod.java` — Main mod class
 - `src/main/java/com/nobody174/armoraura/client/AuraRenderer.java` — Particle rendering (4-ring system)
-- `src/main/java/com/nobody174/armoraura/client/AuraClientCommands.java` — All 8 in-game commands
-- `src/main/java/com/nobody174/armoraura/client/AuraConfig.java` — Config management
+- `src/main/java/com/nobody174/armoraura/client/AuraClientCommands.java` — All in-game commands (`/armoraura` + `/auraglow`)
+- `src/main/java/com/nobody174/armoraura/client/AuraConfig.java` — Particle aura config management
 - `src/main/java/com/nobody174/armoraura/client/AuraConfigFile.java` — JSON file I/O
+- `src/main/java/com/nobody174/armoraura/client/AuraGlowConfig.java` — Glow-aura settings (color, intensity, pulse)
+- `src/main/java/com/nobody174/armoraura/client/AuraGlowManager.java` — Per-player glow state (local + synced remote)
+- `src/main/java/com/nobody174/armoraura/client/PlayerGlowAuraLayer.java` — Render layer that draws the glow outline
+- `src/main/java/com/nobody174/armoraura/client/AuraGlowLayerRegistration.java` — Attaches the glow layer to player renderers
 
 ### Configuration System
 - **Location:** `~/.minecraft/config/armoraura/aura-config.json`
 - **Format:** JSON with hot-reload via `/armoraura reload`
 - **Default preset:** MEDIUM (10 particles, 0.7 radius, 2 rings, 1.3 speed)
 
-### Commands (All Client-Side)
+### Commands
+
+`/armoraura` — particle aura, client-side only (cosmetic display preference, not synced):
 1. `/armoraura preset NAME` — Switch preset (minimal, medium, maximum)
 2. `/armoraura particles N` — Set particles per ring (1-20)
 3. `/armoraura radius X` — Set aura distance (0.1-1.5)
@@ -38,6 +92,16 @@ All core features implemented, tested, and released. Ready for public use.
 6. `/armoraura effect TYPE` — Set particle type (10+ types)
 7. `/armoraura status` — Display all settings
 8. `/armoraura reload` — Reload from JSON file
+
+`/auraglow` — colored outline glow, client command but state is synced to the server so other players see it:
+1. `/auraglow toggle` / `on` / `off` — Enable or disable
+2. `/auraglow color NAME|HEX` — Set glow color by name (see `AuraGlowPalette`) or hex (e.g. `33CCFF`)
+3. `/auraglow colors` — List all named colors and their hex codes
+4. `/auraglow intensity X` — Set base brightness (0.05-1.0)
+5. `/auraglow pulse X` — Set pulse speed (0-5.0, 0 = static)
+6. `/auraglow status` — Display all glow settings
+
+`/armoraura` also gained: `enable` / `disable` / `toggle` for the particle aura as a whole.
 
 ## Architecture Notes
 

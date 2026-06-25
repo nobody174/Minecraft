@@ -11,14 +11,17 @@
 package com.nobody174.armoraura;
 
 import com.nobody174.armoraura.client.AuraConfigFile;
+import com.nobody174.armoraura.client.AuraGlowLayerRegistration;
 import com.nobody174.armoraura.client.AuraRenderer;
 import com.nobody174.armoraura.networking.AuraPacketHandler;
 import com.nobody174.armoraura.server.ArmorDetectionManager;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,10 @@ public class ArmorAuraMod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
         modEventBus.addListener(AuraPacketHandler::register);
+
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            AuraGlowLayerRegistration.register(modEventBus);
+        }
 
         // ArmorDetectionManager handles ServerTickEvent
         NeoForge.EVENT_BUS.register(new ArmorDetectionManager());

@@ -47,12 +47,20 @@ public class AuraConfigFile {
     private static void createDefaultConfig() {
         try (FileWriter writer = new FileWriter(configFile)) {
             JsonObject config = new JsonObject();
+            config.addProperty("enabled", true);
             config.addProperty("particlesPerRing", 8);
             config.addProperty("radius", 0.5);
             config.addProperty("rotationSpeed", 1.0);
             config.addProperty("ringCount", 4);
             config.addProperty("particleEffect", "glow");
             config.addProperty("preset", "medium");
+
+            JsonObject glow = new JsonObject();
+            glow.addProperty("enabled", AuraGlowConfig.isEnabled());
+            glow.addProperty("color", String.format("%06X", AuraGlowConfig.getColor()));
+            glow.addProperty("intensity", AuraGlowConfig.getIntensity());
+            glow.addProperty("pulseSpeed", AuraGlowConfig.getPulseSpeed());
+            config.add("glow", glow);
 
             GSON.toJson(config, writer);
             ArmorAuraMod.LOGGER.info("[AuraConfigFile] Created default config at: {}", configFile.getAbsolutePath());
@@ -81,6 +89,9 @@ public class AuraConfigFile {
             }
 
             // Load settings from JSON
+            if (config.has("enabled")) {
+                AuraConfig.setEnabled(config.get("enabled").getAsBoolean());
+            }
             if (config.has("particlesPerRing")) {
                 AuraConfig.setParticlesPerRing(config.get("particlesPerRing").getAsInt());
             }
@@ -101,6 +112,26 @@ public class AuraConfigFile {
                 AuraRenderer.setPreset(preset);
             }
 
+            if (config.has("glow")) {
+                JsonObject glow = config.getAsJsonObject("glow");
+                if (glow.has("enabled")) {
+                    AuraGlowConfig.setEnabled(glow.get("enabled").getAsBoolean());
+                }
+                if (glow.has("color")) {
+                    try {
+                        AuraGlowConfig.setColor(Integer.parseInt(glow.get("color").getAsString(), 16));
+                    } catch (NumberFormatException e) {
+                        ArmorAuraMod.LOGGER.warn("[AuraConfigFile] Invalid glow color in config, keeping default");
+                    }
+                }
+                if (glow.has("intensity")) {
+                    AuraGlowConfig.setIntensity(glow.get("intensity").getAsFloat());
+                }
+                if (glow.has("pulseSpeed")) {
+                    AuraGlowConfig.setPulseSpeed(glow.get("pulseSpeed").getAsFloat());
+                }
+            }
+
             ArmorAuraMod.LOGGER.info("[AuraConfigFile] Config loaded from: {}", configFile.getAbsolutePath());
         } catch (IOException e) {
             ArmorAuraMod.LOGGER.error("[AuraConfigFile] Failed to load config", e);
@@ -115,11 +146,19 @@ public class AuraConfigFile {
 
         try (FileWriter writer = new FileWriter(configFile)) {
             JsonObject config = new JsonObject();
+            config.addProperty("enabled", AuraConfig.isEnabled());
             config.addProperty("particlesPerRing", AuraConfig.getParticlesPerRing());
             config.addProperty("radius", AuraConfig.getRadius());
             config.addProperty("rotationSpeed", AuraConfig.getRotationSpeed());
             config.addProperty("ringCount", AuraConfig.getRingCount());
             config.addProperty("particleEffect", AuraConfig.getParticleEffect());
+
+            JsonObject glow = new JsonObject();
+            glow.addProperty("enabled", AuraGlowConfig.isEnabled());
+            glow.addProperty("color", String.format("%06X", AuraGlowConfig.getColor()));
+            glow.addProperty("intensity", AuraGlowConfig.getIntensity());
+            glow.addProperty("pulseSpeed", AuraGlowConfig.getPulseSpeed());
+            config.add("glow", glow);
 
             GSON.toJson(config, writer);
             ArmorAuraMod.LOGGER.info("[AuraConfigFile] Config saved to: {}", configFile.getAbsolutePath());

@@ -14,6 +14,7 @@ import com.nobody174.armoraura.ArmorAuraMod;
 public class AuraConfig {
 
     // Current aura settings
+    private static boolean enabled = true;
     private static int particlesPerRing = 8;
     private static double radius = 0.5;
     private static double rotationSpeed = 1.0;
@@ -22,6 +23,15 @@ public class AuraConfig {
 
     // Ring heights
     private static final double[] DEFAULT_RING_HEIGHTS = {0.3, 0.8, 1.3, 1.85};
+
+    public static void setEnabled(boolean value) {
+        enabled = value;
+        ArmorAuraMod.LOGGER.info("[AuraConfig] Particle aura enabled: {}", enabled);
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
+    }
 
     public static void setParticlesPerRing(int count) {
         particlesPerRing = Math.max(1, Math.min(20, count));

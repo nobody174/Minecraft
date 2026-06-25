@@ -10,6 +10,8 @@
 
 package com.nobody174.armoraura.networking;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -32,6 +34,43 @@ public class AuraPacketHandler {
                     );
                 }).exceptionally(e -> {
                     throw new RuntimeException("Failed to handle aura packet", e);
+                });
+            }
+        );
+
+        registrar.playToClient(
+            AuraGlowStatePacket.TYPE,
+            AuraGlowStatePacket.CODEC,
+            (payload, context) -> {
+                context.enqueueWork(() -> {
+                    com.nobody174.armoraura.client.AuraGlowManager.setRemoteState(
+                        payload.playerId(),
+                        payload.glowing(),
+                        payload.color(),
+                        payload.intensity()
+                    );
+                }).exceptionally(e -> {
+                    throw new RuntimeException("Failed to handle aura glow state packet", e);
+                });
+            }
+        );
+
+        registrar.playToServer(
+            AuraGlowRequestPacket.TYPE,
+            AuraGlowRequestPacket.CODEC,
+            (payload, context) -> {
+                context.enqueueWork(() -> {
+                    if (!(context.player() instanceof ServerPlayer sender)) {
+                        return;
+                    }
+                    int clampedColor = payload.color() & 0xFFFFFF;
+                    float clampedIntensity = Math.max(0.05f, Math.min(1.0f, payload.intensity()));
+                    AuraGlowStatePacket broadcast = new AuraGlowStatePacket(
+                        sender.getId(), payload.glowing(), clampedColor, clampedIntensity
+                    );
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(sender, broadcast);
+                }).exceptionally(e -> {
+                    throw new RuntimeException("Failed to handle aura glow request packet", e);
                 });
             }
         );

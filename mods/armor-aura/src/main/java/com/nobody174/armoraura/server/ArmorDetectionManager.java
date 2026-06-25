@@ -14,34 +14,45 @@ import com.nobody174.armoraura.ArmorAuraMod;
 import com.nobody174.armoraura.networking.AuraStatePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ArmorDetectionManager {
+
+    // Only re-broadcast when a player's aura state actually changes, instead of every tick.
+    private final Map<Integer, AuraState> lastKnownState = new HashMap<>();
+
+    private record AuraState(boolean hasAura, int color, float intensity) {
+    }
 
     public ArmorDetectionManager() {
     }
 
     @SubscribeEvent
+    public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        lastKnownState.remove(event.getEntity().getId());
+    }
+
+    @SubscribeEvent
     public void onServerTick(ServerTickEvent.Post event) {
         if (event.getServer() == null) {
-            ArmorAuraMod.LOGGER.debug("[ArmorDetectionManager] Server is null, skipping tick");
             return;
         }
 
-        java.util.List<ServerPlayer> players = event.getServer().getPlayerList().getPlayers();
-        ArmorAuraMod.LOGGER.debug("[ArmorDetectionManager] ServerTick - checking {} players", players.size());
-
-        players.forEach(player -> {
+        List<ServerPlayer> players = event.getServer().getPlayerList().getPlayers();
+        for (ServerPlayer player : players) {
             detectAura(player, players);
-        });
+        }
     }
 
-    private void detectAura(Player player, java.util.List<ServerPlayer> allPlayers) {
+    private void detectAura(ServerPlayer player, List<ServerPlayer> allPlayers) {
         boolean hasAura = false;
         int auraColor = 0xFFFFFF;
         float intensity = 0.5f;
@@ -54,24 +65,21 @@ public class ArmorDetectionManager {
 
             // Detect any non-empty armor piece as aura
             hasAura = true;
-            ArmorAuraMod.LOGGER.debug("[ArmorDetectionManager] Player {} has armor in slot {}",
-                player.getName().getString(), slot.getName());
             // TODO: Determine color and intensity from enchantments or tags
             break;
         }
 
-        ArmorAuraMod.LOGGER.info("[ArmorDetectionManager] Player {} detection: hasAura={}, color=0x{}, intensity={}",
+        AuraState newState = new AuraState(hasAura, auraColor, intensity);
+        AuraState oldState = lastKnownState.get(player.getId());
+        if (newState.equals(oldState)) {
+            return; // No change since last tick — skip the broadcast entirely
+        }
+        lastKnownState.put(player.getId(), newState);
+
+        ArmorAuraMod.LOGGER.debug("[ArmorDetectionManager] Player {} aura changed: hasAura={}, color=0x{}, intensity={}",
             player.getName().getString(), hasAura, Integer.toHexString(auraColor), intensity);
 
-        AuraStatePacket packet = new AuraStatePacket(
-            player.getId(),
-            hasAura,
-            auraColor,
-            intensity
-        );
-
-        // Send packet to all connected players
-        ArmorAuraMod.LOGGER.debug("[ArmorDetectionManager] Sending aura packet to {} players", allPlayers.size());
+        AuraStatePacket packet = new AuraStatePacket(player.getId(), hasAura, auraColor, intensity);
         for (ServerPlayer serverPlayer : allPlayers) {
             PacketDistributor.sendToPlayer(serverPlayer, packet);
         }

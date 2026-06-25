@@ -6,12 +6,12 @@ description="ArmorAura - Animated armor auras for all players"
 
 [[mods]]
 modId="armoraura"
-version="1.0.0"
+version="1.1.0"
 displayName="ArmorAura"
 logoFile="assets/armoraura/icon.png"
 credits=""
 authors="nobody174"
-description="ArmorAura is a NeoForge mod that displays animated particle auras around players wearing armor."
+description="ArmorAura is a NeoForge mod that displays animated particle auras and a synced colored glow outline around players wearing armor."
 
 [[dependencies.armoraura]]
     modId="minecraft"

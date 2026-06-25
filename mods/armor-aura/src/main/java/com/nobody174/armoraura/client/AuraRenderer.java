@@ -41,6 +41,10 @@ public class AuraRenderer {
 
     @SubscribeEvent
     public static void onRenderFrame(RenderFrameEvent.Post event) {
+        if (!AuraConfig.isEnabled()) {
+            return;
+        }
+
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null) {
             ArmorAuraMod.LOGGER.debug("[AuraRenderer] Render frame skipped: level is null");

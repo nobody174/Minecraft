@@ -1,4 +1,26 @@
-# TODO - ArmorAura v1.0.0
+# TODO - ArmorAura v1.1.0
+
+## ✅ COMPLETED: v1.1.0 — Glow Aura
+
+- [x] `PlayerGlowAuraLayer` — custom render layer drawing a scaled, colored,
+      pulsing glow directly on the player model, using additive blending
+      (two-pass inner shine + outer halo) for real brightness/shine
+- [x] `AuraGlowConfig` / `AuraGlowManager` — local + synced remote glow state
+- [x] `AuraGlowPalette` — named color shortcuts (cyan, white, red, green, gold,
+      purple, orange, pink, blue, yellow), tab-completable; raw hex still works
+- [x] `/auraglow` command: `toggle`/`on`/`off`, `color`, `colors`, `intensity`, `pulse`, `status`
+- [x] `/armoraura enable`/`disable`/`toggle` — master on/off for the particle aura
+- [x] Networking: `AuraGlowRequestPacket` (client→server), `AuraGlowStatePacket`
+      (server→all clients) — glow is visible to other players in multiplayer
+- [x] Fixed `ArmorDetectionManager` broadcasting `AuraStatePacket` to all
+      players every tick regardless of change — now only sends on state change
+- [x] Fixed dedicated server crash (`NoClassDefFoundError`) caused by
+      client-only render classes being touched from common mod init code
+- [x] Fixed settings not persisting across restarts — `enabled` flag and all
+      glow settings are now saved to `aura-config.json` on every change
+- [x] Cleanup of stale per-player state on logout (server `lastKnownState`,
+      client `AuraGlowManager.remoteStates`)
+- [x] `./gradlew build` passes; produced `armoraura-1.1.0-mc1_21_1.jar`
 
 ## ✅ COMPLETED: v1.0.0 Core Features
 
