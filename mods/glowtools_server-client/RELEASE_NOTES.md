@@ -116,7 +116,7 @@ totem_of_undying, spore_blossom_air, sculk_soul
 **Developer:** nobody174  
 **Framework:** NeoForge 21.1.233  
 **Reference:** TinkersConstruct (rotation math pattern)  
-**License:** MIT
+**License:** PolyForm Noncommercial 1.0.0
 
 ---
 

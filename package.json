@@ -24,7 +24,7 @@
     "server"
   ],
   "author": "nobody174 <nobodylearn174@gmail.com>",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "commander": "^11.1.0",
     "yaml": "^2.3.4"

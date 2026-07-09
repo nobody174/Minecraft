@@ -121,7 +121,7 @@ plugin-name/
 
 ```yaml
 # Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-# Licensed under MIT License
+# Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 
 name: PluginName
 version: 1.0.0
@@ -163,7 +163,7 @@ permissions:
 
 ```java
 // Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-// Licensed under MIT License
+// Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 
 package com.minecraft.plugin;
 
@@ -236,7 +236,7 @@ public class PluginName extends JavaPlugin {
 
 ```java
 // Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-// Licensed under MIT License
+// Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 
 package com.minecraft.plugin;
 

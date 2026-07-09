@@ -125,7 +125,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for:
 
 ## License
 
-All code in this repository is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+All code in this repository is licensed under the PolyForm Noncommercial
+License 1.0.0. Free to view, clone, modify, and self-host for personal or
+noncommercial use; commercial use (charging for access, repackaging into a
+paid modpack/service, etc.) requires a separate agreement. See
+[LICENSE](LICENSE) for details.
 
 ## Author
 

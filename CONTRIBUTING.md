@@ -21,7 +21,7 @@ Thank you for contributing to the Minecraft Addons project! This guide explains 
 **Example:**
 ```java
 // Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-// Licensed under MIT License
+// Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 
 package com.example.minecraft.addon;
 
@@ -81,7 +81,7 @@ public boolean registerHandler(EventHandler handler) {
 **Example:**
 ```typescript
 // Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-// Licensed under MIT License
+// Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 
 interface MinecraftPlayer {
   uuid: string;
@@ -117,7 +117,7 @@ export class PlayerManager {
 **Example:**
 ```yaml
 # Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-# Licensed under MIT License
+# Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 
 # Data pack configuration
 custom_recipes:
@@ -139,25 +139,25 @@ All source files must include a copyright header:
 **Java:**
 ```java
 // Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-// Licensed under MIT License
+// Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 ```
 
 **JavaScript/TypeScript:**
 ```javascript
 // Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-// Licensed under MIT License
+// Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 ```
 
 **Python:**
 ```python
 # Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-# Licensed under MIT License
+# Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 ```
 
 **YAML:**
 ```yaml
 # Copyright (c) 2026 nobody174 - nobodylearn174@gmail.com
-# Licensed under MIT License
+# Licensed under PolyForm Noncommercial License 1.0.0 - see LICENSE
 ```
 
 ## Commit Message Conventions
