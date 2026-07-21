@@ -38,7 +38,7 @@ jobs:
                 echo "Skipping $MOD_NAME: tag $TAG already exists"
               else
                 echo "Detected version bump: $MOD_NAME $OLD_VERSION -> $NEW_VERSION"
-                CHANGED_MODS=$(echo "$CHANGED_MODS" | jq --arg mod "$MOD_NAME" --arg ver "$NEW_VERSION" '. + [{"mod_name": $mod, "version": $ver}]')
+                CHANGED_MODS=$(echo "$CHANGED_MODS" | jq -c --arg mod "$MOD_NAME" --arg ver "$NEW_VERSION" '. + [{"mod_name": $mod, "version": $ver}]')
               fi
             fi
           done
