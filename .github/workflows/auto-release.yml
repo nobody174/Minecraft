@@ -11,6 +11,7 @@ on:
     branches: [ main ]
     paths:
       - 'mods/*/gradle.properties'
+  workflow_dispatch: {}
 
 jobs:
   detect-version-bumps:
