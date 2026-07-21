@@ -15,7 +15,7 @@ A modern entity tracking and visualization framework for Minecraft 1.21.1 — lo
 
 ## Installation
 
-1. Download `trackervision-1.0.0-mc1_21_1.jar` from [releases](https://github.com/nobody174/trackervision/releases)
+1. Download `trackervision-1.0.0-mc1_21_1.jar` from [releases](https://github.com/nobody174/Minecraft/releases?q=trackervision)
 2. Place in your `.minecraft/mods` folder
 3. Launch Minecraft 1.21.1 with NeoForge
 
@@ -83,16 +83,16 @@ For full feature list, see [FEATURE_LIST.md](FEATURE_LIST.md).
 
 ## Support & Feedback
 
-- **Issues:** [GitHub Issues](https://github.com/nobody174/trackervision/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/nobody174/trackervision/discussions)
-- **Repository:** [GitHub](https://github.com/nobody174/trackervision)
+- **Issues:** [GitHub Issues](https://github.com/nobody174/Minecraft/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/nobody174/Minecraft/discussions)
+- **Repository:** [GitHub](https://github.com/nobody174/Minecraft/tree/main/mods/trackervision)
 
 ## What's Next?
 
 **v1.0.1 (2-4 weeks):** Entity-type filtering, bug fixes, performance optimizations  
 **v2.0 (future):** Team systems, boss tracking integration, minimap sync, audio cues
 
-See [FUTURE_FEATURES.md](https://github.com/nobody174/trackervision/blob/main/FUTURE_FEATURES.md) for the full roadmap.
+See [ROADMAP.md](https://github.com/nobody174/Minecraft/blob/main/mods/trackervision/ROADMAP.md) for the full roadmap.
 
 ---
 

@@ -98,12 +98,12 @@ The `/track lock` command requires a **Minecraft entity selector**. Here are com
 ## Installation
 
 ### From JAR
-Download the latest JAR from [Releases](https://github.com/nobody174/trackervision/releases) and place it in your `mods` folder.
+Download the latest JAR from [Releases](https://github.com/nobody174/Minecraft/releases?q=trackervision) and place it in your `mods` folder.
 
 ### From Source
 1. Java 21+ and Gradle 8.9+
-2. `git clone https://github.com/nobody174/trackervision.git`
-3. `cd TrackerVision && ./gradlew build`
+2. `git clone https://github.com/nobody174/Minecraft.git`
+3. `cd Minecraft/mods/trackervision && ./gradlew build`
 4. JAR is at `build/libs/trackervision-1.0.0-mc1_21_1.jar`
 
 ## Technical Details
@@ -129,7 +129,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for system design and [ROADMAP.md](ROADMA
 - Minimap integration (JourneyMap/Xaero sync)
 - Sound indicators (audio cues on lock/proximity)
 
-See [FUTURE_FEATURES.md](FUTURE_FEATURES.md) for the full backlog.
+See [ROADMAP.md](ROADMAP.md) for the full backlog.
 
 ## Known Limitations
 
@@ -143,7 +143,7 @@ All rights reserved © 2025 nobody174.
 
 ## Links
 
-- [GitHub Repository](https://github.com/nobody174/trackervision)
+- [GitHub Repository](https://github.com/nobody174/Minecraft/tree/main/mods/trackervision)
 - [ARCHITECTURE.md](ARCHITECTURE.md) — system design and component overview
 - [ROADMAP.md](ROADMAP.md) — v1.0 completion and v2.0 future scope
 - [CHANGELOG.md](CHANGELOG.md) — version history

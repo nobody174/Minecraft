@@ -20,15 +20,15 @@
 
 **Option A: From GitHub Release (Recommended)**
 
-1. Go to [TrackerVision Releases](https://github.com/nobody174/trackervision/releases)
+1. Go to [TrackerVision Releases](https://github.com/nobody174/Minecraft/releases?q=trackervision)
 2. Find v1.0.0 release
 3. Download `trackervision-1.0.0-mc1_21_1.jar`
 
 **Option B: Build from Source**
 
 ```bash
-git clone https://github.com/nobody174/trackervision.git
-cd trackervision
+git clone https://github.com/nobody174/Minecraft.git
+cd Minecraft/mods/trackervision
 ./gradlew build
 # JAR is at: build/libs/trackervision-1.0.0-mc1_21_1.jar
 ```
@@ -157,9 +157,9 @@ To remove TrackerVision:
 
 ## Getting Help
 
-- **GitHub Issues:** [Report bugs](https://github.com/nobody174/trackervision/issues)
-- **GitHub Discussions:** [Ask questions](https://github.com/nobody174/trackervision/discussions)
-- **Check README:** Full feature guide at [README.md](https://github.com/nobody174/trackervision)
+- **GitHub Issues:** [Report bugs](https://github.com/nobody174/Minecraft/issues)
+- **GitHub Discussions:** [Ask questions](https://github.com/nobody174/Minecraft/discussions)
+- **Check README:** Full feature guide at [README.md](https://github.com/nobody174/Minecraft/blob/main/mods/trackervision/README.md)
 
 ## Next Steps
 

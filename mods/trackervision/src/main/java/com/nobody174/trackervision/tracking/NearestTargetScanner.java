@@ -1,7 +1,7 @@
 //
 // TrackerVision
 // Author:  nobody174 (nobodylearn174@gmail.com)
-// Repo:    https://github.com/nobody174/trackervision
+// Repo:    https://github.com/nobody174/Minecraft/tree/main/mods/trackervision
 // License: All rights reserved © 2025 nobody174
 // "It's never too late to give up!"
 //

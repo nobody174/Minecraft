@@ -110,4 +110,4 @@
 
 ---
 
-**Summary:** v1.0.0 includes all planned v1.0 features, fully tested and production-ready. Core tracking, visualization, configuration, and profile systems are complete. See [FUTURE_FEATURES.md](https://github.com/nobody174/trackervision/blob/main/FUTURE_FEATURES.md) for v1.1+ roadmap.
+**Summary:** v1.0.0 includes all planned v1.0 features, fully tested and production-ready. Core tracking, visualization, configuration, and profile systems are complete. See [ROADMAP.md](https://github.com/nobody174/Minecraft/blob/main/mods/trackervision/ROADMAP.md) for v1.1+ roadmap.

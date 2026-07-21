@@ -17,7 +17,7 @@
 - Multiple tracking profiles
 - Shader pipeline for advanced visual effects
 
-## Future (see FUTURE_FEATURES.md)
+## Future
 - Team systems
 - Boss tracking integration
 - Network synchronization across players

@@ -41,8 +41,8 @@ Lock targets manually with `/track lock @e[...]` or auto-select with `/track mod
 
 **From Source:**
 ```bash
-git clone https://github.com/nobody174/trackervision.git
-cd trackervision
+git clone https://github.com/nobody174/Minecraft.git
+cd Minecraft/mods/trackervision
 ./gradlew build
 # JAR at: build/libs/trackervision-1.0.0-mc1_21_1.jar
 ```
@@ -101,10 +101,10 @@ Full Minecraft entity selector syntax supported:
 
 ## 📚 Documentation
 
-- **[README.md](https://github.com/nobody174/trackervision)** — Installation & features
-- **[ARCHITECTURE.md](https://github.com/nobody174/trackervision/blob/main/ARCHITECTURE.md)** — System design
-- **[CHANGELOG.md](https://github.com/nobody174/trackervision/blob/main/CHANGELOG.md)** — Version history
-- **[FUTURE_FEATURES.md](https://github.com/nobody174/trackervision/blob/main/FUTURE_FEATURES.md)** — Roadmap
+- **[README.md](https://github.com/nobody174/Minecraft/blob/main/mods/trackervision/README.md)** — Installation & features
+- **[ARCHITECTURE.md](https://github.com/nobody174/Minecraft/blob/main/mods/trackervision/ARCHITECTURE.md)** — System design
+- **[CHANGELOG.md](https://github.com/nobody174/Minecraft/blob/main/mods/trackervision/CHANGELOG.md)** — Version history
+- **[ROADMAP.md](https://github.com/nobody174/Minecraft/blob/main/mods/trackervision/ROADMAP.md)** — Roadmap
 
 ## ⚠️ Known Limitations
 
@@ -133,9 +133,9 @@ Full Minecraft entity selector syntax supported:
 
 Found an issue? Have a question?
 
-- **[GitHub Issues](https://github.com/nobody174/trackervision/issues)** — Report bugs
-- **[GitHub Discussions](https://github.com/nobody174/trackervision/discussions)** — Ask questions
-- **[Full Repository](https://github.com/nobody174/trackervision)** — Source code
+- **[GitHub Issues](https://github.com/nobody174/Minecraft/issues)** — Report bugs
+- **[GitHub Discussions](https://github.com/nobody174/Minecraft/discussions)** — Ask questions
+- **[Full Repository](https://github.com/nobody174/Minecraft/tree/main/mods/trackervision)** — Source code
 
 ## 📝 Release Notes
 

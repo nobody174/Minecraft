@@ -106,9 +106,9 @@ For more details, see the full documentation on GitHub.
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/nobody174/trackervision/issues)
-- **Questions:** [GitHub Discussions](https://github.com/nobody174/trackervision/discussions)
-- **Repository:** [GitHub](https://github.com/nobody174/trackervision)
+- **Issues:** [GitHub Issues](https://github.com/nobody174/Minecraft/issues)
+- **Questions:** [GitHub Discussions](https://github.com/nobody174/Minecraft/discussions)
+- **Repository:** [GitHub](https://github.com/nobody174/Minecraft/tree/main/mods/trackervision)
 
 ## Roadmap
 

@@ -63,7 +63,7 @@ These mods have not been tested but may work:
 - Custom Dimension mods
 - Complex terrain-modifying mods
 
-If you test any untested mods and find compatibility, please report on [GitHub Issues](https://github.com/nobody174/trackervision/issues).
+If you test any untested mods and find compatibility, please report on [GitHub Issues](https://github.com/nobody174/Minecraft/issues).
 
 ## Shader Pack Compatibility
 
@@ -155,7 +155,7 @@ Performance tested with 20+ simultaneous tracked entities — zero impact.
 
 **Crashes:**
 1. Check latest.log file for error message
-2. Report on [GitHub Issues](https://github.com/nobody174/trackervision/issues) with:
+2. Report on [GitHub Issues](https://github.com/nobody174/Minecraft/issues) with:
    - Full error log
    - Minecraft version
    - NeoForge version
@@ -165,7 +165,7 @@ Performance tested with 20+ simultaneous tracked entities — zero impact.
 ## Reporting Compatibility Issues
 
 Found an incompatibility? Please report it:
-1. Go to [GitHub Issues](https://github.com/nobody174/trackervision/issues)
+1. Go to [GitHub Issues](https://github.com/nobody174/Minecraft/issues)
 2. Include:
    - Minecraft version
    - NeoForge version

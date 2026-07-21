@@ -172,9 +172,9 @@ See INSTALLATION_GUIDE for detailed troubleshooting.
 
 ## Support & Feedback
 
-- **Issues:** [Report bugs on GitHub](https://github.com/nobody174/trackervision/issues)
-- **Discussions:** [Ask questions on GitHub](https://github.com/nobody174/trackervision/discussions)
-- **Repository:** [GitHub](https://github.com/nobody174/trackervision)
+- **Issues:** [Report bugs on GitHub](https://github.com/nobody174/Minecraft/issues)
+- **Discussions:** [Ask questions on GitHub](https://github.com/nobody174/Minecraft/discussions)
+- **Repository:** [GitHub](https://github.com/nobody174/Minecraft/tree/main/mods/trackervision)
 
 ## Credits
 
