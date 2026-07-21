@@ -1,0 +1,42 @@
+# Gradle
+.gradle/
+build/
+*.jar
+!found-ya-*.jar
+!gradle/wrapper/*.jar
+
+# IDE
+.idea/
+.vscode/
+.eclipse/
+.settings/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+bin/
+
+# Minecraft
+run/
+logs/
+
+# Development/Testing (private, not for public)
+*.local
+*.private
+*.tmp
+.env
+.env.local
+secrets.txt
+dev-notes.md
+scratch/
+scratch/**
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE artifacts
+*.swp
+*.swo
+*~
