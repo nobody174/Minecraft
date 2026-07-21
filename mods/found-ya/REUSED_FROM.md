@@ -1,7 +1,7 @@
 # Reused From
 
 Patterns adapted from sibling portfolio mods (not copy-pasted verbatim —
-re-derived to match TrackerVision's modern visual direction).
+re-derived to match Found Ya!'s modern visual direction).
 
 ## From `boss-radar`
 - Entity scanning structure (`BossRadarItem.scanForBosses` →
@@ -9,7 +9,7 @@ re-derived to match TrackerVision's modern visual direction).
   scan pattern. Saves re-deriving the scan-throttling approach.
 - HUD distance-color-coding concept (re-themed, not reused visually).
 - **Explicitly not reused:** boss-radar's `CustomPacketPayload` /
-  `RegisterPayloadHandlersEvent` networking pattern. TrackerVision's
+  `RegisterPayloadHandlersEvent` networking pattern. Found Ya!'s
   tracking state is purely client-side cosmetic and never needs to leave
   the client, so there's no networking layer at all — an earlier draft of
   this file claimed the pattern was reused; it never was.
@@ -21,7 +21,7 @@ re-derived to match TrackerVision's modern visual direction).
 - `EntityRenderersEvent.AddLayers` registration pattern for attaching custom
   render layers.
 - **Explicitly not reused:** the additive-bloom glow render style. It reads
-  as soft/dated for TrackerVision's goals; v0.1 uses the vanilla outline
+  as soft/dated for Found Ya!'s goals; v0.1 uses the vanilla outline
   buffer / post-shader pipeline instead for a crisp, modern rim outline.
 
 ## Why this matters

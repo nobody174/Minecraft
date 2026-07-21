@@ -1,6 +1,6 @@
 # UI Style Guide
 
-TrackerVision's visual identity lives mostly in this layer (see
+Found Ya!'s visual identity lives mostly in this layer (see
 `RENDERING_RESEARCH.md` for why). Goal: read as a modern tactical-overlay
 HUD — thin geometric brackets, depth-based hierarchy, restrained motion —
 not the chunky/static look of 2014-era Forge HUD mods.
@@ -14,7 +14,7 @@ Vanilla's bitmap font is the wrong era. Plan:
   — reads cleaner over a busy world background.
 - **v0.5+:** ship a condensed sans TTF (Rajdhani / Chakra Petch / Exo 2,
   all OFL-licensed) as a resource-pack font provider
-  (`assets/trackervision/font/hud.json`). This is the single highest-impact
+  (`assets/foundya/font/hud.json`). This is the single highest-impact
   typography upgrade; deferred only because it adds an asset-licensing
   step that shouldn't block v0.1 functionality.
 

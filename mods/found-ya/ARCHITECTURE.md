@@ -56,7 +56,7 @@ uses; the flat format avoids the full textured model bleeding through
 geometry, which would look messier than a clean silhouette.
 
 `RimBoostEffect` is the v1.0 "shader pipeline" milestone: a real custom
-core `ShaderInstance` (`assets/trackervision/shaders/core/rim_boost.*`,
+core `ShaderInstance` (`assets/foundya/shaders/core/rim_boost.*`,
 registered via `RegisterShadersEvent`) that brightens only already-bright
 pixels (a `smoothstep` luminance threshold in the fragment shader) so the
 additive rim reads with a soft bloom-like punch. Deliberately scoped
@@ -74,7 +74,7 @@ swap-chain bookkeeping, and the pass only runs on frames where
 Toggleable per-profile via `rimBoostEnabled`.
 
 ### HUD Layer (`client/hud/`)
-This is where TrackerVision's actual visual identity lives: screen-space
+This is where Found Ya!'s actual visual identity lives: screen-space
 corner-bracket reticle, off-screen direction caret, and distance readout,
 anchored to the target's projected world position on `RenderGuiEvent.Post`.
 Built from scratch against `docs/UI_STYLE_GUIDE.md` (thin geometric
@@ -82,7 +82,7 @@ brackets + depth-based color/alpha falloff, modern tactical-overlay
 language) — not a port of boss-radar's ring-indicator HUD, which doesn't
 match this mod's visual bar.
 
-Beyond `TrackerVisionConfig.getBeaconDistance()`, the bracket reticle is
+Beyond `FoundYaConfig.getBeaconDistance()`, the bracket reticle is
 replaced by a beacon pillar (`drawBeacon`): a vertical accent line from
 the target's projected screen-space base, alpha-gradient fading
 top-to-bottom, capped with a chevron — per the style guide's Beacon
@@ -112,9 +112,9 @@ that doesn't exist in 1.21.1):
 - `/track config rimBoostEnabled <true|false>`
 
 ### Configuration Layer (`config/`)
-`TrackerVisionProfile` holds one named bundle of the tunable settings
+`FoundYaProfile` holds one named bundle of the tunable settings
 (near/far distance, bracket size, accent color, beacon enabled/distance),
-clamped on every setter. `TrackerVisionConfig` holds every registered
+clamped on every setter. `FoundYaConfig` holds every registered
 profile plus which one is active, and exposes the active profile's
 settings through the same static getter/setter surface every other layer
 already calls — adding profiles didn't require touching the HUD, render,
@@ -122,8 +122,8 @@ or command call sites, only how a setting resolves underneath them.
 Three profiles are seeded by default ("Default", a tighter short-range
 "PvP", and a longer-range "Exploration"); players can also create/delete
 their own via `/track profile create|delete` or the config screen's cycle
-button. `TrackerVisionConfigFile` (JSON persistence at
-`config/trackervision/trackervision-config.json`) serializes every
+button. `FoundYaConfigFile` (JSON persistence at
+`config/foundya/foundya-config.json`) serializes every
 profile as an array plus the active profile name, following the
 armor-aura `AuraConfig`/`AuraConfigFile` pattern otherwise. It also reads
 the pre-profiles flat-key layout from older config files, applying it to
@@ -131,13 +131,13 @@ the seeded "Default" profile so upgrading doesn't discard existing
 settings. Loaded on `FMLClientSetupEvent`, saved immediately on any
 `/track config` or `/track profile` change.
 
-`TrackerVisionConfigScreen` (`client/gui/`) is an in-game settings screen
+`FoundYaConfigScreen` (`client/gui/`) is an in-game settings screen
 reachable from the mod list's "Config" button, registered via
 `ModContainer.registerExtensionPoint(IConfigScreenFactory.class, ...)` in
-`TrackerVisionMod`'s constructor. It's built from vanilla `Screen`/
+`FoundYaMod`'s constructor. It's built from vanilla `Screen`/
 `GridLayout`/`Checkbox`/`AbstractSliderButton` widgets rather than
 NeoForge's spec-driven `ConfigurationScreen`, since this mod's config is a
-hand-rolled JSON file (`TrackerVisionConfig`/`TrackerVisionConfigFile`),
+hand-rolled JSON file (`FoundYaConfig`/`FoundYaConfigFile`),
 not a `ModConfigSpec` — the built-in screen only binds to the latter. The
 `/track config` commands remain available as an alternate interface, not
 replaced by the GUI.
@@ -145,18 +145,18 @@ replaced by the GUI.
 ## Package Layout
 
 ```
-com.nobody174.trackervision/
-├── TrackerVisionMod.java        (main @Mod class)
+com.nobody174.foundya/
+├── FoundYaMod.java        (main @Mod class)
 ├── tracking/                    (detection + lock state)
 ├── client/
-│   ├── TrackerVisionClientSetup.java
+│   ├── FoundYaClientSetup.java
 │   ├── command/                 (client commands)
 │   ├── render/                  (outline/silhouette renderers)
 │   └── hud/                     (HUD overlay)
 └── config/                      (JSON config load/save)
 ```
 
-TrackerVision has no networking layer — it's entirely client-side cosmetic
+Found Ya! has no networking layer — it's entirely client-side cosmetic
 state, so there's no `network/` package. A prior revision of this diagram
 described one that was never built; removed rather than left as dead
 documentation.

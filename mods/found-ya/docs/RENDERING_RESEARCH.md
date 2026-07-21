@@ -1,7 +1,7 @@
 # Rendering Research — Outline & Silhouette Strategy
 
 Findings from deep research into NeoForge 1.21.1 rendering options, used to
-decide TrackerVision's visual direction (see `UI_STYLE_GUIDE.md` for the HUD
+decide Found Ya!'s visual direction (see `UI_STYLE_GUIDE.md` for the HUD
 side of this decision).
 
 ## Vanilla outline buffer (the mechanism behind spectator glowing)

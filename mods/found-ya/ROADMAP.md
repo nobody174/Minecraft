@@ -45,5 +45,5 @@ here. Concrete additions worth carrying forward:
 - **Backlog** (`17_BACKLOG.md`): adds minimap integration, sound
   indicators, AI threat scoring, search vision mode to FUTURE_FEATURES.md.
 
-Will be fleshed out into full implementation docs as TrackerVision
+Will be fleshed out into full implementation docs as Found Ya!
 approaches the milestones each section describes.

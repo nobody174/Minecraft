@@ -1,20 +1,26 @@
-# TrackerVision
+# Found Ya!
 
 A modern entity tracking and visualization framework for **NeoForge 1.21.1 / Minecraft 1.21.1**.
 
-TrackerVision replaces vanilla glowing with a flexible, customizable tracking system: persistent target locking with multiple tracking modes, search-mode area reveals, distance-aware HUD indicators, sky-to-target beacon tracking, in-game config screens, and a custom shader pipeline for enhanced visuals.
+Found Ya! replaces vanilla glowing with a flexible, customizable tracking system: persistent target locking with multiple tracking modes, category/type filtering (nearest enemy/friendly/player/specific mob), search-mode area reveals, distance-aware HUD indicators, sky-to-target beacon tracking, a clickable in-game menu, and a custom shader pipeline for enhanced visuals.
 
 ## Status
 
-**v1.0.0 Released** — Production-ready entity tracking framework. All v1.0 features implemented, tested, and validated. Ready for public use.
+**v1.1.0 Released** — Production-ready entity tracking framework, consolidated into the `nobody174/Minecraft` monorepo. All features implemented, tested, and validated. Ready for public use.
 
 ## Features
 
 ### Core Tracking
-- **Lock targets manually** with `/track lock @e` or auto-select with `/track mode nearest`
+- **Lock targets manually** with `/track lock @e`, or auto-select with the menu / `/track mode nearest`
+- **Category tracking** — auto-select the nearest enemy, friendly (animal), player, or a specific mob type (zombie, wolf, etc.)
 - **Search Mode** — persistent toggle `/track search true|false` reveals all nearby entities with a light rim
 - **Multiple tracking profiles** — switch between Default, PvP, and Exploration profiles (or create your own) via `/track profile use <name>`
-- **Tracking modes** — LOCKED (manual) or NEAREST (auto-select closest)
+
+### Menu UI
+- Press **K** (rebindable) or type bare `/track` to open a compact, clickable menu — no need to memorize command syntax
+- Track ▸ Nearest / Enemy / Friendly / Player / By name (clickable list of online players)
+- Clear tracked target, Lock (freeze the current auto-followed target), Settings ▸ Options / Search Mode / Profile
+- Every menu action has an equivalent typed command that still works unchanged
 
 ### Visualization
 - **Additive glow rim** on locked targets
@@ -26,7 +32,7 @@ TrackerVision replaces vanilla glowing with a flexible, customizable tracking sy
 - **Rim-boost shader** — custom post-process bloom-style punch on the locked target's glow
 
 ### Configuration
-- **In-game config screen** — mod list → Config button
+- **In-game config screen** — mod list → Config button, or menu → Settings → Options
 - **Command-line config** — `/track config <setting> <value>`
 - **Per-profile settings** — each profile has its own near/far distance, bracket size, accent color, beacon settings
 - **Target state colors** — hostile mobs render red, distant targets render amber, otherwise cyan
@@ -50,6 +56,8 @@ TrackerVision replaces vanilla glowing with a flexible, customizable tracking sy
 ### Tracking Modes
 - `/track mode locked` — manual lock only
 - `/track mode nearest` — auto-select closest entity
+- `/track enemy` / `/track friendly` / `/track player` — auto-select nearest of that category
+- `/track type <alias>` — auto-select nearest of a specific type (e.g. `/track type zombie`)
 
 ### Profiles
 - `/track profile list` — show all profiles (active shown in brackets)
@@ -93,18 +101,18 @@ The `/track lock` command requires a **Minecraft entity selector**. Here are com
 /track lock @e[type=#minecraft:attackable,limit=1,sort=nearest]
 ```
 
-**Note:** Entity selectors **require at least one bracket argument** (even if empty: `@e[]`). The syntax `@e[type=zombie]` *without* a limit will fail if multiple matches exist. Always use `limit=1` and `sort=nearest` together for reliable single-target locking.
+**Note:** Entity selectors **require at least one bracket argument** (even if empty: `@e[]`). The syntax `@e[type=zombie]` *without* a limit will fail if multiple matches exist. Always use `limit=1` and `sort=nearest` together for reliable single-target locking — or just use the menu (`K` or `/track`) to avoid selector syntax entirely.
 
 ## Installation
 
 ### From JAR
-Download the latest JAR from [Releases](https://github.com/nobody174/trackervision/releases) and place it in your `mods` folder.
+Download the latest JAR from [Releases](https://github.com/nobody174/Minecraft/releases) (tagged `found-ya-vX.Y.Z`) and place it in your `mods` folder.
 
 ### From Source
 1. Java 21+ and Gradle 8.9+
-2. `git clone https://github.com/nobody174/trackervision.git`
-3. `cd TrackerVision && ./gradlew build`
-4. JAR is at `build/libs/trackervision-1.0.0-mc1_21_1.jar`
+2. `git clone https://github.com/nobody174/Minecraft.git`
+3. `cd Minecraft/mods/found-ya && ./gradlew build`
+4. JAR is at `build/libs/foundya-1.1.0-mc1_21_1.jar`
 
 ## Technical Details
 
@@ -112,16 +120,15 @@ Download the latest JAR from [Releases](https://github.com/nobody174/trackervisi
 - **Client-only mod** — safe to add to dedicated servers (auto-ignored)
 - **Custom rendering** — `RenderLivingEvent.Post` for per-entity glows
 - **Custom shader** — real `RegisterShadersEvent` post-process for bloom
-- **JSON config** — persisted to `config/trackervision/trackervision-config.json`
+- **JSON config** — persisted to `config/foundya/foundya-config.json`
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for system design and [ROADMAP.md](ROADMAP.md) for future plans.
 
 ## Roadmap
 
-### v1.0.1 (coming soon)
-- Entity-type filtering for auto-select (`/track type friendly|hostile|players|zombie|skeleton|...`)
-- Performance optimizations
-- Bug fixes from v1.0.0 testing
+### Near-term
+- Performance profiling of `SearchModeScanner` against 100+ nearby entities
+- Iris/shader-pack compatibility testing
 
 ### Future (v2.0+)
 - Team systems (shared tracking across party members)
@@ -134,8 +141,9 @@ See [FUTURE_FEATURES.md](FUTURE_FEATURES.md) for the full backlog.
 ## Known Limitations
 
 - **Not yet Iris-compatible** — custom shader has not been tested against shader packs (Iris, etc.)
-- **No manual play-testing in this build environment** — all features built and tested programmatically, but no in-game visual verification in vanilla client yet
-- **Entity selector syntax** — requires proper Minecraft command syntax; `@e[type=zombie]` alone won't work if multiple match
+- **Entity selector syntax** — requires proper Minecraft command syntax for typed `/track lock`; the menu (`K`/`/track`) avoids this entirely for common cases
+
+See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) for the full list, including what's been manually verified in-client.
 
 ## License
 
@@ -143,7 +151,7 @@ All rights reserved © 2025 nobody174.
 
 ## Links
 
-- [GitHub Repository](https://github.com/nobody174/trackervision)
+- [GitHub Repository](https://github.com/nobody174/Minecraft/tree/main/mods/found-ya)
 - [ARCHITECTURE.md](ARCHITECTURE.md) — system design and component overview
-- [ROADMAP.md](ROADMAP.md) — v1.0 completion and v2.0 future scope
+- [ROADMAP.md](ROADMAP.md) — completed milestones and future scope
 - [CHANGELOG.md](CHANGELOG.md) — version history

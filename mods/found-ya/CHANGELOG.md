@@ -1,6 +1,50 @@
 # Changelog
 
-## [Unreleased]
+## [1.1.0] - 2026-07-21
+
+Renamed from TrackerVision to **Found Ya!** (mod ID `trackervision` →
+`foundya`, package `com.nobody174.trackervision` → `com.nobody174.foundya`,
+matching class renames). The `/track` command is unchanged. Consolidated
+into the `nobody174/Minecraft` monorepo at `mods/found-ya`, replacing the
+standalone `nobody174/trackervision` repo (deleted).
+
+### Added
+- Category/type auto-tracking: `TrackingCategory` (nearest enemy/friendly/
+  player) and `EntityTypeAliases` (nearest zombie/wolf/etc. by name) let
+  `NearestTargetScanner` filter its auto-select instead of always picking
+  the closest entity of any kind. Replaces the originally-planned
+  multi-target `TrackingMode.GROUP`/`FILTERED` modes — filtering the single
+  auto-selected target covered the real use cases (track a pet, track
+  hostiles, track a specific player) without needing multi-target state.
+- Full clickable menu UI (`TrackerMenuScreen` → `TrackSubmenuScreen` /
+  `SettingsSubmenuScreen` / `TrackTypeSubmenuScreen` / `PlayerPickerScreen`),
+  opened via a keybind (`K`, rebindable) or bare `/track` with no
+  subcommand — a compact, bottom-left anchored alternative to memorizing
+  `/track ...` subcommand syntax, aimed at players (kids, non-English
+  speakers) for whom typed commands are a poor primary interface. Every
+  menu action has an equivalent typed command that still works unchanged.
+- "Track a Player by name" — a clickable list of other online players,
+  no typing required, for quickly locking onto a specific person.
+
+### Fixed
+- `TrackedTargetManager.setMode` previously only cleared the tracked
+  target when switching *into* `NEAREST` mode; switching back to `LOCKED`
+  silently kept whatever `NEAREST` had last auto-selected. Now clears on
+  any mode change, requiring an explicit `/track lock` (or a menu pick)
+  after switching modes.
+- Beacon's sky-beam was drawn via ~300 individual per-pixel-row `fill()`
+  calls; replaced with a small number of `fillGradient()` segments.
+- `TrackedTargetManager`'s static lock/mode state and
+  `TrackedTargetGlowRenderer`'s per-texture `RenderType` cache now reset
+  on disconnect, instead of carrying over into a fresh session.
+  `RimBoostEffect`'s offscreen scratch texture is now disposed on
+  disconnect too, instead of leaking until the next resize.
+- Removed a dead, never-implemented `RegisterPayloadHandlersEvent`
+  listener and empty `commonSetup`/`clientSetup` methods in the main mod
+  class — this mod has no networking layer at all.
+- Added a `schemaVersion` field to the config JSON (structural
+  `"profiles"` key detection still handles the legacy-format migration;
+  the version field is reserved for the next format change).
 
 ## [1.0.0-RC2] - 2026-06-26
 

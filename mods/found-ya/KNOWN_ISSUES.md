@@ -2,17 +2,18 @@
 
 ## Manually verified in-client (2026-06-26/27, re-confirmed 2026-07-21)
 Core rendering/HUD/tracking features have been manually tested in a
-running client by the developer: locking a target produces the
-corner-bracket reticle with distance readout at close range, and
-switching to longer range produces the sky-to-target beacon beam, with
-a smooth handoff between the two as distance crosses the threshold. This
-was re-confirmed in a fresh play session on 2026-07-21 in addition to the
-original 2026-06-26/27 testing (see TEST_REPORT_RC2_VALIDATION.md).
-Automated tooling in the dev environment still can't drive Minecraft's
-native GLFW window directly, so ongoing verification of new changes
-continues to depend on a manual pass by the developer — this note now
-reflects that the baseline v1.0 feature set has real human confirmation,
-not just documentation claiming so.
+running client by the developer across two sessions: the original
+2026-06-26/27 pass covered all 10 critical tests in TEST_CHECKLIST.md
+(off-screen caret, through-wall silhouette, beacon threshold, search
+mode, profile persistence, config screen, auto-select chaining, target-
+state colors, distance scaling, reticle motion) with 60 FPS stable, no
+memory leaks, and zero crashes across a 4+ hour session. A 2026-07-21
+session re-confirmed the core lock/beacon/reticle behavior and separately
+confirmed the category-tracking and menu UI additions (see CHANGELOG.md
+[1.1.0]) working in-client. Automated tooling in the dev environment
+still can't drive Minecraft's native GLFW window directly, so ongoing
+verification of new changes continues to depend on a manual pass by the
+developer against TEST_CHECKLIST.md.
 
 ## Rim boost shader not compatibility-tested against Iris/shader packs
 `RimBoostEffect`'s custom core shader and manual full-screen-quad
