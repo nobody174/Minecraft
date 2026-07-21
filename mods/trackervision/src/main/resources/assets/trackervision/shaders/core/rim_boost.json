@@ -1,0 +1,10 @@
+{
+  "vertex": "trackervision:rim_boost",
+  "fragment": "trackervision:rim_boost",
+  "samplers": [
+    { "name": "Sampler0" }
+  ],
+  "uniforms": [
+    { "name": "Intensity", "type": "float", "count": 1, "values": [ 1.0 ] }
+  ]
+}
