@@ -81,6 +81,10 @@ htmlcov/
 # IDE specific
 .vscode/extensions.json
 
+# Patreon post drafts (working scratch, deleted after posting - see mods/PATREON_TEMPLATE.md)
+PATREON_UPDATE_DRAFT.md
+PATREON_ROADMAP_DRAFT.md
+
 # Minecraft specific
 eula.txt
 server.properties
