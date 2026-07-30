@@ -35,6 +35,14 @@ for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
+@rem Isolate this project's Gradle module/build cache from other projects on this
+@rem machine. NeoGradle's NeoForm pipeline caches per-project absolute paths inside
+@rem globally content-addressed cache keys (~/.gradle/caches/ng_execute/<hash>), so
+@rem two mods sharing the default global GRADLE_USER_HOME can silently poison each
+@rem other's build with stale paths. Respect an already-set GRADLE_USER_HOME so CI
+@rem (which sets its own for caching) is unaffected.
+if not defined GRADLE_USER_HOME set DEFAULT_JVM_OPTS=%DEFAULT_JVM_OPTS% "-Dgradle.user.home=%APP_HOME%.gradle-home"
+
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
 

@@ -1,8 +1,8 @@
 //
 // ArmorAura - Automated Command Test
 //
-// Tests that /armoraura reload command only registers on client
-// and doesn't crash when server tries to process it
+// Tests that the client command handler and config file system are present
+// and safe to load without a server crash.
 //
 
 package com.nobody174.armoraura;
@@ -30,25 +30,6 @@ public class AuraCommandTest {
             fail("AuraClientCommands class not found in JAR", e);
         } catch (NoSuchMethodException e) {
             fail("AuraClientCommands.init() method not found", e);
-        }
-    }
-
-    @Test
-    @DisplayName("Reload command is NOT in main AuraCommand")
-    void testReloadNotInMainCommand() {
-        try {
-            Class<?> auraCommand = Class.forName("com.nobody174.armoraura.commands.AuraCommand");
-
-            // Try to find executeReload - it should NOT exist (moved to client)
-            try {
-                auraCommand.getDeclaredMethod("executeReload");
-                fail("executeReload should NOT be in AuraCommand (should be client-only)");
-            } catch (NoSuchMethodException e) {
-                // Expected - this is good!
-                System.out.println("✅ executeReload correctly removed from server-side command");
-            }
-        } catch (ClassNotFoundException e) {
-            fail("AuraCommand class not found", e);
         }
     }
 

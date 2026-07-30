@@ -30,5 +30,16 @@ else
     JAVACMD="java"
 fi
 
+# Isolate this project's Gradle module/build cache from other projects on this
+# machine. NeoGradle's NeoForm pipeline caches per-project absolute paths inside
+# globally content-addressed cache keys (~/.gradle/caches/ng_execute/<hash>), so
+# two mods sharing the default global GRADLE_USER_HOME can silently poison each
+# other's build with stale paths. Respect an already-set GRADLE_USER_HOME so CI
+# (which sets its own for caching) is unaffected.
+GRADLE_HOME_OPT=""
+if [ -z "$GRADLE_USER_HOME" ]; then
+    GRADLE_HOME_OPT="-Dgradle.user.home=$dir/.gradle-home"
+fi
+
 # Execute Gradle
-exec "$JAVACMD" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+exec "$JAVACMD" $GRADLE_HOME_OPT -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"

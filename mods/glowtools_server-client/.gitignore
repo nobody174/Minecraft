@@ -1,6 +1,7 @@
 # Build & Gradle
 build/
 .gradle/
+.gradle-home/
 gradle-app.setting
 *.jar
 *.war

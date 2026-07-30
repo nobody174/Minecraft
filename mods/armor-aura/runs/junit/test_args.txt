@@ -5,7 +5,7 @@ forgejunitdev
 --assetIndex
 asset-index
 --assetsDir
-C:\Users\Vartd\.gradle\caches\minecraft\assets\1.21.1
+D:\Claude AI Projects\projects\GitHub\Minecraft\mods\armor-aura\.gradle-home\caches\minecraft\assets\1.21.1
 --gameDir
 .
 --fml.fmlVersion

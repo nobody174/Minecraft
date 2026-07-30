@@ -31,4 +31,9 @@ else
 fi
 
 # Execute Gradle
-exec "$JAVACMD" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+GRADLE_HOME_OPT=""
+if [ -z "$GRADLE_USER_HOME" ]; then
+    GRADLE_HOME_OPT="-Dgradle.user.home=$dir/.gradle-home"
+fi
+
+exec "$JAVACMD" $GRADLE_HOME_OPT -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
