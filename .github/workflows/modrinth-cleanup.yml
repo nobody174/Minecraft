@@ -1,0 +1,91 @@
+name: Modrinth Version Cleanup (manual, testing use only)
+
+# Temporary utility for cleaning up bad/test versions on Modrinth while the
+# release pipeline is being built out. Lists a project's versions and
+# deletes any whose version_number is in the given delete list — with a
+# hard-coded refusal to ever delete a project's FIRST/oldest version
+# (the original public release), regardless of what's passed in.
+#
+# This is not part of the normal release flow — remove this workflow once
+# pipeline testing is done and it's no longer needed.
+
+on:
+  workflow_dispatch:
+    inputs:
+      modrinth_id:
+        description: 'Modrinth project slug (e.g. armoraura)'
+        required: true
+        type: string
+      delete_versions:
+        description: 'Comma-separated version_numbers to delete (e.g. 1.1.2,1.1.3)'
+        required: true
+        type: string
+      dry_run:
+        description: 'List what would be deleted without actually deleting'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch versions
+        run: |
+          curl -s "https://api.modrinth.com/v2/project/${{ inputs.modrinth_id }}/version" \
+            -H "Authorization: ${{ secrets.MODRINTH_TOKEN }}" \
+            -H "User-Agent: nobody174-cleanup/1.0" > versions.json
+          cat versions.json | python3 -m json.tool > /dev/null || (echo "::error::Modrinth API did not return valid JSON" && cat versions.json && exit 1)
+
+      - name: Write cleanup script
+        run: |
+          cat > cleanup.py << 'PYEOF'
+          import json
+          import os
+          import subprocess
+          import sys
+
+          with open("versions.json") as f:
+              data = json.load(f)
+
+          print("=== All versions on this project ===")
+          for v in data:
+              files = [fl["filename"] for fl in v.get("files", [])]
+              print("id=%s version_number=%s date_published=%s files=%s" % (
+                  v["id"], v["version_number"], v["date_published"], files))
+
+          oldest = min(data, key=lambda v: v["date_published"])
+          print("\nProtected (oldest/original) version: %s (id=%s) — will never be deleted." % (
+              oldest["version_number"], oldest["id"]))
+
+          targets = [t.strip() for t in os.environ["DELETE_VERSIONS"].split(",") if t.strip()]
+          dry_run = os.environ["DRY_RUN"] == "true"
+          token = os.environ["MODRINTH_TOKEN"]
+
+          for target in targets:
+              match = next((v for v in data if v["version_number"] == target), None)
+              if match is None:
+                  print("No version found matching '%s' — skipping." % target)
+                  continue
+              if match["id"] == oldest["id"]:
+                  print("::warning::REFUSING to delete '%s' (id=%s) — this is the protected original version." % (target, match["id"]))
+                  continue
+              if dry_run:
+                  print("[DRY RUN] Would delete version '%s' (id=%s)" % (target, match["id"]))
+              else:
+                  print("Deleting version '%s' (id=%s)..." % (target, match["id"]))
+                  result = subprocess.run([
+                      "curl", "-s", "-X", "DELETE",
+                      "https://api.modrinth.com/v2/version/%s" % match["id"],
+                      "-H", "Authorization: %s" % token,
+                      "-H", "User-Agent: nobody174-cleanup/1.0",
+                      "-w", "\nHTTP status: %{http_code}\n",
+                  ])
+          PYEOF
+
+      - name: Run cleanup
+        env:
+          DELETE_VERSIONS: ${{ inputs.delete_versions }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: python3 cleanup.py
