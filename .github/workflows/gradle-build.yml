@@ -17,17 +17,37 @@ on:
         required: false
 
 jobs:
+  discover-mods:
+    runs-on: ubuntu-latest
+    outputs:
+      mods: ${{ steps.discover.outputs.mods }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Auto-discovers every mod folder under mods/ that has a Gradle build
+      # script, so a new mod gets CI coverage the moment it's added to the
+      # repo — no workflow file edits needed. A folder counts as a mod if it
+      # has build.gradle.kts (preferred) or build.gradle (legacy).
+      - name: Discover mod folders
+        id: discover
+        run: |
+          MODS="[]"
+          for dir in mods/*/; do
+            mod=$(basename "$dir")
+            if [ -f "${dir}build.gradle.kts" ] || [ -f "${dir}build.gradle" ]; then
+              MODS=$(echo "$MODS" | jq -c --arg mod "$mod" '. + [$mod]')
+            fi
+          done
+          echo "Discovered mods: $MODS"
+          echo "mods=$MODS" >> "$GITHUB_OUTPUT"
+
   build:
+    needs: discover-mods
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mod:
-          - glowtools_server-client
-          - boss-radar
-          - armor-aura
-          - buddy-beast
-          - pet-evolution
-          - found-ya
+        mod: ${{ fromJson(needs.discover-mods.outputs.mods) }}
 
     steps:
       - name: Checkout repository
@@ -79,11 +99,11 @@ jobs:
 
       - name: Verify mod structure
         run: |
-          for mod in mods/glowtools_server-client mods/boss-radar mods/armor-aura mods/buddy-beast mods/pet-evolution mods/found-ya; do
-            if [ -d "$mod" ]; then
+          for mod in mods/*/; do
+            if [ -f "${mod}build.gradle.kts" ] || [ -f "${mod}build.gradle" ]; then
               echo "✓ $mod structure valid"
-              [ -f "$mod/build.gradle" ] && echo "  - build.gradle ✓" || echo "  - build.gradle ✗"
-              [ -f "$mod/README.md" ] && echo "  - README.md ✓" || echo "  - README.md ✗"
-              [ -d "$mod/src" ] && echo "  - src/ ✓" || echo "  - src/ ✗"
+              [ -f "${mod}build.gradle.kts" ] && echo "  - build.gradle.kts ✓" || [ -f "${mod}build.gradle" ] && echo "  - build.gradle ✓"
+              [ -f "${mod}README.md" ] && echo "  - README.md ✓" || echo "  - README.md ✗"
+              [ -d "${mod}src" ] && echo "  - src/ ✓" || echo "  - src/ ✗"
             fi
           done

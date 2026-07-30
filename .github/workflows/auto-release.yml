@@ -125,44 +125,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Maps each mod's folder name to its CurseForge numeric project ID and
-      # Modrinth slug. Add a new line here whenever a new mod is onboarded to
-      # either platform — mc-publish needs both IDs per mod since neither can
-      # be derived from mod_name alone.
+      # Reads mods/<mod_name>/platform.json for the CurseForge project ID and
+      # Modrinth slug. A new mod gets full pipeline coverage the moment it
+      # has this file — no workflow edits needed. If the file is missing
+      # (e.g. the mod hasn't been created on CurseForge/Modrinth yet),
+      # platform publishing is skipped with a warning, everything else
+      # (GitHub Release) still happens normally.
       - name: Resolve platform project IDs
         id: platform_ids
         run: |
-          case "${{ matrix.mod_name }}" in
-            armor-aura)
-              echo "curseforge_id=1629684" >> "$GITHUB_OUTPUT"
-              echo "modrinth_id=armoraura" >> "$GITHUB_OUTPUT"
-              ;;
-            boss-radar)
-              echo "curseforge_id=1629723" >> "$GITHUB_OUTPUT"
-              echo "modrinth_id=boss-radar" >> "$GITHUB_OUTPUT"
-              ;;
-            buddy-beast)
-              echo "curseforge_id=1629700" >> "$GITHUB_OUTPUT"
-              echo "modrinth_id=buddy-beast" >> "$GITHUB_OUTPUT"
-              ;;
-            found-ya)
-              echo "curseforge_id=1629716" >> "$GITHUB_OUTPUT"
-              echo "modrinth_id=found-ya" >> "$GITHUB_OUTPUT"
-              ;;
-            glowtools_server-client)
-              echo "curseforge_id=1629705" >> "$GITHUB_OUTPUT"
-              echo "modrinth_id=glow_tools" >> "$GITHUB_OUTPUT"
-              ;;
-            pet-evolution)
-              echo "curseforge_id=1629712" >> "$GITHUB_OUTPUT"
-              echo "modrinth_id=pet-evolution" >> "$GITHUB_OUTPUT"
-              ;;
-            *)
-              echo "::warning::No CurseForge/Modrinth project IDs mapped for ${{ matrix.mod_name }} — skipping platform publish."
-              echo "curseforge_id=" >> "$GITHUB_OUTPUT"
-              echo "modrinth_id=" >> "$GITHUB_OUTPUT"
-              ;;
-          esac
+          PLATFORM_FILE="mods/${{ matrix.mod_name }}/platform.json"
+          if [ -f "$PLATFORM_FILE" ]; then
+            CURSEFORGE_ID=$(jq -r '.curseforge_id // empty' "$PLATFORM_FILE")
+            MODRINTH_ID=$(jq -r '.modrinth_id // empty' "$PLATFORM_FILE")
+            echo "curseforge_id=$CURSEFORGE_ID" >> "$GITHUB_OUTPUT"
+            echo "modrinth_id=$MODRINTH_ID" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::No $PLATFORM_FILE found for ${{ matrix.mod_name }} — skipping CurseForge/Modrinth publish. Create the project on each platform, then add mods/${{ matrix.mod_name }}/platform.json (see mods/armor-aura/platform.json for the format)."
+            echo "curseforge_id=" >> "$GITHUB_OUTPUT"
+            echo "modrinth_id=" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Publish to CurseForge & Modrinth
         if: steps.platform_ids.outputs.curseforge_id != '' && steps.platform_ids.outputs.modrinth_id != ''
