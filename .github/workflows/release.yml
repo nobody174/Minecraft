@@ -140,6 +140,80 @@ jobs:
           game-version-filter: releases
           fail-mode: warn
 
+      # Patreon has no write API for posts (confirmed: read-only as of the
+      # public API's entire lifetime), so this can't post directly. Instead,
+      # it fills mods/PATREON_TEMPLATE.md with everything this pipeline
+      # already knows (version, download links, requirements, install
+      # steps) and leaves [WRITE: ...] placeholders for the creative
+      # content (hook, feature bullets, roadmap) that only a human can
+      # write. Uploaded as a workflow artifact — never committed to git,
+      # since PATREON_UPDATE_DRAFT.md is intentionally gitignored.
+      - name: Generate Patreon post draft
+        id: patreon_draft
+        run: |
+          DRAFT_FILE="mods/${{ inputs.mod_name }}/PATREON_UPDATE_DRAFT.md"
+          MOD_TITLE=$(grep '^mod_name=' "mods/${{ inputs.mod_name }}/gradle.properties" | cut -d= -f2)
+          [ -z "$MOD_TITLE" ] && MOD_TITLE="${{ inputs.mod_name }}"
+
+          cat > "$DRAFT_FILE" <<EOF
+          ## [WRITE: emoji] ${MOD_TITLE} — Update (v${{ inputs.version }})
+
+          Hey everyone! [WRITE: 1-sentence hook — what changed or why this update matters]
+
+          ### ⭐ What It Does
+          [WRITE: feature bullets — one per line, bold the name, one sentence of player-facing impact each]
+
+          ### 🎮 How to Use
+          [WRITE: quick start — menu/keybind path first, then key commands if applicable]
+
+          ---
+
+          ### 📥 WHERE TO GET IT
+          **GitHub:** https://github.com/${{ github.repository }}/tree/main/mods/${{ inputs.mod_name }}
+
+          Includes full documentation and complete command/feature list
+
+          **Installation steps:**
+          - Install NeoForge 21.1.233+
+          - Drop the JAR into: \`%appdata%/.minecraft/mods/\`
+          - Launch Minecraft 1.21.1
+          - [WRITE: 1 short mod-specific first-action line]
+
+          **Requirements:**
+          - Minecraft 1.21.1
+          - NeoForge 21.1.233+
+          - Java 21+
+
+          ### 📊 Version Status
+          **Current: v${{ inputs.version }}**
+
+          [WRITE: 1-2 sentences — what's included, tested/validated status]
+
+          Full release notes: https://github.com/${{ github.repository }}/releases/tag/${{ inputs.mod_name }}-v${{ inputs.version }}
+
+          ### 🔮 What's Next?
+          [WRITE: near-term and longer-term roadmap bullets, direction only]
+
+          ### 📋 Full Feature List (v${{ inputs.version }})
+          [WRITE: bullet per shipped feature, one line each]
+
+          ---
+
+          🙏 **Thank You**
+          Huge thanks to everyone supporting this project! Whether you're using ${MOD_TITLE} or one of my other projects, I appreciate you being here.
+
+          More updates soon — happy [WRITE: theme verb]! [WRITE: emoji]✨
+          EOF
+
+          echo "draft_file=$DRAFT_FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Upload Patreon draft as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: patreon-draft-${{ inputs.mod_name }}-v${{ inputs.version }}
+          path: ${{ steps.patreon_draft.outputs.draft_file }}
+          retention-days: 30
+
       - name: Post release summary
         run: |
           echo "## 🎉 Release Created" >> $GITHUB_STEP_SUMMARY
@@ -152,5 +226,6 @@ jobs:
           else
             echo "**CurseForge / Modrinth:** Skipped (no project IDs mapped)" >> $GITHUB_STEP_SUMMARY
           fi
+          echo "**Patreon draft:** Generated — download from this run's Artifacts section, fill in [WRITE: ...] placeholders, open in a Markdown-rendering viewer (e.g. VS Code preview), then copy the RENDERED text into Patreon's editor so bold/headers carry over (Patreon does not render literal ## / ** on paste). No write API exists for Patreon posts, so this can't be posted automatically." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ inputs.mod_name }}-v${{ inputs.version }})" >> $GITHUB_STEP_SUMMARY
