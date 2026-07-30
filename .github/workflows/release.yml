@@ -168,6 +168,13 @@ jobs:
           game-versions: |
             1.21.1
           game-version-filter: releases
+          # CurseForge started requiring an environment field on every Java
+          # mod file upload from mid-July 2026 onward. Without it, uploads
+          # silently fail while mc-publish (known bug, still open as of this
+          # writing: Kira-NT/mc-publish#138) misreports it as a success in
+          # the log. ALL = required on both client and server, matching how
+          # these mods actually work.
+          environment: ALL
           fail-mode: warn
 
       # Patreon has no write API for posts (confirmed: read-only as of the
