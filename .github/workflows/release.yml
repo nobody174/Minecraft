@@ -175,7 +175,14 @@ jobs:
           # the log. ALL = required on both client and server, matching how
           # these mods actually work.
           environment: ALL
-          fail-mode: warn
+          # fail (not warn): a real silent-failure case happened during
+          # testing — CurseForge rejected an upload but mc-publish
+          # misreported it as a success (open bug: Kira-NT/mc-publish#138).
+          # warn would have hidden that permanently; fail surfaces platform
+          # publish problems loudly. The GitHub Release step above is
+          # separate and already completed by this point either way, so a
+          # publish failure here never costs you the release itself.
+          fail-mode: fail
 
       # Patreon has no write API for posts (confirmed: read-only as of the
       # public API's entire lifetime), so this can't post directly. Instead,
